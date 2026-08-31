@@ -17,7 +17,7 @@
 int main(int argc, char* argv[])
 {
     QGuiApplication application(argc, argv);
-    QCoreApplication::setOrganizationName("OpenPocket");
+    QCoreApplication::setOrganizationName("FpvDeck");
     QCoreApplication::setApplicationName("FPVDeck");
     QCoreApplication::setApplicationVersion("0.1.0");
 
@@ -29,10 +29,12 @@ int main(int argc, char* argv[])
     QCommandLineOption databaseOption({"d", "database"}, "SQLite database path", "path");
     QCommandLineOption exitOption("exit-after-ms", "Exit automatically (test use)", "milliseconds");
     QCommandLineOption screenshotOption("screenshot", "Save a rendered screenshot", "path");
+    QCommandLineOption demoStateOption("demo-state", "Open a deterministic showcase state", "state", "fpv");
     parser.addOption(videoOption);
     parser.addOption(databaseOption);
     parser.addOption(exitOption);
     parser.addOption(screenshotOption);
+    parser.addOption(demoStateOption);
     parser.process(application);
 
     const QString dataDirectory = qEnvironmentVariableIsSet("FPVDECK_DATA_DIR")
@@ -55,6 +57,18 @@ int main(int argc, char* argv[])
         qCritical("Database initialization failed: %s", qPrintable(databaseError));
         return 2;
     }
+    const QString demoState = parser.value(demoStateOption).trimmed().toLower();
+    const QStringList validDemoStates = {"home", "fpv", "battery", "media", "flights", "diagnostics"};
+    if (parser.isSet(demoStateOption) && !validDemoStates.contains(demoState)) {
+        qCritical("Unknown showcase state: %s", qPrintable(demoState));
+        return 7;
+    }
+    if (parser.isSet(demoStateOption) && !databaseService.seedShowcaseData()) {
+        qCritical("Could not seed showcase data");
+        return 6;
+    }
+    if (parser.isSet(demoStateOption) && demoState == "battery") batteryService.setScenario("imbalanced");
+    if (parser.isSet(demoStateOption) && demoState == "fpv") dvrService.toggleRecording();
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("BatteryService", &batteryService);
@@ -63,6 +77,7 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("TelemetryService", &telemetryService);
     engine.rootContext()->setContextProperty("VideoService", &videoService);
     engine.rootContext()->setContextProperty("DatabaseService", &databaseService);
+    engine.rootContext()->setContextProperty("StartupDemoState", demoState);
     engine.load(QUrl(QStringLiteral("qrc:/FPVDeck/ui/Main.qml")));
     if (engine.rootObjects().isEmpty()) return 3;
     if (parser.isSet(screenshotOption)) {

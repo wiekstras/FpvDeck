@@ -31,11 +31,15 @@ qt_add_qml_module(fpvdeck
         ui/components/AppMenu.qml
         ui/components/BatteryWidget.qml
         ui/components/StatusPill.qml
+        ui/pages/HomePage.qml
         ui/pages/FpvPage.qml
         ui/pages/BatteryPage.qml
+        ui/pages/MediaPage.qml
         ui/pages/FlightsPage.qml
+        ui/pages/BatteriesPage.qml
         ui/pages/DvrPage.qml
         ui/pages/AircraftPage.qml
+        ui/pages/DiagnosticsPage.qml
         ui/pages/SettingsPage.qml
         ui/pages/SimulatorPage.qml
 )

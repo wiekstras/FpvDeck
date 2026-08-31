@@ -15,3 +15,12 @@ set_tests_properties(test_qml_smoke PROPERTIES
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
     TIMEOUT 10
 )
+
+foreach(state home fpv battery media flights diagnostics)
+    add_test(NAME test_qml_${state}
+        COMMAND fpvdeck --database :memory: --demo-state ${state} --exit-after-ms 300)
+    set_tests_properties(test_qml_${state} PROPERTIES
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+        TIMEOUT 10
+    )
+endforeach()

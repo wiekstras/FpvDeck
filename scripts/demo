@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export FPVDECK_DATA_DIR="${FPVDECK_DATA_DIR:-${project_dir}/generated/showcase-data}"
+exec "${project_dir}/scripts/dev" --demo-state home "$@"

@@ -16,6 +16,7 @@ public:
     QVariantList recentFlights() const { return m_recentFlights; }
     QString path() const { return m_path; }
     Q_INVOKABLE bool addDemoFlight();
+    bool seedShowcaseData();
 
 signals:
     void recentFlightsChanged();

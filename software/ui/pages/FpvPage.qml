@@ -53,7 +53,7 @@ Item {
         }
     }
 
-    // Layer 2: OpenPocket widgets. The Betaflight OSD, if present, is already in video.
+    // Layer 2: FpvDeck widgets. The Betaflight OSD, if present, is already in video.
     Row {
         anchors { left: parent.left; top: parent.top; margins: 24 }
         spacing: 9
@@ -82,7 +82,7 @@ Item {
 
     AppMenu {
         id: menu
-        width: 590; height: 330
+        width: 650; height: 410
         anchors.centerIn: parent
         visible: root.menuOpen
         opacity: visible ? 1 : 0

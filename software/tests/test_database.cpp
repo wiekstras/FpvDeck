@@ -31,6 +31,22 @@ private slots:
             QCOMPARE(reopened.recentFlights().size(), 1);
         }
     }
+
+    void seedsDeterministicShowcaseHistory()
+    {
+        DatabaseService database(":memory:");
+        QString error;
+        QVERIFY2(database.initialize(&error), qPrintable(error));
+        QVERIFY(database.seedShowcaseData());
+        QCOMPARE(database.recentFlights().size(), 3);
+        const QVariantMap newest = database.recentFlights().first().toMap();
+        QCOMPARE(newest.value("startedAt").toString(), QString("2026-08-30T17:42:10Z"));
+        QVERIFY(newest.value("durationSeconds").toInt() >= 380);
+        QVERIFY(newest.value("durationSeconds").toInt() <= 381);
+        QCOMPARE(newest.value("channel").toString(), QString("R1"));
+        QVERIFY(database.seedShowcaseData());
+        QCOMPARE(database.recentFlights().size(), 3);
+    }
 };
 
 QTEST_APPLESS_MAIN(DatabaseTest)

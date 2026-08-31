@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="${FPVDECK_BUILD_DIR:-${project_dir}/build/screenshots}"
+output_dir="${project_dir}/docs/assets/ui"
+
+if ! command -v xvfb-run >/dev/null 2>&1; then
+    echo "xvfb-run is required to capture video-backed screenshots" >&2
+    exit 1
+fi
+
+"${project_dir}/scripts/generate-test-video"
+cmake -S "${project_dir}" -B "${build_dir}" -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build "${build_dir}" --parallel
+mkdir -p "${output_dir}"
+
+for state in home fpv battery media flights diagnostics; do
+    xvfb-run -a -s "-screen 0 1280x720x24" \
+        "${build_dir}/software/fpvdeck" \
+        --database :memory: \
+        --video "${project_dir}/generated/fpv-test-pal.mp4" \
+        --demo-state "${state}" \
+        --screenshot "${output_dir}/${state}.png"
+done
+
+echo "Wrote reproducible showcase screenshots to ${output_dir}"

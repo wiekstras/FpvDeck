@@ -5,19 +5,25 @@ import "pages"
 ApplicationWindow {
     id: window
     width: 1280; height: 720; minimumWidth: 960; minimumHeight: 540
-    visible: true; color: "#080d14"; title: "FPVDeck — OpenPocket Simulator"
+    visible: true; color: "#080d14"; title: "FpvDeck Simulator"
     property string currentApp: "fpv"
     property bool simulatorOpen: false
 
     function openApp(app) { currentApp = app; simulatorOpen = false }
     function back() { if (simulatorOpen) simulatorOpen = false; else if (currentApp !== "fpv") currentApp = "fpv"; else fpv.menuOpen = false }
 
+    Component.onCompleted: openApp(StartupDemoState)
+
+    HomePage { anchors.fill: parent; visible: window.currentApp === "home" && !window.simulatorOpen; onAppRequested: app => window.openApp(app) }
     FpvPage { id: fpv; anchors.fill: parent; visible: window.currentApp === "fpv" && !window.simulatorOpen; onAppRequested: app => window.openApp(app) }
     BatteryPage { anchors.fill: parent; visible: window.currentApp === "battery" && !window.simulatorOpen }
+    MediaPage { anchors.fill: parent; visible: window.currentApp === "media" && !window.simulatorOpen }
     FlightsPage { anchors.fill: parent; visible: window.currentApp === "flights" && !window.simulatorOpen }
+    BatteriesPage { anchors.fill: parent; visible: window.currentApp === "batteries" && !window.simulatorOpen }
     DvrPage { anchors.fill: parent; visible: window.currentApp === "dvr" && !window.simulatorOpen }
     AircraftPage { anchors.fill: parent; visible: window.currentApp === "aircraft" && !window.simulatorOpen }
     SettingsPage { anchors.fill: parent; visible: window.currentApp === "settings" && !window.simulatorOpen }
+    DiagnosticsPage { anchors.fill: parent; visible: window.currentApp === "diagnostics" && !window.simulatorOpen }
     SimulatorPage { anchors.fill: parent; visible: window.simulatorOpen }
 
     Rectangle {

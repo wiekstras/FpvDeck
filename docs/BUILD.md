@@ -13,7 +13,7 @@ sudo apt-get install cmake ninja-build g++ ffmpeg \
   qml6-module-qtquick-layouts qml6-module-qtquick-window \
   qml6-module-qtmultimedia qml6-module-qttest qml6-module-qtqml \
   qml6-module-qtqml-models qml6-module-qtqml-workerscript \
-  qml6-module-qtquick-templates
+  qml6-module-qtquick-templates xvfb
 ```
 
 Build, test, and launch:
@@ -21,6 +21,7 @@ Build, test, and launch:
 ```sh
 ./scripts/check
 ./scripts/dev
+./scripts/demo
 ```
 
 `scripts/generate-test-video` creates copyright-free PAL-shaped synthetic test
@@ -31,6 +32,9 @@ elements composited above it.
 Set `FPVDECK_DATA_DIR` to relocate the simulator database. Set
 `FPVDECK_BUILD_DIR` to relocate the build tree. `fpvdeck --help` lists runtime
 arguments.
+
+`./scripts/screenshot-demo` additionally requires `xvfb-run` (provided by the
+`xvfb` package above) and regenerates the committed deterministic UI previews.
 
 ## macOS
 

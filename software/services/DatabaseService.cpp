@@ -114,6 +114,35 @@ bool DatabaseService::addDemoFlight()
     return result;
 }
 
+bool DatabaseService::seedShowcaseData()
+{
+    QSqlQuery query(m_database);
+    if (!query.exec("SELECT COUNT(*) FROM flights") || !query.next()) return false;
+    if (query.value(0).toInt() > 0) {
+        reload();
+        return true;
+    }
+    if (!m_database.transaction()) return false;
+    query.prepare("INSERT INTO flights(started_at, ended_at, receiver_channel, min_rssi, min_lq, dvr_path, notes, software_version) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+    const QList<QVariantList> flights = {
+        {"2026-08-30T17:42:10Z", "2026-08-30T17:48:31Z", "R1", 46.0, 92.0, "DVR/2026-08-30_ridge-run.mkv", "Ridge run", "0.1.0-dev"},
+        {"2026-08-28T08:14:03Z", "2026-08-28T08:19:17Z", "R3", 39.0, 87.0, "DVR/2026-08-28_park-line.mkv", "Park line", "0.1.0-dev"},
+        {"2026-08-24T19:02:44Z", "2026-08-24T19:06:53Z", "F4", 51.0, 96.0, "DVR/2026-08-24_sunset.mkv", "Sunset test", "0.1.0-dev"},
+    };
+    for (const QVariantList& flight : flights) {
+        for (qsizetype index = 0; index < flight.size(); ++index) {
+            query.bindValue(index, flight.at(index));
+        }
+        if (!query.exec()) {
+            m_database.rollback();
+            return false;
+        }
+    }
+    if (!m_database.commit()) return false;
+    reload();
+    return true;
+}
+
 void DatabaseService::reload()
 {
     m_recentFlights.clear();
