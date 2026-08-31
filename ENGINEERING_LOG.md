@@ -121,3 +121,7 @@ and unresolved facts. Status labels are used deliberately:
   Version 2 enlarges and raises the screen, lowers/separates the gimbals, and adds
   palm support and pinch clearance. Both are labeled **CONCEPT RENDER** and are
   explicitly prohibited as dimensional/PCB inputs in `docs/assets/renders/README.md`.
+- **VERIFIED:** the first canonical GitHub Actions run passed, including all 12
+  tests and required-document checks. Its Node 20 deprecation annotation prompted
+  an upgrade to official `actions/checkout@v6` and `actions/cache@v5`, both using
+  the Node 24 action runtime on current GitHub-hosted runners.
