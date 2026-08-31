@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">FpvDeck application icon</title>
+  <rect width="128" height="128" rx="28" fill="#0b111a"/>
+  <path d="M25 37h78v49H25z" fill="none" stroke="#6fb4ff" stroke-width="7"/>
+  <circle cx="43" cy="86" r="16" fill="#111d2b" stroke="#67e8a5" stroke-width="7"/>
+  <circle cx="85" cy="86" r="16" fill="#111d2b" stroke="#67e8a5" stroke-width="7"/>
+  <path d="M42 70V53h44v17" fill="none" stroke="#f4f8ff" stroke-width="7" stroke-linecap="round"/>
+</svg>

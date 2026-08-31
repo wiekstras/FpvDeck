@@ -1,0 +1,29 @@
+name: Feature or design proposal
+description: Propose a scoped application, service, protocol, or hardware capability.
+title: "proposal: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the field or development need, not only a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and interfaces
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Video, control, power, reliability, and simulation impact
+      description: Explain how the live video and independent control paths stay protected.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and validation plan

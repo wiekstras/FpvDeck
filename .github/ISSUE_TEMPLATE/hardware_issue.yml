@@ -1,0 +1,41 @@
+name: Hardware / measurement issue
+description: Record a bench finding, integration failure, or hardware design concern.
+title: "hardware: "
+labels: [hardware]
+body:
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: Subsystem
+      options: [T8L / ELRS, VRX, CVBS decoder, Compute, Display, Controller MCU, Balance measurement, Power, PCB, Mechanical / thermal, EMC]
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Exact setup
+      description: Part numbers, revisions, wiring document, firmware/software commit, instruments, and conditions.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Result and raw evidence
+      description: Include distributions/raw captures where relevant, not only a best value.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety impact and current containment
+    validations:
+      required: true
+  - type: checkboxes
+    id: assumptions
+    attributes:
+      label: Verification
+      options:
+        - label: I did not infer undocumented T8L pins or electrical ratings.
+          required: true
+        - label: I identified what is measured versus assumed.
+          required: true

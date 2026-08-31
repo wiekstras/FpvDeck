@@ -5,7 +5,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
 ## Milestone 1 — desktop vertical slice
 
 - [x] Build and launch FPVDeck on Linux with `./scripts/dev`.
-- [x] Implement shell navigation: FPV, Battery, Flights, DVR, Aircraft, Settings.
+- [x] Implement shell navigation: Home, FPV, Balance, Media, Flights, Batteries,
+  Aircraft, DVR, Diagnostics, and Settings.
 - [x] Render synthetic moving video with a color overlay that remains interactive.
 - [x] Simulate PAL/NTSC, weak signal, loss, rolling, black frames, and reconnect.
 - [x] Simulate 1S–6S packs, imbalance, unplug, under/overvoltage, noise, and bad taps.
@@ -13,6 +14,7 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [x] Add keyboard controls and development-only simulator panel.
 - [x] Add unit, integration, protocol, database, service, and QML smoke tests.
 - [x] Run CI-equivalent build/test locally and fix all failures.
+- [x] Add deterministic demo states and reproducible 1280×720 showcase captures.
 - [ ] Add full battery/aircraft CRUD repositories and editing UI.
 - [ ] Implement actual test-file DVR segments and interruption recovery tests.
 - [ ] Add QML interaction/screenshot tests, not only graph startup.
@@ -22,6 +24,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
 ## Milestone 2 — bench architecture
 
 - [x] Establish initial compute/decoder/display/VRX shortlist from primary sources.
+- [ ] Measure/fit the 6.25-inch DSI evaluation display and compare it against the
+  5-inch bright fallback; select a 5.5–6.25-inch outdoor production panel.
 - [ ] Obtain/borrow ADV7280A-M or ADV7282-M evaluation hardware.
 - [ ] Confirm exact CSI cable/adapter wiring from board documentation; do not infer.
 - [ ] Buy or borrow SteadyView X and at least one benchmark receiver.
@@ -41,6 +45,21 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Identify connector grounds and rails power-off before any powered probing.
 - [ ] Determine whether CRSF telemetry is accessible without disturbing RF timing.
 - [ ] Characterize T8L current at each RF power and operating mode.
+- [ ] Run thumb/pinch user trials and measure gimbal finger envelopes, palm support,
+  grip angle, center of mass, neck-strap balance, and screen sight line.
+
+## Repository and project presentation
+
+- [x] Configure canonical `origin` for `git@github.com:wiekstras/FpvDeck.git`
+  after inspecting local remotes and branches.
+- [x] Add a status-accurate product README, concept disclaimer, editable branding,
+  source-controlled diagrams, UI captures, contributor guide, security policy,
+  issue forms, and pull-request checklist.
+- [x] Preserve the existing MIT license while renaming the contributor identity to
+  FpvDeck.
+- [ ] Export/upload the source-controlled social preview in GitHub repository settings.
+- [ ] Replace concept renders with measured CAD renders after T8L and module geometry
+  is captured; retain concept history and labeling.
 
 ## Electrical and PCB
 

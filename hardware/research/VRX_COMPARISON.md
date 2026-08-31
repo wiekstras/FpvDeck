@@ -15,8 +15,7 @@ RF source, splitter/cabling, antennas or conducted fixtures, and video criterion
 
 Measure each receiver's single/diversity/fusion latency, sensitivity, adjacent-
 channel rejection, recovery, multipath, RSSI repeatability, channel switch time,
-noise injected into CVBS, and immunity to OpenPocket's own 2.4 GHz/digital clocks.
+noise injected into CVBS, and immunity to FpvDeck's own 2.4 GHz/digital clocks.
 
 Sources: [SteadyView X](https://www.skyzonefpv.com/en-de/products/skyzone-stvx-steadyview-x-receiver),
 [TBS Fusion](https://www.team-blacksheep.com/products/prod%3Atbs_fusion).
-

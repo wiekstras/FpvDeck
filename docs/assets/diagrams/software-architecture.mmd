@@ -1,0 +1,8 @@
+flowchart TB
+  REAL[Real hardware backends] --> SVC[Versioned service APIs]
+  SIM[Desktop simulator backends] --> SVC
+  REPLAY[Replay / fault injection] --> SVC
+  SVC --> CORE[Video-priority application core]
+  CORE --> APPS[FPV · Balance · Media · Flights · Batteries · Aircraft · Diagnostics · Settings]
+  APPS --> UI[Qt 6 / QML shell + RGB overlays]
+  SVC --> DB[(SQLite)]

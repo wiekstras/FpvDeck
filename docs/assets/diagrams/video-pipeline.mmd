@@ -1,0 +1,6 @@
+flowchart LR
+  CAM[FPV camera] --> OSD[FC / Betaflight OSD] --> VTX[Analog VTX] --> VRX[Diversity VRX] --> DEC[CVBS decoder] --> VID[VideoService]
+  VID --> COMP[GPU compositor] --> LCD[HD display]
+  RGB[RGB widgets / menus] --> COMP
+  VID -. bounded tee .-> DVR[Pre-overlay DVR]
+  COMP -. optional branch .-> ODVR[Composited DVR]

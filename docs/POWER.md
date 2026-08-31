@@ -1,5 +1,7 @@
 # Power architecture
 
+![FpvDeck power architecture](assets/diagrams/power-architecture.svg)
+
 ## Provisional topology
 
 ```text
@@ -27,7 +29,7 @@ stability, peak battery current, and EMI must be calculated and measured.
 | Load | Typical estimate | Peak estimate | Confidence |
 | --- | ---: | ---: | --- |
 | CM4 + eMMC | 3.5 W | 7 W | platform-dependent estimate |
-| 5-inch display/backlight | 2.5 W | 5 W | **NEEDS MEASUREMENT** |
+| 5.5–6.25-inch display/backlight | 3.5 W | 7 W | envelope estimate; **NEEDS MEASUREMENT** |
 | SteadyView X | 2.9 W | 3.5 W | 12 V × 240 mA published typical |
 | decoder + carrier | 0.4 W | 0.8 W | estimate |
 | T8L/ELRS | 0.7 W | 1.5 W | **NEEDS MEASUREMENT** |
@@ -50,4 +52,3 @@ A ≥8 s hold is emergency forced-off. The MCU records the cause and removes pow
 even without Linux acknowledgement. The next boot runs filesystem/database checks
 and presents a recovery notice. Brownout prediction requests an expedited shutdown;
 DVR segmentation limits the unrecoverable interval.
-

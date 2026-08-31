@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">FpvDeck video pipeline</title><desc id="desc">Analog FPV video with embedded Betaflight OSD is decoded, composited with an independent RGB layer, displayed, and optionally recorded.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0l9 3-9 3z" fill="#6fb4ff"/></marker><style>.b{fill:#111d2b;stroke:#304158;stroke-width:2}.t{fill:#f4f8ff;font:600 15px DejaVu Sans}.s{fill:#91a2b8;font:12px DejaVu Sans}.l{stroke:#6fb4ff;stroke-width:3;fill:none;marker-end:url(#a)}.d{stroke-dasharray:8 6}</style></defs>
+  <rect width="1200" height="360" rx="24" fill="#080d14"/>
+  <text x="40" y="46" class="t" font-size="23">FIELD-RATE LIVE PATH · NO DVR BACKPRESSURE</text>
+  <g transform="translate(40 82)"><rect class="b" width="135" height="82" rx="13"/><text class="t" x="20" y="35">FPV camera</text><text class="s" x="20" y="58">analog pixels</text></g>
+  <g transform="translate(205 82)"><rect class="b" width="145" height="82" rx="13"/><text class="t" x="20" y="35">FC analog OSD</text><text class="s" x="20" y="58">Betaflight pixels</text></g>
+  <g transform="translate(380 82)"><rect class="b" width="125" height="82" rx="13"/><text class="t" x="23" y="35">VTX / VRX</text><text class="s" x="23" y="58">5.8 GHz link</text></g>
+  <g transform="translate(535 82)"><rect class="b" width="140" height="82" rx="13"/><text class="t" x="21" y="35">CVBS decoder</text><text class="s" x="21" y="58">line I2P · CSI-2</text></g>
+  <g transform="translate(705 82)"><rect class="b" width="140" height="82" rx="13"/><text class="t" x="24" y="35">VideoService</text><text class="s" x="24" y="58">bounded buffers</text></g>
+  <g transform="translate(875 82)"><rect class="b" width="135" height="82" rx="13"/><text class="t" x="24" y="35">Compositor</text><text class="s" x="24" y="58">video + RGB</text></g>
+  <g transform="translate(1040 82)"><rect class="b" width="120" height="82" rx="13"/><text class="t" x="24" y="35">Display</text><text class="s" x="24" y="58">DSI scanout</text></g>
+  <path class="l" d="M175 123h30M350 123h30M505 123h30M675 123h30M845 123h30M1010 123h30"/>
+  <g transform="translate(705 235)"><rect class="b" width="140" height="70" rx="13"/><text class="t" x="20" y="31">Pre-overlay DVR</text><text class="s" x="20" y="52">bounded tee</text></g>
+  <g transform="translate(875 235)"><rect class="b" width="135" height="70" rx="13"/><text class="t" x="21" y="31">RGB overlays</text><text class="s" x="21" y="52">apps + widgets</text></g>
+  <g transform="translate(1040 235)"><rect class="b" width="120" height="70" rx="13"/><text class="t" x="15" y="31">Overlay DVR</text><text class="s" x="15" y="52">optional</text></g>
+  <path class="l d" d="M775 164v71M943 235v-71M1010 270h30"/>
+  <text x="40" y="331" class="s">The incoming Betaflight OSD remains part of the decoded video. FpvDeck never inserts a monochrome analog OSD.</text>
+</svg>

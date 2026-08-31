@@ -8,7 +8,7 @@ and visible supply posture, not a procurement guarantee.
 | --- | --- | --- | --- |
 | SoM | Raspberry Pi CM4 4 GB/32 GB eMMC | i.MX 8M Plus industrial SoM | CM4 has documented ADV728x support and H.264 encode; i.MX offers stronger industrial multimedia/lifecycle options |
 | Decoder | ADV7280A-M/ADV7282-M EVM | Renesas TW9992 | proven Pi driver versus active lifecycle; exact latency and TW9992 driver are open |
-| Display | RPi Touch Display 2 5-inch / Waveshare DSI D | Winstar WF50DSYA3MNN0 | supported bring-up versus 1100-nit outdoor-oriented panel |
+| Display | 5-inch Pi DSI fallback + Waveshare 6.25-inch evaluation | 5.5–6.25-inch high-brightness DSI, TBD | larger/high-mounted product direction; brightness, landscape scan, latency, power and fit remain gates |
 | VRX | Skyzone SteadyView X | modular dual receiver | explicit standalone CVBS, strong published sensitivity; latency A/B mandatory |
 | MCU | STM32G0B1 Nucleo | STM32G0B1CB/CE class | USB, timers, watchdog, internal flash, CAN-FD/UCPD headroom |
 | ADC | ADS7066 and ADS8688A EVMs | not frozen | low-power compact versus protected integrated AFE |
@@ -27,4 +27,5 @@ and visible supply posture, not a procurement guarantee.
 - ST STM32G0B1: <https://www.st.com/en/microcontrollers-microprocessors/stm32g0b1cb.html>
 - TI BQ25792: <https://www.ti.com/product/BQ25792>
 - TI TPS55288: <https://www.ti.com/product/TPS55288>
-
+- Waveshare 6.25-inch DSI LCD: <https://www.waveshare.com/6.25inch-dsi-lcd.htm>
+- Focus LCDs E55RB-I-MW400-C: <https://focuslcds.com/product/e55rb-i-mw400-c/>

@@ -1,0 +1,34 @@
+name: Software bug
+description: Report reproducible simulator, application, service, or build behavior.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not use this form for sensitive safety/security reports.
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Backend
+      options: [Desktop simulator, Bench hardware, Unknown]
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+      description: Include exact steps, logs, video mode, and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit, OS, Qt version, GPU/display backend, and launch command.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Attach concise logs or a minimal test source; remove secrets.

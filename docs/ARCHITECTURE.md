@@ -1,6 +1,8 @@
 # System architecture
 
-OpenPocket keeps the safety-critical control radio independent of Linux. The T8L
+![Overall FpvDeck system](assets/diagrams/overall-system.svg)
+
+FpvDeck keeps the safety-critical control radio independent of Linux. The T8L
 donor remains able to generate and transmit ELRS control even when the compute
 side is powered down, booting, overloaded, or crashed.
 
@@ -54,4 +56,3 @@ layout, thermal, EMC, and latency behavior has been proven on the bench.
 | FPV runtime | ≥2.5 h target at typical brightness | measured 2S2P pack test |
 
 Targets are engineering gates, not current measured results.
-

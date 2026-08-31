@@ -93,3 +93,31 @@ and unresolved facts. Status labels are used deliberately:
 - Prototype 1 component lead set: CM4, Pi-supported DSI panel, ADV728x-M EVM,
   SteadyView X, STM32G0B1 devboard, ADS7066/ADS8688A EVM comparison, BQ25792 and
   TPS55288 evaluation boards. These remain measurement-gated decisions.
+
+## 2026-09-01 — Canonical identity, showcase, and display ergonomics
+
+- **CONFIRMED:** the canonical project/repository name is **FpvDeck** and the Git
+  remote is `git@github.com:wiekstras/FpvDeck.git`. The existing local `main`
+  history was preserved. `origin` had no branch heads when inspected; no history
+  rewrite or force push was performed.
+- Replaced the temporary OpenPocket-facing identity with FpvDeck in build metadata,
+  application metadata, architecture prose, license attribution, and repository
+  presentation. The existing MIT license text was preserved.
+- Added deterministic Home, FPV, Balance, Media, Flights, and Diagnostics showcase
+  states. `scripts/screenshot-demo` launches the actual Qt/QML application under
+  Xvfb with synthetic video and in-memory SQLite, producing the committed 1280×720
+  captures. Static Media/Batteries records remain explicitly labeled simulated;
+  they are not claimed as completed persistence or storage backends.
+- Added editable SVG branding, Mermaid architecture sources, a rendered system
+  diagram, repository issue/PR templates, contribution/security guidance, and a
+  status-accurate README.
+- Product direction changed after ergonomics review: the screen should be larger
+  and high-mounted, with both gimbal finger envelopes clear for pinch grip. The
+  target range is now 5.5–6.25 inches. The Waveshare 6.25-inch 720×1560 DSI module
+  is a larger bench candidate; its brightness, landscape scan direction, power,
+  fit, and latency are **UNKNOWN / NEEDS MEASUREMENT**. The supported 5-inch Pi
+  panel remains a bring-up fallback, not the desired final size.
+- Generated two industrial-design images with the built-in image-generation tool.
+  Version 2 enlarges and raises the screen, lowers/separates the gimbals, and adds
+  palm support and pinch clearance. Both are labeled **CONCEPT RENDER** and are
+  explicitly prohibited as dimensional/PCB inputs in `docs/assets/renders/README.md`.

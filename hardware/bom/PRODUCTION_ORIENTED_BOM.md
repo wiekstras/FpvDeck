@@ -6,7 +6,8 @@ exists. This table records lifecycle leads only.
 | Manufacturer | Candidate MPN | Function | Planning price | Status / alternative |
 | --- | --- | --- | ---: | --- |
 | Renesas | TW9992AT-NA1-GET | PAL/NTSC CSI-2 decoder | €6–12 | active; driver and full datasheet access gate |
-| Winstar | WF50DSYA3MNN0 | 5-inch 1100-nit DSI IPS | €35–70 | sample/init/latency gate |
+| TBD | 5.5–6.25-inch high-brightness DSI panel | integrated outdoor display | TBD | part reopened for size; sample/init/scan/latency/power gate |
+| Winstar | WF50DSYA3MNN0 | 5-inch 1100-nit DSI IPS fallback | €35–70 | bright but smaller than desired; retain as comparison |
 | ST | STM32G0B1CBT6 class | hardware controller | €3–7 | exact package/flash after pin budget |
 | TI | ADS7066RTER | 8-channel 16-bit ADC | €8–15 | frontend candidate; ADS8688A alternative |
 | TI | BQ25792RQMR | 1–4S buck-boost charger/NVDC | €8–15 | USB-C policy and thermal validation |
@@ -17,4 +18,3 @@ exists. This table records lifecycle leads only.
 Supplier examples and alternates will be added only when footprints, ratings and
 source longevity are verified. Distributor CAD is not accepted as the sole land-
 pattern authority; package drawings come from manufacturer datasheets.
-

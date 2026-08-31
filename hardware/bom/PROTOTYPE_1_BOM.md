@@ -7,7 +7,8 @@ This is a purchase-planning list, not an approved assembly BOM. Prices are rough
 | ---: | --- | --- | --- | ---: | --- | --- |
 | 1 | Raspberry Pi | CM4104032 or chosen 4 GB/32 GB eMMC CM4 variant | compute module | €85 | [CM4 brief](https://datasheets.raspberrypi.com/cm4/cm4-product-brief.pdf) | through ≥Jan 2034; exact variant verify |
 | 1 | Raspberry Pi | CM4 IO Board | documented bench carrier | €45 | [CM docs](https://www.raspberrypi.com/documentation/computers/compute-module.html) | other proven carriers acceptable |
-| 1 | Raspberry Pi | Touch Display 2, 5-inch | 720×1280 DSI/touch prototype display | €45 | [display docs](https://www.raspberrypi.com/documentation/accessories/touch-display-2.html) | Waveshare DSI D alternative |
+| 1 | Raspberry Pi | Touch Display 2, 5-inch | low-risk 720×1280 DSI bring-up fallback | €45 | [display docs](https://www.raspberrypi.com/documentation/accessories/touch-display-2.html) | not representative of desired final size |
+| 1 | Waveshare | 6.25-inch DSI LCD | 720×1560 bonded larger-display evaluation | price at purchase | [product](https://www.waveshare.com/6.25inch-dsi-lcd.htm) | brightness/scan/latency unknown; evaluate before final panel |
 | 1 | Analog Devices | EVAL-ADV7282-MEBZ or verified ADV7280A-M EVM | CVBS-to-CSI bridge evaluation | €250 allowance | [ADV7280A](https://www.analog.com/en/products/ADV7280A.html) | exact stock/connector kit verify |
 | 1 | Skyzone | SteadyView X 5.8G ground-station kit | dual analog receiver/CVBS out | €150 | [product](https://www.skyzonefpv.com/en-de/products/skyzone-stvx-steadyview-x-receiver) | TBS Fusion/rapidFIRE benchmarks |
 | 1 | ST | NUCLEO-G0B1RE | MCU development board | €25 | [board family](https://www.st.com/en/evaluation-tools/nucleo-g0b1re.html) | exact current stock verify |
@@ -22,4 +23,3 @@ This is a purchase-planning list, not an approved assembly BOM. Prices are rough
 Expected module/evaluation spend is roughly €1,700 before instruments. EVM cost is
 intentional: it buys known-good references and reduces the risk of debugging an
 unproven decoder, precision AFE and power board simultaneously.
-

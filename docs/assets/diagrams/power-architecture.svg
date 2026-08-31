@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 410" role="img" aria-labelledby="title desc">
+  <title id="title">FpvDeck power architecture</title><desc id="desc">Internal cells and USB-C feed managed device rails while an external flight battery connects only to a protected measurement frontend.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0l9 3-9 3z" fill="#67e8a5"/></marker><style>.b{fill:#111d2b;stroke:#304158;stroke-width:2}.w{fill:#251c18;stroke:#6f4f32;stroke-width:2}.t{fill:#f4f8ff;font:600 16px DejaVu Sans}.s{fill:#91a2b8;font:12px DejaVu Sans}.l{stroke:#67e8a5;stroke-width:3;fill:none;marker-end:url(#a)}.x{stroke:#ffbf5a}</style></defs>
+  <rect width="1200" height="410" rx="24" fill="#080d14"/>
+  <text x="40" y="46" class="t" font-size="23">INTERNAL ENERGY + SAFE SHUTDOWN</text>
+  <g transform="translate(40 82)"><rect class="b" width="180" height="78" rx="14"/><text class="t" x="25" y="34">USB-C input</text><text class="s" x="25" y="57">policy + ESD</text></g>
+  <g transform="translate(40 196)"><rect class="b" width="180" height="78" rx="14"/><text class="t" x="25" y="34">Protected 2S2P</text><text class="s" x="25" y="57">serviceable 18650</text></g>
+  <g transform="translate(295 139)"><rect class="b" width="210" height="88" rx="14"/><text class="t" x="26" y="38">Charger / NVDC</text><text class="s" x="26" y="62">managed system power</text></g>
+  <path class="l" d="M220 121h75M220 235h35q40 0 40-40"/>
+  <g transform="translate(585 54)"><rect class="b" width="220" height="66" rx="13"/><text class="t" x="24" y="29">T8L / ELRS rail</text><text class="s" x="24" y="50">topology unverified</text></g>
+  <g transform="translate(585 139)"><rect class="b" width="220" height="66" rx="13"/><text class="t" x="24" y="29">5.1 V compute rail</text><text class="s" x="24" y="50">SoM · display · storage</text></g>
+  <g transform="translate(585 224)"><rect class="b" width="220" height="66" rx="13"/><text class="t" x="24" y="29">Quiet video rails</text><text class="s" x="24" y="50">VRX · decoder filtering</text></g>
+  <g transform="translate(585 309)"><rect class="b" width="220" height="66" rx="13"/><text class="t" x="24" y="29">Always-on MCU</text><text class="s" x="24" y="50">button · watchdog · loads</text></g>
+  <path class="l" d="M505 183h40q20 0 20-96h20M505 183h80M505 183h40q20 0 20 74h20M505 183h30q30 0 30 159h20"/>
+  <g transform="translate(885 96)"><rect class="w" width="260" height="78" rx="14"/><text class="t" x="24" y="34">External LiPo taps</text><text class="s" x="24" y="57">measurement source only</text></g>
+  <g transform="translate(885 226)"><rect class="w" width="260" height="78" rx="14"/><text class="t" x="24" y="34">Protection + ADC</text><text class="s" x="24" y="57">current limiting · ESD · RC</text></g>
+  <path class="l x" d="M1015 174v52M885 265h-40q-20 0-20 77h-20"/>
+  <text x="876" y="344" fill="#ffbf5a" font-family="DejaVu Sans" font-size="13">No path powers FpvDeck from the flight pack.</text>
+</svg>

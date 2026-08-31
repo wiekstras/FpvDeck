@@ -7,7 +7,7 @@
 | Compute | Raspberry Pi CM4, 4 GB/32 GB eMMC, no wireless preferred | i.MX 8M Plus industrial SoM | Prototype selected; production shortlist |
 | CVBS decode | ADV7280A-M or ADV7282-M evaluation hardware | Renesas TW9992 | Prototype selected; production driver work open |
 | VRX | Skyzone SteadyView X standalone ground-station kit | modular dual-VRX bay; integrated RF later | Selected pending latency A/B |
-| Display | 5-inch Raspberry Pi Touch Display 2 or Waveshare 5-inch DSI D | Winstar WF50DSYA3MNN0, 1100-nit IPS | Leads; all latency unmeasured |
+| Display | 5-inch Pi DSI fallback; evaluate Waveshare 6.25-inch DSI mechanics/software | 5.5–6.25-inch high-brightness DSI panel, part not frozen | Larger direction selected; all latency unmeasured |
 | Controller MCU | STM32G0B1 development board | STM32G0B1CB/CE class | Selected family; exact package after pin budget |
 | Battery ADC | ADS7066 and ADS8688A EVM A/B | not frozen | Bench decision required |
 | Main battery | bench supplies, then protected 2S2P 18650 fixture | serviceable protected 2S2P | Cell and regulatory design open |
@@ -41,4 +41,3 @@ separation, standard host support, and power-domain visibility. A debug UART is
 retained. SPI is reserved as a future performance option, not needed for human-
 rate controls/sensors. The VRX interface is initially 75-ohm CVBS plus its native
 control mechanism; no undocumented module-bay pins are assumed.
-

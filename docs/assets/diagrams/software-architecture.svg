@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
+  <title id="title">FpvDeck software architecture</title><desc id="desc">Real, simulated and replay backends implement stable services beneath a protected video core, modular applications and QML user interface.</desc>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0l9 3-9 3z" fill="#6fb4ff"/></marker><style>.b{fill:#111d2b;stroke:#304158;stroke-width:2}.h{fill:#13243a;stroke:#4778a8;stroke-width:2}.t{fill:#f4f8ff;font:600 16px DejaVu Sans}.s{fill:#91a2b8;font:12px DejaVu Sans}.l{stroke:#6fb4ff;stroke-width:3;fill:none;marker-end:url(#a)}</style></defs>
+  <rect width="1200" height="470" rx="24" fill="#080d14"/>
+  <text x="40" y="44" class="t" font-size="23">HARDWARE-INDEPENDENT APPLICATION PLATFORM</text>
+  <g transform="translate(40 77)"><rect class="b" width="310" height="66" rx="14"/><text class="t" x="24" y="30">Real hardware backends</text><text class="s" x="24" y="52">V4L2 · MCU · VRX · storage</text></g>
+  <g transform="translate(445 77)"><rect class="b" width="310" height="66" rx="14"/><text class="t" x="24" y="30">Simulator backends</text><text class="s" x="24" y="52">files · keyboard · fault injection</text></g>
+  <g transform="translate(850 77)"><rect class="b" width="310" height="66" rx="14"/><text class="t" x="24" y="30">Replay / HIL backends</text><text class="s" x="24" y="52">captured streams · test fixtures</text></g>
+  <g transform="translate(40 193)"><rect class="h" width="1120" height="82" rx="16"/><text class="t" x="24" y="33">STABLE SERVICE APIs</text><text class="s" x="24" y="59">Video · Battery · Telemetry · Input · DVR · Radio · Storage · Settings · Database · Network</text></g>
+  <path class="l" d="M195 143v50M600 143v50M1005 143v50"/>
+  <g transform="translate(40 325)"><rect class="h" width="300" height="90" rx="16"/><text class="t" x="24" y="35">Protected video core</text><text class="s" x="24" y="59">bounded live path · compositor</text></g>
+  <g transform="translate(390 325)"><rect class="b" width="470" height="90" rx="16"/><text class="t" x="24" y="35">Modular applications + widgets</text><text class="s" x="24" y="59">FPV · Balance · Media · Flights · Batteries · Aircraft · Diagnostics</text></g>
+  <g transform="translate(910 325)"><rect class="b" width="250" height="90" rx="16"/><text class="t" x="24" y="35">Qt 6 / QML shell</text><text class="s" x="24" y="59">physical focus · RGB UI</text></g>
+  <path class="l" d="M190 275v50M625 275v50M1035 275v50M340 370h50M860 370h50"/>
+  <text x="40" y="449" class="s">Apps may fail or restart without stalling live video; networking is never required for FPV operation.</text>
+</svg>

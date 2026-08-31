@@ -1,5 +1,7 @@
 # Software architecture
 
+![FpvDeck software architecture](assets/diagrams/software-architecture.svg)
+
 FPVDeck is a single-purpose Qt 6 application launched directly into a DRM/KMS
 session. There is no desktop environment. Systemd owns process lifetime and a
 small supervisor restarts noncritical workers independently.
@@ -30,4 +32,3 @@ layout infrastructure.
 The repository currently implements BatteryService, VideoService simulator,
 DVR simulator, SQLite DatabaseService, application pages, and a file video source.
 Telemetry/Input/Radio/Storage interfaces will be added before real backends.
-

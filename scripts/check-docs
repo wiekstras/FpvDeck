@@ -10,6 +10,16 @@ required=(
   docs/MCU_PROTOCOL.md docs/SIMULATOR.md docs/TESTING.md docs/BUILD.md
   docs/DEVELOPMENT.md docs/ROADMAP.md docs/RISK_REGISTER.md
   docs/REVERSE_ENGINEERING.md
+  CONTRIBUTING.md SECURITY.md LICENSE
+  docs/assets/renders/README.md docs/assets/renders/fpvdeck-concept-render-v2.png
+  docs/assets/ui/README.md docs/assets/ui/home.png docs/assets/ui/fpv.png
+  docs/assets/ui/battery.png docs/assets/ui/media.png docs/assets/ui/flights.png
+  docs/assets/ui/diagnostics.png docs/assets/branding/fpvdeck-icon.svg
+  docs/assets/branding/fpvdeck-wordmark.svg docs/assets/branding/social-preview.svg
+  docs/assets/diagrams/overall-system.svg docs/assets/diagrams/overall-system.mmd
+  docs/assets/diagrams/video-pipeline.mmd docs/assets/diagrams/video-pipeline.svg
+  docs/assets/diagrams/power-architecture.mmd docs/assets/diagrams/power-architecture.svg
+  docs/assets/diagrams/software-architecture.mmd docs/assets/diagrams/software-architecture.svg
   hardware/research/COMPONENT_SELECTION.md hardware/research/VRX_COMPARISON.md
   hardware/research/DISPLAY_COMPARISON.md hardware/research/SBC_COMPARISON.md
   hardware/research/VIDEO_DECODER_COMPARISON.md hardware/research/ADC_COMPARISON.md
@@ -21,4 +31,3 @@ for path in "${required[@]}"; do
     exit 1
   fi
 done
-

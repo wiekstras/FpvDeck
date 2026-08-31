@@ -1,5 +1,7 @@
 # Video pipeline
 
+![FpvDeck video pipeline](assets/diagrams/video-pipeline.svg)
+
 ## Prototype 1 path
 
 ```text
@@ -52,4 +54,3 @@ problem sources. The service publishes detected/forced standard, lock state,
 field rate, frame sequence, decoder error counters, and last-good-frame time.
 PAL, NTSC-M, weak sync, nonstandard line length, unplug/replug, and standard
 change are required bench cases.
-

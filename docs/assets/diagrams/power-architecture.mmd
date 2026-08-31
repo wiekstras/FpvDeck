@@ -1,0 +1,10 @@
+flowchart LR
+  USB[USB-C input] --> PMIC[Charger / NVDC power path]
+  CELL[Internal protected 2S2P 18650] <--> PMIC
+  PMIC --> T8L[T8L / ELRS rail]
+  PMIC --> FIVE[5.1 V compute/display rail]
+  PMIC --> QUIET[Filtered VRX/video rails]
+  PMIC --> AON[Always-on MCU rail]
+  EXT[External LiPo balance lead] --> PROTECT[Protected measurement only] --> ADC[Precision ADC]
+  ADC --> MCU[MCU]
+  MCU -->|shutdown / load control| PMIC
