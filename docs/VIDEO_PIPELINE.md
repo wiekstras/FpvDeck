@@ -1,0 +1,55 @@
+# Video pipeline
+
+## Prototype 1 path
+
+```text
+SteadyView X 1 Vpp / 75 Ω CVBS
+  -> correctly terminated/protected analog input
+  -> ADV7280A-M/ADV7282-M low-delay line-based I2P
+  -> one-lane CSI-2 YUV422
+  -> CM4 Unicam/V4L2 capture
+  -> DMABUF-backed live queue (depth 1; newest frame wins)
+  -> Qt Quick scene graph / DRM-KMS compositor
+  -> DSI scanout
+```
+
+Raspberry Pi's camera documentation explicitly supports ADV728x-M through the
+`adv7180` driver and explicitly does not support interlaced input. Therefore I2P
+is not optional on this prototype. The Analog Devices I2P uses line interpolation
+rather than field/frame storage; its artifacts are accepted in exchange for low
+delay. A frame-based software deinterlacer is forbidden in the live path.
+
+The current desktop `QMediaPlayer` backend is only a file simulator. Hardware
+capture will use a dedicated C++ V4L2 backend. It must not transit a USB capture
+device, encode/decode round trip, GStreamer queue with unspecified depth, or a
+desktop window manager.
+
+## Queue policy
+
+- Capture buffers: minimum driver-supported count proven stable; target 2.
+- Application live queue: exactly one pending frame; overwrite stale frames.
+- Compositor: direct fullscreen KMS/DRM session with no desktop compositor.
+- Recorder: independent bounded queue. Recorder overload drops/flags recording
+  frames and never back-pressures live video.
+- Faults: hold last valid frame briefly, then show explicit `NO VIDEO`; never let
+  a decoder's free-run blue/black output masquerade as a valid RF lock.
+
+## DVR
+
+V1 records pre-overlay YUV through the CM4 H.264 hardware encoder. Five-minute
+segments and a journaled metadata transaction limit power-loss damage. Container
+choice will be tested between fragmented MP4 and Matroska; normal MP4 requiring a
+final `moov` write is not acceptable without fragmentation/recovery.
+
+Composited recording is a later option. It requires an additional offscreen render
+or writeback path and must be disabled automatically if it threatens the live
+budget. Pre-overlay recording remains the canonical evidence stream.
+
+## PAL/NTSC policy
+
+Autodetect is accepted for general use; a user-forced standard is available for
+problem sources. The service publishes detected/forced standard, lock state,
+field rate, frame sequence, decoder error counters, and last-good-frame time.
+PAL, NTSC-M, weak sync, nonstandard line length, unplug/replug, and standard
+change are required bench cases.
+
