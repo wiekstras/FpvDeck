@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="${FPVDECK_BUILD_DIR:-${project_dir}/build/dev}"
+
+"${project_dir}/scripts/generate-test-video"
+cmake -S "${project_dir}" -B "${build_dir}" -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build "${build_dir}" --parallel
+
+export FPVDECK_DATA_DIR="${FPVDECK_DATA_DIR:-${project_dir}/generated/dev-data}"
+exec "${build_dir}/software/fpvdeck" --video "${project_dir}/generated/fpv-test-pal.mp4" "$@"
+

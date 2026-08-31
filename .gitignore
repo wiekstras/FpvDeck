@@ -1,0 +1,11 @@
+build/
+.cache/
+.idea/
+.vscode/
+*.user
+*.swp
+*.sqlite3
+*.db-shm
+*.db-wal
+generated/
+

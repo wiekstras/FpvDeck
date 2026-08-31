@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+output_dir="${project_dir}/generated"
+output_file="${output_dir}/fpv-test-pal.mp4"
+
+mkdir -p "${output_dir}"
+if [[ -s "${output_file}" ]]; then
+    exit 0
+fi
+if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "ffmpeg is required to generate the synthetic FPV video" >&2
+    exit 1
+fi
+
+ffmpeg -hide_banner -loglevel error -y \
+    -f lavfi -i "testsrc2=size=720x576:rate=50:duration=18" \
+    -vf "drawbox=x=24:y=20:w=672:h=536:color=white@0.20:t=2,drawbox=x=280:y=260:w=160:h=56:color=black@0.45:t=fill,drawtext=text='SYNTHETIC QUAD OSD':x=(w-text_w)/2:y=276:fontsize=22:fontcolor=white,drawtext=text='14.8V  LQ 96  MODE ACRO':x=34:y=36:fontsize=19:fontcolor=white,drawtext=text='ALT 23m    04\\:18':x=470:y=518:fontsize=19:fontcolor=white" \
+    -c:v libx264 -preset veryfast -tune zerolatency -pix_fmt yuv420p -g 50 -an \
+    "${output_file}"
+

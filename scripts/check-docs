@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+required=(
+  README.md ENGINEERING_LOG.md TODO.md
+  docs/ARCHITECTURE.md docs/HARDWARE_ARCHITECTURE.md docs/VIDEO_PIPELINE.md
+  docs/LATENCY.md docs/T8L_INTEGRATION.md docs/POWER.md
+  docs/BATTERY_MEASUREMENT.md docs/SOFTWARE_ARCHITECTURE.md docs/APP_API.md
+  docs/MCU_PROTOCOL.md docs/SIMULATOR.md docs/TESTING.md docs/BUILD.md
+  docs/DEVELOPMENT.md docs/ROADMAP.md docs/RISK_REGISTER.md
+  docs/REVERSE_ENGINEERING.md
+  hardware/research/COMPONENT_SELECTION.md hardware/research/VRX_COMPARISON.md
+  hardware/research/DISPLAY_COMPARISON.md hardware/research/SBC_COMPARISON.md
+  hardware/research/VIDEO_DECODER_COMPARISON.md hardware/research/ADC_COMPARISON.md
+)
+
+for path in "${required[@]}"; do
+  if [[ ! -s "${project_dir}/${path}" ]]; then
+    echo "missing required document: ${path}" >&2
+    exit 1
+  fi
+done
+
