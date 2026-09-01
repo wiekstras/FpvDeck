@@ -7,14 +7,58 @@ Item {
     id: root
     signal appRequested(string app)
     property bool menuOpen: false
+    property int videoFrameCount: 0
+    property int lastVideoFrameCount: 0
+    property int videoFps: 0
 
-    MediaPlayer { id: player; source: VideoService.source; videoOutput: output; loops: MediaPlayer.Infinite; Component.onCompleted: play() }
+    MediaPlayer {
+        id: player
+        source: VideoService.source
+        videoOutput: VideoService.liveCapture ? null : output
+        loops: MediaPlayer.Infinite
+        Component.onCompleted: if (!VideoService.liveCapture) play()
+    }
+    CaptureSession {
+        id: liveSession
+        camera: VideoService.captureAvailable ? PrototypeCamera : null
+        videoOutput: VideoService.liveCapture && VideoService.captureAvailable ? output : null
+        recorder: VideoService.liveCapture && VideoService.captureAvailable ? liveRecorder : null
+    }
+    MediaRecorder {
+        id: liveRecorder
+        outputLocation: DvrService.outputLocation
+        quality: MediaRecorder.NormalQuality
+        onErrorOccurred: function(error, errorString) {
+            if (error !== MediaRecorder.NoError) DvrService.reportRecorderError(errorString)
+        }
+    }
+    Connections {
+        target: DvrService
+        function onChanged() {
+            if (!VideoService.liveCapture) return
+            if (DvrService.recording && liveRecorder.recorderState === MediaRecorder.StoppedState)
+                liveRecorder.record()
+            else if (!DvrService.recording && liveRecorder.recorderState === MediaRecorder.RecordingState)
+                liveRecorder.stop()
+        }
+    }
     Rectangle { anchors.fill: parent; color: "#090d14" }
     VideoOutput {
         id: output; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop
         visible: VideoService.state !== "black" && VideoService.state !== "lost"
         y: VideoService.rolling ? rollAnimation.value : 0
         TapHandler { onTapped: { root.menuOpen = false; InteractionService.toggleControls() } }
+    }
+    Connections {
+        target: output.videoSink
+        function onVideoFrameChanged(frame) { root.videoFrameCount += 1 }
+    }
+    Timer {
+        interval: 1000; repeat: true; running: true
+        onTriggered: {
+            root.videoFps = root.videoFrameCount - root.lastVideoFrameCount
+            root.lastVideoFrameCount = root.videoFrameCount
+        }
     }
     Item {
         anchors.fill: parent; visible: VideoService.state === "weak" || VideoService.state === "rolling"; opacity: 0.32
@@ -28,7 +72,7 @@ Item {
         TapHandler { onTapped: InteractionService.toggleControls() }
         Column { anchors.centerIn: parent; spacing: 10
             Text { anchors.horizontalCenter: parent.horizontalCenter; text: VideoService.state === "lost" ? "NO VIDEO" : "BLACK FRAME"; color: Theme.text; font.pixelSize: 28; font.bold: true; font.letterSpacing: 3 }
-            Text { anchors.horizontalCenter: parent.horizontalCenter; text: "VIDEO " + VideoService.standard + " · VRX R" + RadioService.channel; color: Theme.textMuted; font.pixelSize: 14 }
+            Text { anchors.horizontalCenter: parent.horizontalCenter; text: "VIDEO " + VideoService.standard + " · " + VideoService.backend.toUpperCase() + " · VRX R" + RadioService.channel; color: Theme.textMuted; font.pixelSize: 14 }
         }
     }
 
@@ -83,5 +127,18 @@ Item {
     AppMenu {
         width: 650; height: 370; anchors.centerIn: parent; visible: root.menuOpen && !InteractionService.flightLocked; z: 20
         onAppSelected: function(app) { root.menuOpen = false; root.appRequested(app) }
+    }
+
+    Rectangle {
+        visible: SystemService.touchDebug
+        anchors.left: parent.left; anchors.bottom: controls.visible ? controls.top : parent.bottom
+        anchors.margins: 20; width: 270; height: 80; radius: 10
+        color: "#e80a1019"; border.color: Theme.cyan; z: 25
+        Column {
+            anchors.fill: parent; anchors.margins: 10; spacing: 4
+            Text { text: "VIDEO " + root.videoFps + " FPS  ·  DROP —  ·  LAT —"; color: Theme.cyan; font.pixelSize: 11; font.bold: true }
+            Text { text: "BACKEND " + VideoService.backend.toUpperCase() + "  ·  " + VideoService.standard; color: Theme.text; font.pixelSize: 11 }
+            Text { text: "CPU " + (SystemService.cpuPercent < 0 ? "—" : SystemService.cpuPercent.toFixed(0) + "%") + "  ·  MEM " + (SystemService.memoryMegabytes < 0 ? "—" : SystemService.memoryMegabytes.toFixed(0) + " MB") + "  ·  " + SystemService.temperatureC.toFixed(0) + "°C"; color: Theme.textMuted; font.pixelSize: 11 }
+        }
     }
 }

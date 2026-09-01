@@ -7,6 +7,13 @@ architectural assessments rather than measurements.
 
 ## Decision
 
+**Prototype 0 selection: Raspberry Pi Touch Display 2, 5-inch, MPN SC1975.**
+It is the fastest inexpensive route to dependable capacitive multi-touch: the
+€44-class module includes both Pi 5 and Pi 4 FFCs, the GPIO power cable and
+mounting screws; Raspberry Pi OS supports display and five-point touch over DSI.
+Its native portrait 720×1280 image becomes a 1280×720 landscape UI. It is not the
+final outdoor panel and does not replace the larger pinch-grip product direction.
+
 **Prototype 1 selection: Waveshare 6.25inch DSI LCD (B), SKU 35000.** This is the
 current Type B product, not the discontinued SKU 28918 with the almost identical
 name. It is intentionally slightly larger than the earlier 4–6 inch target: in
@@ -22,8 +29,11 @@ mock-up. Critical flight actions remain available on physical controls.
 
 | Candidate | Display / mechanics | Touch / Linux | Interface, support and latency concerns | Availability / price | Decision |
 | --- | --- | --- | --- | --- | --- |
+| **Raspberry Pi Touch Display 2, 5-inch, SC1975** | 5-inch; 720×1280; 24-bit; active area 62.1×110.4 mm; anti-glare; ±80° viewing; cover about 143.4×91.46 mm | Five-point capacitive; first-party Raspberry Pi OS integration; DSI carries display and touch | Native DSI; supplied 22-to-15-way Pi 5 FFC and GPIO power lead. Brightness, response time and measured latency are not published | Kiwi NL €36.49 ex VAT (~€44.15 inc), 10 shown in stock; stated production through at least Jan 2030 | **SELECTED for Prototype 0**: lowest integration risk at the right learning cost |
+| DFRobot 5-inch DSI Touchscreen V2, DFR0550-V2 | 5-inch IPS; 800×480 | Five-point capacitive; Raspberry Pi support | DSI but vendor/seller warns Pi 5 incompatibility; lower resolution | Kiwi NL €47.49 ex VAT, 10 shown | Rejected: costs more and conflicts with selected Pi 5 |
+| Waveshare 5-inch HDMI resistive module | 5-inch; 800×480 | Resistive single-point touch | HDMI plus GPIO touch creates more cabling and does not exercise the intended capacitive UX | Kiwi NL €31.49 ex VAT, in stock | Rejected: saves little after VAT and materially weakens touch testing |
+| Waveshare 5-inch HDMI high-brightness module | 5-inch IPS; 1024×600 | Capacitive touch variants available | HDMI processing plus separate USB touch; more setup and an unknown scaler delay | Current EU listings, generally above the official 5-inch DSI price | Rejected for Prototype 0: no advantage for functional bring-up |
 | **Waveshare 6.25inch DSI LCD (B), SKU 35000** | 6.25-inch IPS; 720×1560 portrait native; 178°; 500 cd/m²; up to 60 Hz; optical-bonded 1.1 mm, 6H cover; cover 74.70×159.18 mm; active area 66.81×144.75 mm | 5-point projected capacitive; I²C touch in the DSI connector; exact controller IC **UNKNOWN**; current Raspberry Pi OS is advertised driver-free | Native Pi DSI; documented CM4 IO Board connection; no HDMI scaler. Landscape rotation and panel scan direction need measurement. Panel response/buffering latency **UNKNOWN** | Current Waveshare catalog item, US$59.99 list / US$58.79 qty 1–9 | **SELECTED for Prototype 1**: largest credible low-risk Pi DSI touch module with adequate brightness and official CAD resources |
-| Raspberry Pi Touch Display 2, 5-inch, SC1631 | 5-inch; 720×1280; 24-bit; active area 62.1×110.4 mm; outline about 91.5×143.5×16 mm; anti-glare | Five-finger capacitive; first-party Raspberry Pi OS integration; touch and display over DSI | Native DSI and very low software-integration risk. Brightness, response time and measured latency are not published in the product brief | Current, US$40 list; production stated through at least Jan 2030 | **BENCH FALLBACK**: excellent support, but visibly smaller than requested |
 | Waveshare 5inch DSI LCD (D) | 5-inch IPS; 720×1280; 178°; optical bonding; published brightness not found | 5-point capacitive, I²C, documented Pi support | Native DSI, up to 60 Hz; no HDMI bridge. Same unanswered scan/response latency questions | Current module, commonly stocked around US$50–70 | Rejected as baseline: smaller with no compensating brightness/support advantage |
 | Focus LCDs E55RB-I-MW400-C | 5.5-inch IPS; 1080×1920; 400 cd/m²; 79.04×137.67 mm; -20…70 °C; HX8399-C | Capacitive GT911 over I²C; upstream Linux has a Goodix-family driver, but complete panel init/DRM integration is project work | Raw 4-lane MIPI DSI panel, 3.3 V logic and separate 14-LED backlight design. More driver, carrier and power risk; latency not specified | Recommended for new designs; US$128.81 list, limited visible unit stock | Rejected for Prototype 1: smaller/dimmer and much higher integration risk |
 | Winstar WF50DSYA3MNN0 | 5-inch IPS; 720×1280; 1100 cd/m²; -20…70 °C | **No touch in selected configuration** | Raw 4-lane DSI/ILI9881-class integration; custom init, backlight and touch stack required | Sample/inquiry procurement | Rejected: violates touchscreen requirement despite excellent nominal brightness |

@@ -8,7 +8,16 @@ inputs, binary protocol framing, and automated build/runtime tests are implement
 Remaining: richer aircraft/battery CRUD, real file recording, pointer-driven QML
 tests, macOS verification, and source reconnect/resolution tests.
 
-## M1 — measured bench video
+## M0.5 — Prototype 0 real-video bench
+
+The Raspberry Pi 5, official 5-inch capacitive display, RC832 Mini and
+UVG-002 reference chain is selected and order-documented. V4L2 enumeration,
+raw preview, hardware-mode launch, missing-device fallback, diagnostics and a
+pre-overlay Qt recorder branch are implemented. Next: receive parts, continuity-
+check the receiver power lead, show real Air65 video/OSD, capture frame/drop and
+recovery evidence, and measure the deliberately unoptimized latency baseline.
+
+## M1 — measured low-latency bench video
 
 Acquire the selected decoder/VRX/display/CM4 hardware; build the latency fixture;
 bring up V4L2; implement bounded DMABUF display; measure all modes; implement

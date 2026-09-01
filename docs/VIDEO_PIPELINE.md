@@ -2,7 +2,31 @@
 
 ![FpvDeck video pipeline](assets/diagrams/video-pipeline.svg)
 
-## Prototype 1 path
+## Prototype 0 functional path
+
+```text
+Air65 analog VTX -> RC832 Mini RF-to-CVBS -> yellow RCA
+  -> Gembird UVG-002 -> Linux V4L2/QCamera (usbtv or uvcvideo)
+  -> Qt Quick VideoOutput + independent RGB QML overlay
+  -> Raspberry Pi Touch Display 2
+```
+
+This is implemented as a selectable `v4l2` VideoService backend. Qt owns the
+camera/capture session; the UI continues to consume the same service state as
+file and simulated sources. A `QMediaRecorder` tee can write the pre-overlay
+camera stream without routing recording frames back through the live UI. This
+path is allowed to be slow and buffered: it is evidence for functionality, not
+the release pipeline.
+
+Gembird declares two possible chipsets under one MPN. UTV007 uses `usbtv`;
+UTVF007 commonly exposes a UVC stream through `uvcvideo` but may squelch noisy
+input. Device ID, driver, formats and loss behavior are receipt/bench gates.
+
+`scripts/fpvdeck-video-list` enumerates exact nodes/formats, `scripts/test-video`
+validates V4L2 without the application, and `scripts/prototype0` launches real
+capture with an explicit fallback to synthetic video when hardware is absent.
+
+## Prototype 1 latency path
 
 ```text
 Aircraft camera -> Betaflight analog OSD -> 5.8 GHz analog VTX
@@ -34,8 +58,9 @@ is not optional on this prototype. The Analog Devices I2P uses line interpolatio
 rather than field/frame storage; its artifacts are accepted in exchange for low
 delay. A frame-based software deinterlacer is forbidden in the live path.
 
-The current desktop `QMediaPlayer` backend is only a file simulator. Hardware
-capture will use a dedicated C++ V4L2 backend. It must not transit a USB capture
+The Prototype 0 Qt camera/V4L2 path intentionally transits USB capture. The
+Prototype 1 release candidate must instead use a dedicated low-queue V4L2/DMABUF
+backend. It must not transit a USB capture
 device, encode/decode round trip, GStreamer queue with unspecified depth, or a
 desktop window manager.
 

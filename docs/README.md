@@ -6,6 +6,10 @@ balance port measures an aircraft battery only; it never powers the deck.
 
 ## Start here
 
+- [Prototype 0: parts arrived, now build it](PROTOTYPE_0_SETUP.md)
+- [Buy Prototype 0 tonight](../hardware/PROTOTYPE_0_BUY_TONIGHT.md)
+- [Prototype 0 architecture and wiring](../hardware/prototype-0/README.md)
+- [Air65 real-video testing](AIR65_TESTING.md)
 - [System architecture](ARCHITECTURE.md)
 - [Hardware architecture](HARDWARE_ARCHITECTURE.md)
 - [Software architecture](SOFTWARE_ARCHITECTURE.md)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QElapsedTimer>
 #include <QTimer>
 
 class SystemService final : public QObject {
@@ -18,6 +19,8 @@ class SystemService final : public QObject {
     Q_PROPERTY(qint64 uptimeSeconds READ uptimeSeconds NOTIFY changed)
     Q_PROPERTY(QString warning READ warning NOTIFY changed)
     Q_PROPERTY(int displayBrightness READ displayBrightness NOTIFY changed)
+    Q_PROPERTY(double cpuPercent READ cpuPercent NOTIFY changed)
+    Q_PROPERTY(double memoryMegabytes READ memoryMegabytes NOTIFY changed)
 
 public:
     explicit SystemService(QObject* parent = nullptr);
@@ -34,6 +37,8 @@ public:
     qint64 uptimeSeconds() const { return m_uptimeSeconds; }
     QString warning() const;
     int displayBrightness() const { return m_displayBrightness; }
+    double cpuPercent() const { return m_cpuPercent; }
+    double memoryMegabytes() const { return m_memoryMegabytes; }
 
     void setTouchDebug(bool enabled);
     Q_INVOKABLE void setScenario(const QString& scenario);
@@ -58,4 +63,8 @@ private:
     bool m_touchDebug{false};
     qint64 m_uptimeSeconds{0};
     int m_displayBrightness{78};
+    QElapsedTimer m_cpuTimer;
+    qint64 m_lastCpuUsec{0};
+    double m_cpuPercent{-1.0};
+    double m_memoryMegabytes{-1.0};
 };

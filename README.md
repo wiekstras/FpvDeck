@@ -15,7 +15,9 @@ T8L donor controller. It keeps ELRS control independent while adding low-latency
 analog video, a large HD color display, modern RGB overlays, local flight data,
 capacitive multi-touch, and modular applications in one field-ready device.
 
-The desktop product shell works today without hardware. The RF, video-decoder,
+The desktop product shell works today without hardware, and a minimal real-video
+Prototype 0 now has selected orderable reference hardware and V4L2 software support.
+The final RF, video-decoder,
 power, battery-measurement, and enclosure designs remain engineering prototypes;
 this repository calls that distinction out rather than presenting renders as
 finished hardware.
@@ -45,7 +47,8 @@ data. [Media browser](docs/assets/ui/media.png),
 - T8L gimbals, switches, ELRS control electronics, and RF path reused where safe
 - analog FPV reception with the Betaflight OSD preserved in the received image
 - GPU-composited full-color widgets, menus, notifications, and applications
-- selected 6.25-inch 720×1560 IPS capacitive touchscreen for the bench prototype
+- inexpensive official 5-inch Touch Display 2 for Prototype 0; larger 6.25-inch
+  DSI panel remains the pinch-grip-oriented latency-bench direction
 - touch-first shell with large targets, FPV auto-hide controls, and flight lock
 - pre-overlay DVR architecture and optional composited recording branch
 - protected external 1S–6S balance checking; 8S remains under evaluation
@@ -87,7 +90,7 @@ with the documentation.
 | Flights | ✅ SQLite schema, migrations, deterministic history, and persistence |
 | Batteries | 🧪 application shell/showcase data; 🚧 persistent inventory workflow pending |
 | Aircraft | 🧪 application shell; 🚧 persistent profile workflow pending |
-| DVR | 🧪 state/error simulation; 📐 hardware encoder pipeline pending |
+| DVR | ✅ live-capture pre-overlay recorder plumbing; 🧪 file-source state/faults; 🚧 target codec and power-loss validation pending |
 | Receiver | ✅ channel/favorite/scan UI; 🧪 RF state and scan results |
 | Diagnostics | ✅ detailed UI and simulated faults; 🧪 host self-test CLI; 📐 physical HIL pending |
 | Settings | ✅ physical-input-friendly application shell; 🚧 durable settings pending |
@@ -113,6 +116,22 @@ will retain physical control paths for critical actions.
 
 Rebuild the committed previews with `./scripts/screenshot-demo`.
 
+## Prototype 0: real Air65 video
+
+The next milestone uses the owned Air65 as a real analog source. The deliberately
+pragmatic chain is RC832 Mini → Gembird UVG-002 → Raspberry Pi 5 → official
+5-inch capacitive Touch Display 2. It proves RF reception, V4L2 ingestion, touch,
+overlay, apps and DVR before spending final-product money or waiting for a custom PCB.
+
+- **[Buy the short reference list tonight](hardware/PROTOTYPE_0_BUY_TONIGHT.md)**
+- [Assemble and launch Prototype 0](docs/PROTOTYPE_0_SETUP.md)
+- [Exact wiring](hardware/prototype-0/WIRING.md)
+- [Air65 bench test](docs/AIR65_TESTING.md)
+
+On Pi hardware, `./scripts/fpvdeck-video-list` enumerates capture formats,
+`./scripts/test-video` validates raw V4L2 independently, and
+`./scripts/prototype0` launches real capture with safe simulated-service fallback.
+
 ## Hardware
 
 | Subsystem | Prototype direction | Status |
@@ -126,6 +145,7 @@ Rebuild the committed previews with `./scripts/screenshot-demo`.
 | Balance ADC | ADS8688A + matched 31 kΩ/10 kΩ dividers | 🧪 error model; 📐 physical validation required |
 | Power | donor's two 18650 cells, managed shutdown, modular rails | ❓ series/parallel and charger topology need measurement |
 | Test PCB Rev A | MCU, ADC, protected-input intent, probes, module headers | 🚧 placed/unrouted; **not released for fabrication** |
+| Prototype 0 | Pi 5 2 GB + 5-inch Touch Display 2 + RC832 Mini + UVG-002 | ✅ selected/orderable; 🚧 physical test awaits parts |
 
 No PCB or battery frontend in this repository is approved for fabrication or pack
 connection. Unknown interfaces are labeled **UNKNOWN** or **NEEDS MEASUREMENT**.
@@ -136,6 +156,7 @@ Legend: ✅ implemented · 🚧 in development · 🧪 simulated · 📐 hardwar
 ❓ research/unconfirmed
 
 - ✅ desktop Qt 6/QML application, service interfaces, SQLite migrations, and CI
+- ✅ V4L2 device discovery/backend selection and a complete Prototype 0 order/setup path
 - 🧪 video, balance battery, telemetry, touch/input, media/storage, DVR, and faults
 - 📐 low-latency bench chain and Test PCB Rev A; board routing/review gates remain
 - ❓ T8L internal pinout/mechanics and final display/enclosure geometry
@@ -156,6 +177,7 @@ unresolved video chain and unreleased bare PCB.
 ## Documentation
 
 - [Complete documentation index](docs/README.md)
+- [Prototype 0 order list](hardware/PROTOTYPE_0_BUY_TONIGHT.md) · [setup](docs/PROTOTYPE_0_SETUP.md) · [wiring](hardware/prototype-0/WIRING.md)
 - [System architecture](docs/ARCHITECTURE.md) · [hardware architecture](docs/HARDWARE_ARCHITECTURE.md)
 - [Video pipeline](docs/VIDEO_PIPELINE.md) · [latency budget and measurement](docs/LATENCY.md)
 - [T8L integration](docs/T8L_INTEGRATION.md) · [safe reverse engineering](docs/REVERSE_ENGINEERING.md)
@@ -168,9 +190,9 @@ unresolved video chain and unreleased bare PCB.
 
 ## Roadmap
 
-1. **v0.1 simulator:** complete persistent app workflows, bounded video/DVR tests,
-   and reproducible desktop packaging.
-2. **v0.2 bench:** measure VRX → decoder → compositor → display latency and RF,
+1. **v0.1 simulator + Prototype 0:** show real Air65 analog video with FpvDeck's
+   overlay on the capacitive touchscreen, then complete bounded DVR tests.
+2. **v0.2 latency bench:** measure VRX → decoder → compositor → display latency and RF,
    ADC, power, display, and shutdown behavior.
 3. **v0.3 controller PCB:** protected measurement, MCU, controls, sequencing,
    connectors, debug, and manufacturing self-test.

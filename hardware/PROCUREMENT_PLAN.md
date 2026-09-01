@@ -1,5 +1,9 @@
 # Prototype procurement plan
 
+> Prototype 0 now overrides this older Prototype 1 purchasing sequence. Order the
+> [short reference chain](PROTOTYPE_0_BUY_TONIGHT.md), prove real Air65 video, and
+> leave every direct-decoder/custom-PCB item below paused until evidence is logged.
+
 ## Order now
 
 These items unlock independent work even if the custom PCB changes:

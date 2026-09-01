@@ -4,6 +4,19 @@ FPVDeck is an appliance UI, not a desktop shell. Hardware backends are selected
 behind service interfaces; screens consume stable QObject properties and never
 open devices directly.
 
+## Video backends
+
+- `simulated`: generated source used when no explicit input is provided.
+- `file`: explicit `--video PATH`, used by deterministic tests and demos.
+- `v4l2`: explicit `--video-device /dev/videoN`; optional `--video-standard
+  PAL|NTSC` keeps diagnostics aligned with the forced capture norm. Qt's Linux
+  camera backend owns capture and publishes frames to the existing FPV compositor.
+
+Use `./scripts/fpvdeck-video-list` and `./scripts/test-video` before debugging
+the full UI. A missing device produces an explicit `lost` service state rather
+than terminating the application. `./scripts/prototype0` provides friendly
+auto-detection and simulator fallback for bench work.
+
 ## Keyboard input backend
 
 - Arrows: cycle the current screen's large actionable controls; Enter activates

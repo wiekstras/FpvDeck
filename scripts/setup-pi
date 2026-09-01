@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dry_run=0
+if [[ "${1:-}" == "--dry-run" ]]; then
+    dry_run=1
+    shift
+fi
+if (($#)); then
+    echo "Usage: ./scripts/setup-pi [--dry-run]" >&2
+    exit 2
+fi
+if [[ ! -r /etc/os-release ]]; then
+    echo "This installer requires Raspberry Pi OS/Debian." >&2
+    exit 3
+fi
+. /etc/os-release
+if [[ "${ID:-}" != "debian" && "${ID:-}" != "raspbian" && "${ID:-}" != "ubuntu" ]]; then
+    echo "Unsupported OS '${ID:-unknown}'; use docs/BUILD.md manually." >&2
+    exit 3
+fi
+
+packages=(
+    build-essential cmake ninja-build git ffmpeg v4l-utils
+    qt6-base-dev qt6-declarative-dev qt6-multimedia-dev
+    qml6-module-qtquick qml6-module-qtquick-controls
+    qml6-module-qtquick-layouts qml6-module-qtmultimedia
+    libqt6sql6-sqlite
+)
+
+if ((dry_run)); then
+    printf 'sudo apt-get update\nsudo apt-get install -y'
+    printf ' %q' "${packages[@]}"
+    printf '\n'
+    exit 0
+fi
+
+sudo apt-get update
+sudo apt-get install -y "${packages[@]}"
+echo "Pi dependencies installed. Reboot after connecting the Touch Display 2, then run:"
+echo "  ./scripts/fpvdeck-video-list"
+echo "  ./scripts/prototype0"

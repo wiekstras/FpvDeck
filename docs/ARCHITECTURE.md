@@ -36,16 +36,18 @@ The T8L/ELRS path is control only. FpvDeck's dedicated VRX performs RF-to-CVBS;
 the decoder performs CVBS-to-digital conversion; neither function is supplied by
 the donor radio.
 
-Prototype 0 is the desktop simulator in this repository. Prototype 1 is a CM4
-development carrier, selected 720×1560 DSI touch module, ADV7282A-M evaluation
+The simulator is the pre-hardware product showcase. Prototype 0 is the deliberately
+simple Pi 5 + 5-inch Touch Display 2 + RC832 Mini + UVG-002 functionality bench;
+it exists to show real Air65 video before latency optimization. Prototype 1 is a CM4
+latency bench with the selected 720×1560 DSI touch module, ADV7282A-M evaluation
 hardware, standalone SteadyView X VRX, STM32G0 development board, and protected
 ADC evaluation hardware. Each module remains replaceable, and the analog-video
 modules remain procurement-gated until the decoder-to-CM4 bridge is reviewed.
 
 Prototype 2 is a Controller-I/O PCB: MCU, protected battery measurement, controls,
 power button/sequencing logic, fans/temperature, debug, and module connectors.
-Prototype 3 is a compute carrier. Prototype 4 integrates only interfaces whose
-layout, thermal, EMC, and latency behavior has been proven on the bench.
+Prototype 3 integrates only interfaces whose layout, thermal, EMC, and latency
+behavior has been proven on the bench, including a compute carrier as justified.
 
 ## Performance gates
 

@@ -1,10 +1,53 @@
 #include "SystemService.h"
 
+#include <QFile>
+
+#ifdef Q_OS_UNIX
+#include <sys/resource.h>
+#endif
+
+namespace {
+qint64 processCpuUsec()
+{
+#ifdef Q_OS_UNIX
+    rusage usage{};
+    if (getrusage(RUSAGE_SELF, &usage) != 0) return -1;
+    return (usage.ru_utime.tv_sec + usage.ru_stime.tv_sec) * 1000000LL
+        + usage.ru_utime.tv_usec + usage.ru_stime.tv_usec;
+#else
+    return -1;
+#endif
+}
+
+double currentRssMegabytes()
+{
+    QFile status(QStringLiteral("/proc/self/status"));
+    if (!status.open(QIODevice::ReadOnly | QIODevice::Text)) return -1.0;
+    for (const QByteArray& line : status.readAll().split('\n')) {
+        if (!line.startsWith("VmRSS:")) continue;
+        const auto fields = line.simplified().split(' ');
+        return fields.size() >= 2 ? fields.at(1).toDouble() / 1024.0 : -1.0;
+    }
+    return -1.0;
+}
+}
+
 SystemService::SystemService(QObject* parent)
     : QObject(parent)
 {
+    m_lastCpuUsec = processCpuUsec();
+    m_cpuTimer.start();
+    m_memoryMegabytes = currentRssMegabytes();
     m_timer.setInterval(1000);
     connect(&m_timer, &QTimer::timeout, this, [this] {
+        const qint64 elapsedUsec = m_cpuTimer.restart() * 1000;
+        const qint64 cpuUsec = processCpuUsec();
+        if (elapsedUsec > 0 && cpuUsec >= 0 && m_lastCpuUsec >= 0) {
+            m_cpuPercent = 100.0 * static_cast<double>(cpuUsec - m_lastCpuUsec)
+                / static_cast<double>(elapsedUsec);
+        }
+        m_lastCpuUsec = cpuUsec;
+        m_memoryMegabytes = currentRssMegabytes();
         ++m_uptimeSeconds;
         if (m_deckCharging && m_deckBatteryPercent < 100 && m_uptimeSeconds % 5 == 0) {
             ++m_deckBatteryPercent;

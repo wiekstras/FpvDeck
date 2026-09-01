@@ -12,10 +12,14 @@ MCU protocol CRC/framing/corruption and board-command dispatch; and SQLite
 migration plus flight persistence/reopen. Service tests cover touch auto-hide,
 flight lock, battery extrema/faults, media seek/playback, storage faults,
 deck/MCU/ADC/VRX health, receiver scan/favorites, telemetry loss/corruption,
-PAL/NTSC validation, and physical-input lockout.
+PAL/NTSC validation, V4L2/file/simulator backend switching, capture loss/reconnect,
+recorder-error isolation, and physical-input lockout.
 
 Headless tests launch the complete QML graph in Home, Fly, Fly controls, flight
 lock, Battery, Media, touch playback, Receiver, Flights, and Diagnostics states.
+The QML suite also starts with an intentionally missing `/dev/video999` to prove
+that capture absence does not crash the shell. Python tests cover numeric video-
+node ordering and format discovery independently of physical devices.
 An additional first-swapped-frame test exercises the schema-versioned benchmark
 output and a Python test rejects incomplete/unknown metric records.
 The screenshot script runs the same executable with deterministic data. A Python

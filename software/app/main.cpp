@@ -17,6 +17,9 @@
 #include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QCamera>
+#include <QCameraDevice>
+#include <QMediaDevices>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -39,12 +42,18 @@ int main(int argc, char* argv[])
     parser.addHelpOption();
     parser.addVersionOption();
     QCommandLineOption videoOption({"i", "video"}, "Synthetic/test video file", "path");
+    QCommandLineOption videoDeviceOption("video-device",
+        "Linux V4L2 capture device (for example /dev/video0)", "device");
+    QCommandLineOption videoStandardOption("video-standard",
+        "Capture video standard shown by diagnostics (PAL or NTSC)", "standard", "PAL");
     QCommandLineOption databaseOption({"d", "database"}, "SQLite database path", "path");
     QCommandLineOption exitOption("exit-after-ms", "Exit automatically (test use)", "milliseconds");
     QCommandLineOption screenshotOption("screenshot", "Save a rendered screenshot", "path");
     QCommandLineOption benchmarkOption("benchmark-json", "Write first-frame benchmark JSON and exit", "path");
     QCommandLineOption demoStateOption("demo-state", "Open a deterministic showcase state", "state", "fpv");
     parser.addOption(videoOption);
+    parser.addOption(videoDeviceOption);
+    parser.addOption(videoStandardOption);
     parser.addOption(databaseOption);
     parser.addOption(exitOption);
     parser.addOption(screenshotOption);
@@ -60,9 +69,12 @@ int main(int argc, char* argv[])
         ? parser.value(databaseOption) : dataDirectory + "/fpvdeck.sqlite3";
     const QString videoPath = parser.isSet(videoOption)
         ? parser.value(videoOption) : QDir::currentPath() + "/generated/fpv-test-pal.mp4";
+    const QString recordingDirectory = dataDirectory + "/recordings";
+    QDir().mkpath(recordingDirectory);
 
     BatteryService batteryService;
     DvrService dvrService;
+    dvrService.setOutputDirectory(recordingDirectory);
     InputService inputService;
     InteractionService interactionService;
     MediaService mediaService(QUrl::fromLocalFile(videoPath));
@@ -71,6 +83,55 @@ int main(int argc, char* argv[])
     SystemService systemService;
     TelemetryService telemetryService;
     VideoService videoService(QUrl::fromLocalFile(videoPath));
+    const QString requestedStandard = parser.value(videoStandardOption).trimmed().toUpper();
+    if (requestedStandard != "PAL" && requestedStandard != "NTSC") {
+        qCritical("Video standard must be PAL or NTSC");
+        return 11;
+    }
+    videoService.setStandard(requestedStandard);
+    QCamera prototypeCamera;
+    QMediaDevices mediaDevices;
+    if (parser.isSet(videoDeviceOption)) {
+        const QString requestedDevice = parser.value(videoDeviceOption);
+        const auto configureCaptureDevice = [&prototypeCamera, &videoService,
+                                                &mediaDevices, requestedDevice] {
+            QCameraDevice selectedDevice;
+            for (const QCameraDevice& device : mediaDevices.videoInputs()) {
+                if (QString::fromUtf8(device.id()) == requestedDevice) {
+                    selectedDevice = device;
+                    break;
+                }
+            }
+            if (selectedDevice.isNull()) {
+                prototypeCamera.stop();
+                videoService.useV4l2(requestedDevice,
+                    QStringLiteral("Capture device unavailable"), false);
+                return;
+            }
+            if (prototypeCamera.cameraDevice().id() == selectedDevice.id()
+                && prototypeCamera.isActive()) {
+                videoService.reportCaptureAvailability(true);
+                return;
+            }
+            prototypeCamera.stop();
+            prototypeCamera.setCameraDevice(selectedDevice);
+            videoService.useV4l2(requestedDevice, selectedDevice.description(), true);
+            prototypeCamera.start();
+        };
+        QObject::connect(&mediaDevices, &QMediaDevices::videoInputsChanged,
+            &application, configureCaptureDevice);
+        QObject::connect(&prototypeCamera, &QCamera::errorOccurred, &videoService,
+            [&videoService](QCamera::Error error, const QString& errorString) {
+                if (error == QCamera::NoError) return;
+                qWarning("V4L2 capture error: %s", qPrintable(errorString));
+                videoService.reportCaptureAvailability(false);
+            });
+        configureCaptureDevice();
+        if (!videoService.captureAvailable())
+            qWarning("V4L2 device is unavailable: %s", qPrintable(requestedDevice));
+    } else if (!parser.isSet(videoOption)) {
+        videoService.useSimulated(QUrl::fromLocalFile(videoPath));
+    }
     DatabaseService databaseService(databasePath);
     QString databaseError;
     if (!databaseService.initialize(&databaseError)) {
@@ -112,6 +173,7 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("SystemService", &systemService);
     engine.rootContext()->setContextProperty("TelemetryService", &telemetryService);
     engine.rootContext()->setContextProperty("VideoService", &videoService);
+    engine.rootContext()->setContextProperty("PrototypeCamera", &prototypeCamera);
     engine.rootContext()->setContextProperty("DatabaseService", &databaseService);
     engine.rootContext()->setContextProperty("StartupDemoState", demoState);
     engine.rootContext()->setContextProperty("StartupDemoMode", parser.isSet(demoStateOption));

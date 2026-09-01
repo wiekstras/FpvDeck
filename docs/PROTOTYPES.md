@@ -1,6 +1,6 @@
 # Prototype stages and exit criteria
 
-## Prototype 0 — desktop
+## Pre-hardware simulator
 
 **BOM:** normal Linux/macOS computer, Qt 6, FFmpeg. **Connections:** none.
 **Tests:** C++/C units, SQLite migration, QML runtime, simulated fault scenarios.
@@ -8,7 +8,30 @@
 **Exit:** all core apps navigate without hardware, overlays remain independent of
 video, persistent flight records work, simulator faults are repeatable, CI green.
 
-## Prototype 1 — modular bench
+## Prototype 0 — bench functionality
+
+**BOM:** Raspberry Pi 5 2 GB, official 5-inch Touch Display 2, dedicated
+RC832 Mini 5.8 GHz RF-to-CVBS receiver, Gembird UVG-002 CVBS-to-V4L2 capture,
+separate approved Pi/VRX wall supplies and the owned T8L/Air65.
+
+**Connections:** supplied DSI/GPIO display cables; receiver-supplied antenna,
+power and AV leads; yellow RCA composite to UVG-002; USB-A to Pi. No T8L
+teardown or shared power.
+
+**Tests:** real Air65 video/embedded OSD; Qt RGB overlay; touch; PAL/NTSC capture;
+loss/recovery; short DVR; diagnostics; T8L-to-Air65 control continuity.
+
+**Risk:** the USB capture path may have poor latency and buffering. That is
+acceptable only for this functionality milestone.
+
+**Exit:** live Air65 image with embedded OSD plus independent FpvDeck overlay is
+stable on the touchscreen; apps remain responsive through signal loss; capture
+format/FPS/drops and baseline latency are recorded.
+
+See [Buy Tonight](../hardware/PROTOTYPE_0_BUY_TONIGHT.md) and
+[setup](PROTOTYPE_0_SETUP.md).
+
+## Prototype 1 — latency bench
 
 **BOM:** CM4/IO carrier, selected 6.25-inch DSI touch display, dedicated 5.8 GHz
 SteadyView X RF-to-CVBS ground station, separate ADV7282A-M CVBS-to-CSI evaluation
@@ -28,7 +51,7 @@ MCU protocol/reconnect; T8L coexistence.
 video/DVR soak; 1,000 signal reconnects; power budget measured; Prototype 1 wiring
 and purchase BOM frozen.
 
-## Prototype 2 — Controller-I/O Rev A
+## Prototype 2 — custom modular hardware
 
 **BOM:** custom PCB with STM32G0, selected ADC/protected frontend, controls,
 temperature/fan, power state logic, USB CDC/debug, modular VRX/T8L/compute headers.
@@ -40,7 +63,7 @@ HIL buttons/watchdog/shutdown; ESD pre-check; self-test coverage.
 **Exit:** no unsafe fault current, calibration target met over temperature, 1,000
 shutdown/brownout cycles, recovery/update method proven, all test points accessible.
 
-## Prototype 3 — compute carrier
+## Prototype 3 — integrated FpvDeck
 
 **BOM:** CM4 carrier, CSI/DSI, power, eMMC module, USB-C/data, decoder or decoder
 module, debug/test connectors and shielding options. VRX remains modular.
@@ -51,7 +74,6 @@ applicable; full latency/thermal/EMC repeat; RF degradation A/B; storage enduran
 **Exit:** 100-hour soak and thermal margin, no material RF loss, reproducible image,
 all carrier interfaces pass manufacturing diagnostics.
 
-## Prototype 4 — integrated candidate
-
-Integrate only proven circuits. Complete DFM/DFT, enclosure/drop/ingress/ergonomic
-tests, compliance pre-scan, service procedure, supply-chain audit and pilot build.
+Integrate only proven circuits, including the compute carrier when measurement
+supports it. Complete DFM/DFT, enclosure/drop/ingress/ergonomic tests, compliance
+pre-scan, service procedure, supply-chain audit and pilot build.

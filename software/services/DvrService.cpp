@@ -1,5 +1,8 @@
 #include "DvrService.h"
 
+#include <QDateTime>
+#include <QDir>
+
 DvrService::DvrService(QObject* parent)
     : QObject(parent)
 {
@@ -15,8 +18,24 @@ void DvrService::toggleRecording()
 {
     if (!m_error.isEmpty()) return;
     m_recording = !m_recording;
-    if (m_recording) m_timer.start(); else m_timer.stop();
+    if (m_recording) {
+        m_elapsedSeconds = 0;
+        if (!m_outputDirectory.isEmpty()) {
+            const QString stamp = QDateTime::currentDateTimeUtc().toString("yyyyMMdd-HHmmss-zzz");
+            m_outputLocation = QUrl::fromLocalFile(
+                QDir(m_outputDirectory).filePath("fpvdeck-" + stamp + ".mp4"));
+        }
+        m_timer.start();
+    } else {
+        m_timer.stop();
+    }
     emit changed();
+}
+
+void DvrService::setOutputDirectory(const QString& directory)
+{
+    m_outputDirectory = directory;
+    if (!m_outputDirectory.isEmpty()) QDir().mkpath(m_outputDirectory);
 }
 
 void DvrService::simulateStorageFull()
@@ -35,3 +54,10 @@ void DvrService::clearError()
     emit changed();
 }
 
+void DvrService::reportRecorderError(const QString& message)
+{
+    m_recording = false;
+    m_timer.stop();
+    m_error = message.trimmed().isEmpty() ? "RECORDER ERROR" : message.trimmed();
+    emit changed();
+}

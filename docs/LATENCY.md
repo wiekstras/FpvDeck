@@ -4,7 +4,32 @@ Latency is a release gate for FpvDeck. Values in this document are either
 targets or estimates until a physical chain has been measured. They are not
 product claims.
 
-## Selected Prototype 1 path
+## Prototype 0 functionality path
+
+```text
+Air65 -> RC832 Mini CVBS -> Gembird UVG-002 -> V4L2/QCamera
+      -> Qt compositor -> Raspberry Pi Touch Display 2
+```
+
+This deliberately uses USB capture to obtain real video quickly. USB transfer,
+capture buffering, Qt camera buffering, deinterlacing and display scanout may add
+multiple fields/frames. No unmeasured number is assigned to those stages. The
+bench procedure records FPS, dropped frames, recovery behavior and a first
+glass-to-glass distribution. A poor result does not invalidate Prototype 0; it
+confirms why Prototype 1 replaces this path.
+
+The received UVG-002 may use either the `usbtv` or UVC/`uvcvideo` path. Those
+paths can buffer and handle loss differently, so the USB ID/driver is part of
+every recorded latency result.
+
+| Development stage | Purpose | Video path acceptance |
+|---|---|---|
+| Prototype 0 | Functionality | real PAL/NTSC video + overlay + touch + DVR; latency measured but not gated |
+| Prototype 1 | Latency | direct CVBS decoder path must meet the working p95 gate |
+| Prototype 2 | Custom hardware | reproduce validated modular behavior on reviewed PCB hardware |
+| Prototype 3 | Integrated product | end-to-end field, thermal, RF and reliability validation |
+
+## Selected Prototype 1 latency path
 
 ```text
 camera -> FC analog OSD -> VTX/RF -> SteadyView X CVBS

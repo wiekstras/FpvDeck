@@ -1,5 +1,9 @@
 # EU Prototype 1 order list
 
+> **Later-stage list.** For the fastest Air65-to-touchscreen functionality build,
+> use the selected [Prototype 0 buy-tonight list](PROTOTYPE_0_BUY_TONIGHT.md).
+> Do not combine both lists or purchase a second compute/display stack now.
+
 **Research snapshot:** 2026-09-01. **Architecture:** T8L supplies control/2.4 GHz
 ELRS only; FpvDeck adds a separate 5.8 GHz analog VRX and a separate CVBS decoder.
 The machine-readable companion is

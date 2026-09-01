@@ -11,7 +11,7 @@ Item {
             Text { anchors.centerIn: parent; text: "●"; color: "white"; font.pixelSize: 38 }
         }
         Text { anchors.horizontalCenter: parent.horizontalCenter; text: DvrService.recording ? "RECORDING" : "DVR READY"; color: "#f4f8ff"; font.pixelSize: 28; font.bold: true }
-        Text { anchors.horizontalCenter: parent.horizontalCenter; text: DvrService.freeGigabytes.toFixed(1) + " GB AVAILABLE  •  PRE-OVERLAY STREAM"; color: "#71839a"; font.pixelSize: 13 }
+        Text { anchors.horizontalCenter: parent.horizontalCenter; text: DvrService.freeGigabytes.toFixed(1) + " GB AVAILABLE  •  " + (VideoService.liveCapture ? "V4L2 PRE-OVERLAY STREAM" : "SIMULATED RECORDER"); color: "#71839a"; font.pixelSize: 13 }
         Button { anchors.horizontalCenter: parent.horizontalCenter; text: DvrService.recording ? "STOP RECORDING" : "START RECORDING"; enabled: !DvrService.error.length; onClicked: DvrService.toggleRecording() }
         Row {
             anchors.horizontalCenter: parent.horizontalCenter; spacing: 10

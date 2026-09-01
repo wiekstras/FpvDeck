@@ -1,4 +1,5 @@
 #include "services/BatteryService.h"
+#include "services/DvrService.h"
 #include "services/InputService.h"
 #include "services/InteractionService.h"
 #include "services/MediaService.h"
@@ -9,6 +10,7 @@
 #include "services/VideoService.h"
 
 #include <QSignalSpy>
+#include <QDir>
 #include <QTest>
 
 class ServicesTest final : public QObject {
@@ -77,6 +79,58 @@ private slots:
         RadioService radio;
         radio.setScenario("lost");
         QCOMPARE(radio.rssi(), 0);
+    }
+
+    void videoBackendSwitchingAndReconnect()
+    {
+        const QUrl fileSource = QUrl::fromLocalFile("/tmp/fpvdeck-pal.mp4");
+        VideoService video(fileSource);
+        QCOMPARE(video.backend(), QString("file"));
+        QCOMPARE(video.source(), fileSource);
+
+        video.useV4l2("/dev/video7", "USBTV007 usbtv", false);
+        QCOMPARE(video.backend(), QString("v4l2"));
+        QVERIFY(video.liveCapture());
+        QVERIFY(!video.captureAvailable());
+        QCOMPARE(video.state(), QString("lost"));
+        QCOMPARE(video.devicePath(), QString("/dev/video7"));
+
+        video.reportCaptureAvailability(true);
+        QVERIFY(video.captureAvailable());
+        QCOMPARE(video.state(), QString("locked"));
+        video.reportCaptureAvailability(false);
+        QCOMPARE(video.state(), QString("lost"));
+
+        video.useFile(fileSource);
+        QCOMPARE(video.backend(), QString("file"));
+        QVERIFY(!video.liveCapture());
+        QCOMPARE(video.state(), QString("locked"));
+        video.useSimulated(fileSource);
+        QCOMPARE(video.backend(), QString("simulated"));
+
+        video.setStandard("NTSC");
+        QCOMPARE(video.standard(), QString("NTSC"));
+        video.setStandard("SECAM");
+        QCOMPARE(video.standard(), QString("NTSC"));
+    }
+
+    void dvrRecorderFailureStopsWithoutAffectingVideo()
+    {
+        DvrService dvr;
+        dvr.setOutputDirectory(QDir::tempPath());
+        dvr.toggleRecording();
+        QVERIFY(dvr.recording());
+        QVERIFY(dvr.outputLocation().isLocalFile());
+        QVERIFY(dvr.outputLocation().toLocalFile().endsWith(".mp4"));
+        QTRY_VERIFY_WITH_TIMEOUT(dvr.elapsedSeconds() >= 1, 1500);
+        dvr.toggleRecording();
+        dvr.toggleRecording();
+        QCOMPARE(dvr.elapsedSeconds(), 0);
+        dvr.reportRecorderError("encoder unavailable");
+        QVERIFY(!dvr.recording());
+        QCOMPARE(dvr.error(), QString("encoder unavailable"));
+        dvr.clearError();
+        QVERIFY(dvr.error().isEmpty());
     }
 
     void touchControlsAutoHideAndFlightLock()

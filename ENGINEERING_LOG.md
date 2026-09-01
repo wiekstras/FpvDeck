@@ -308,3 +308,92 @@ and unresolved facts. Status labels are used deliberately:
   safety tests, firmware/tool self-test behavior, complete C/C++/QML build, and
   all 19 CTest entries passed locally after the correction. The deterministic
   diagnostics showcase was regenerated from the actual application.
+
+## 2026-09-01 — Prototype 0 reference hardware frozen
+
+- Project priority changed from final hardware optimization to the shortest safe
+  path to real Air65 video. The desktop simulator is now described as pre-hardware;
+  **Prototype 0 is a functionality bench**, Prototype 1 is the direct-decoder
+  latency bench, Prototype 2 is modular custom hardware and Prototype 3 is the
+  integrated product.
+- Selected **Raspberry Pi 5 2 GB** for the bench. Current simulator RSS is roughly
+  285 MiB, so 2 GB is sufficient; Pi 5 adds useful decode/compositor margin for a
+  small premium over Pi 4 2 GB. This does not change the production SoM decision.
+- Selected **Raspberry Pi Touch Display 2 5-inch, MPN SC1975**. Kiwi's Dutch page
+  showed €36.49 before VAT and immediate stock. Raspberry Pi documentation
+  confirms 720×1280, five-point capacitive DSI touch, supplied Pi 5 22-to-15-way
+  FFC, GPIO power lead, Pi GPIO pins 2/6, and Pi 5 support. It is intentionally
+  cheap Prototype 0 hardware; the larger pinch-grip display direction remains.
+- Selected the Rotorama **RC832 Mini** kit for Prototype 0 only. Vendor/manual
+  evidence confirms 56 A/B/E/F/R/L/X channels, RP-SMA, 12 V/130 mA, 3.5 mm AV,
+  PAL/NTSC 1.0 Vp-p into 75 Ω, and included receiver/linear antenna/power/video
+  leads. Rotorama showed €55.49 in stock and documents EU delivery, including
+  €6.49 GLS to Holland. OEM identity, barrel dimension/polarity and AV conductor
+  map remain unknown; the build uses supplied leads and requires continuity checks.
+- Selected **Gembird UVG-002** after the final Netherlands delivery audit rejected
+  USB-Live2 as tonight's primary: its identified offers were either long-lead or
+  not demonstrably deliverable to the Netherlands. Informatique showed UVG-002 at
+  €12.95 including VAT/in stock; bol showed €19.70 delivered/in stock. Gembird
+  specifies composite/S-Video, PAL 720×576/25, NTSC 720×480/30 and UTV007 or
+  UTVF007 silicon. A deeper gate found two Linux paths: UTV007 uses `usbtv`;
+  UTVF007 commonly enumerates as UVC `534d:0021` and uses `uvcvideo`. The latter
+  is reported to squelch weak/noisy input, so it can prove functionality but not
+  final FPV weak-signal quality. The exact received ID/formats remain a receipt
+  gate; Hauppauge remains the known-identity fallback if neither path appears.
+- Added a separate protected 12 V/1 A PCEnergy supply and centre-positive female
+  barrel-to-terminal adapter. High-resolution vendor imagery showed that the
+  supplied receiver power cable is barrel-to-red-two-pole, not bare wire. A final
+  procurement audit rejected relying on RCY/BEC identification: the connector
+  family is unpublished and direct Dutch pigtail listings were insufficiently
+  verifiable. Prototype 0 instead removes that connector from the **replaceable
+  supplied accessory lead**, continuity-maps its barrel, and lands the stripped
+  conductors in the marked terminal adapter. Pi and VRX use separate wall
+  supplies; receiver and T8L remain untouched.
+- `hardware/PROTOTYPE_0_BUY_TONIGHT.md` totals the reference chain at roughly
+  €246.47 including VAT plus €23–€35 multi-shop shipping, including a meter and
+  cutter/stripper for a complete safe bring-up path. It excludes CM4,
+  premium screen, ADV728x EVM, Test PCB, battery frontend, enclosure and duplicate
+  ELRS hardware.
+
+## 2026-09-01 — Real capture software path
+
+- `VideoService` now distinguishes `simulated`, `file` and `v4l2` backends and
+  publishes device identity/availability without coupling receiver channel state
+  back into video. `--video-device /dev/videoN` selects an exact Qt `QCamera`;
+  an unavailable device produces a visible lost state instead of application exit.
+- The FPV page selects the QCamera capture session or existing MediaPlayer behind
+  the same VideoOutput/overlay graph. A QMediaRecorder tee records the live camera
+  before QML overlays to timestamped MP4 files. Recorder errors stop/report DVR
+  without modifying VideoService; real codec/container behavior awaits Pi hardware.
+- Added `fpvdeck-video-list`, `test-video`, `prototype0` and `setup-pi`. Raw video
+  validation is deliberately independent of the full application. `prototype0`
+  falls back to generated video when no capture device exists, retaining software
+  usability before parts arrive.
+- Diagnostics now reports the capture backend/device separately, and developer
+  touch-trace mode adds video FPS, process CPU/RSS and temperature. Dropped-frame
+  and electrical capture-latency values remain `—` until real driver/fixture data
+  exists; the UI does not fabricate them.
+- Added backend switching/reconnect, missing `/dev/video999`, recorder error and
+  numeric V4L2 node/format discovery tests. The CI-equivalent suite increased
+  from 19 to 20 CTest entries and passed locally after implementation.
+- Device auto-selection now ignores metadata-only `/dev/video*` nodes and prefers
+  a formatted node named `usbtv`. Raw bring-up and the launcher accept an
+  explicit driver-reported composite input index; no input number is guessed.
+- The live Qt camera watches `videoInputsChanged`: removal marks capture lost and
+  reconnection at the requested path reconfigures/restarts the same camera object.
+- Closed the owned-aircraft procurement ambiguity: if no serviceable BT2.0 1S
+  LiHV pack/charger is already present, the buy-tonight document names a verified
+  in-stock LAVA 260 mAh five-pack and VIFLY WhoopStor V3 as conditional additions.
+  They are not duplicate purchases for an already complete Air65 kit.
+- Final electrical-safety audit found that Rotorama's one-page Mini manual omits
+  DC-jack polarity even though vendor imagery shows a factory red/black barrel
+  lead. Wiring now permits first power only when factory red maps to centre and
+  black maps to sleeve by continuity; an unmarked or contradictory received lead
+  requires written vendor confirmation. No trial polarity is allowed.
+- New DVR sessions now reset elapsed time. A first full test run exposed an
+  intermittent missing-device multimedia teardown timeout; detaching QCamera,
+  VideoOutput and MediaRecorder from CaptureSession while capture is unavailable
+  removed that unnecessary backend path. The complete suite then passed cleanly.
+- Re-ran shell syntax, installer dry-run, four Python V4L2 selection tests,
+  whitespace and documentation checks, complete C/C++/QML build, all 20 CTest
+  entries, and the 60-footprint Test PCB/BOM consistency check successfully.

@@ -2,6 +2,34 @@
 
 Items remain here until completed and evidenced by a test, document, or artifact.
 
+## Prototype 0 — real Air65 video on the bench
+
+- [x] Freeze one complete reference chain: Pi 5 2 GB, 5-inch Touch Display 2,
+  RC832 Mini kit, Gembird UVG-002, separate approved supplies and storage.
+- [x] Publish a short VAT-aware, link-verified Netherlands/EU buy-tonight list,
+  exact block diagram, pin/cable wiring and from-parts-arrival setup guide.
+- [x] Add Linux V4L2 device/format discovery and independent bounded raw-video
+  test/preview tooling.
+- [x] Add selectable simulated/file/V4L2 VideoService modes, missing-device-safe
+  startup, real QCamera display path and backend/reconnect tests.
+- [x] Add a Prototype 0 launch command with real-capture selection and simulated
+  fallback, plus an idempotent Raspberry Pi OS dependency installer.
+- [x] Add pre-overlay QMediaRecorder capture for the live V4L2 branch and isolate
+  recorder errors from the video/application process.
+- [x] Add an Air65 prop-off test procedure and explicit ELRS-control/video-RF
+  separation.
+- [ ] Receive the ordered parts and record serial/revision/USB identity for each.
+- [ ] Continuity-map the supplied RC832 power and AV leads; photograph and record
+  the actual plug dimensions/polarity before first power.
+- [ ] On real Pi hardware, capture `v4l2-ctl --all/--list-formats-ext`, select the
+  correct composite input and validate PAL plus NTSC where available.
+- [ ] Show the real Air65 feed and embedded Betaflight OSD under the FpvDeck RGB
+  overlay; record video FPS, drops, signal-loss/recovery and touch behavior.
+- [ ] Verify real pre-overlay DVR start/stop/playback, disk-full handling and that
+  recorder load cannot stall the visible feed.
+- [ ] Measure the UVG-002 glass-to-glass latency distribution as a Prototype 0
+  baseline; do not treat it as final-product acceptance.
+
 ## Milestone 1 — desktop vertical slice
 
 - [x] Build and launch FPVDeck on Linux with `./scripts/dev`.
@@ -22,7 +50,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [x] Split simulated 5.8 GHz receiver channel/RSSI/scan state into RadioService;
   VideoService now owns only source/standard/decoder-capture state.
 - [ ] Add full battery/aircraft CRUD repositories and editing UI.
-- [ ] Implement actual test-file DVR segments and interruption recovery tests.
+- [ ] Add segmented DVR containers, metadata journaling and interruption/power-loss
+  recovery tests; Prototype 0 live pre-overlay recording is now implemented.
 - [ ] Add pointer-driven QML interaction/golden tests; service behavior and all
   deterministic page states are covered, but current QML tests still launch
   complete graphs rather than synthesizing taps/swipes.
@@ -30,6 +59,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Verify and package the macOS development path.
 
 ## Milestone 2 — bench architecture
+
+Final-product optimization is paused until Prototype 0 produces real evidence.
 
 - [x] Establish initial compute/decoder/display/VRX shortlist from primary sources.
 - [x] Correct the repository-wide RF boundary: T8L/2.4 GHz ELRS is control only;

@@ -1,5 +1,21 @@
 # Compute platform comparison
 
+## Prototype 0 decision
+
+**Raspberry Pi 5 2 GB is selected for the functionality bench.** It is not a
+production SoM decision. Compared with Pi Zero 2 W, it has enough CPU margin for
+USB analog capture, Qt composition and software experimentation; compared with
+Pi 4 2 GB, the current EU price premium is small. Its MIPI connector supports the
+selected official Touch Display 2 while USB-A accepts the documented capture
+device. A Compute Module adds carrier work without helping tonight's objective.
+
+| Prototype 0 candidate | Practical result | Decision |
+|---|---|---|
+| Raspberry Pi 5 2 GB | 2.4 GHz Cortex-A76, USB 3/2, dual MIPI, current Pi OS; €68.90 in-stock snapshot | **SELECTED**: best iteration/performance balance |
+| Raspberry Pi 4 2 GB | lower power and adequate basic capture; €57.90-class listing | Rejected: modest saving for much less CPU margin |
+| Raspberry Pi Zero 2 W | tiny/low power but 512 MB, micro-USB host adapters and limited compositor headroom | Rejected: avoidable bring-up constraints |
+| Compute Module 4 + IO board | relevant to Prototype 1 CSI work | Rejected for Prototype 0: slower and more expensive to assemble |
+
 | Candidate | Video/display and codec | Linux/support | Power/complexity | Availability/cost | Decision |
 | --- | --- | --- | --- | --- | --- |
 | Raspberry Pi CM4, BCM2711 | 2/4-lane CSI and DSI; H.264 1080p30 encode; OpenGL ES 3 | Raspberry Pi documents ADV728x-M; exceptional community | moderate, simple prototype carrier ecosystem | production stated through Jan 2034; roughly €35–90 by RAM/eMMC | **Prototype 1 selected** |
@@ -16,4 +32,3 @@ does not prove a maintained V4L2 encoder path.
 Sources: [CM4 brief](https://datasheets.raspberrypi.com/cm4/cm4-product-brief.pdf),
 [CM5 datasheet](https://pip.raspberrypi.com/categories/944-raspberry-pi-compute-module-5),
 [i.MX 8M Plus](https://www.nxp.com/products/i.MX8MPLUS).
-

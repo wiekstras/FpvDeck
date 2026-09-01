@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+    cat <<'EOF'
+Usage: ./scripts/test-video [--device /dev/video0] [--standard PAL|NTSC] [--input N] [--seconds N] [--no-preview]
+
+Reports the selected V4L2 device and formats, captures a bounded sample while
+printing FPS/drop diagnostics, then optionally opens a low-buffer preview.
+EOF
+}
+
+device=""
+standard="PAL"
+seconds=10
+preview=1
+input=""
+while (($#)); do
+    case "$1" in
+        --device) device="${2:?missing device}"; shift 2 ;;
+        --standard) standard="${2:?missing standard}"; shift 2 ;;
+        --input) input="${2:?missing input index}"; shift 2 ;;
+        --seconds) seconds="${2:?missing seconds}"; shift 2 ;;
+        --no-preview) preview=0; shift ;;
+        --help|-h) usage; exit 0 ;;
+        *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+    esac
+done
+
+if [[ "${standard}" != "PAL" && "${standard}" != "NTSC" ]]; then
+    echo "Standard must be PAL or NTSC" >&2
+    exit 2
+fi
+if ! command -v v4l2-ctl >/dev/null; then
+    echo "v4l2-ctl is missing; run ./scripts/setup-pi first." >&2
+    exit 3
+fi
+if [[ -z "${device}" ]]; then
+    device="$(python3 "${project_dir}/tools/video_devices.py" --path-only --match usbtv 2>/dev/null || true)"
+fi
+if [[ -z "${device}" || ! -c "${device}" ]]; then
+    echo "No usable V4L2 capture device found." >&2
+    exit 4
+fi
+
+echo "Selected capture device: ${device}"
+v4l2-ctl --device "${device}" --all
+v4l2-ctl --device "${device}" --list-inputs
+v4l2-ctl --device "${device}" --list-formats-ext
+if [[ -n "${input}" ]]; then
+    v4l2-ctl --device "${device}" --set-input "${input}"
+fi
+v4l2-ctl --device "${device}" --set-standard "${standard,,}" 2>/dev/null || \
+    echo "NOTE: the driver did not accept an explicit ${standard} standard; inspect the reported input."
+
+if ! command -v ffmpeg >/dev/null; then
+    echo "ffmpeg is missing; run ./scripts/setup-pi first." >&2
+    exit 5
+fi
+
+echo "Running ${seconds}s decode test (watch ffmpeg's fps/frame/drop counters)..."
+timeout --signal=INT "${seconds}" ffmpeg -hide_banner -loglevel info \
+    -f v4l2 -i "${device}" -an -f null - || true
+
+if ((preview)); then
+    if ! command -v ffplay >/dev/null; then
+        echo "ffplay is unavailable; metrics test completed without preview."
+        exit 0
+    fi
+    echo "Opening low-buffer preview; press q to close."
+    exec ffplay -hide_banner -fflags nobuffer -flags low_delay -framedrop \
+        -f v4l2 -i "${device}"
+fi

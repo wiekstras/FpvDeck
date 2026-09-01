@@ -1,5 +1,10 @@
 # Buy now — EU bench kit
 
+> **Prototype 1 archive — do not use this list for tonight's functional bench.**
+> The current short, complete Prototype 0 purchase decision is
+> [PROTOTYPE_0_BUY_TONIGHT.md](PROTOTYPE_0_BUY_TONIGHT.md). The CM4/direct-decoder
+> items below remain later latency-bench research.
+
 Checked 2026-09-01. Prices and stock are snapshots, not quotations; open every
 linked product page and verify exact MPN, VAT destination, stock, and connector
 contents at checkout. This list intentionally excludes the analog-video chain

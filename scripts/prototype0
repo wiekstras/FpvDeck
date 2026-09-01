@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="${FPVDECK_BUILD_DIR:-${project_dir}/build/prototype0}"
+device="${FPVDECK_VIDEO_DEVICE:-}"
+standard="${FPVDECK_VIDEO_STANDARD:-PAL}"
+input="${FPVDECK_VIDEO_INPUT:-}"
+
+while (($#)); do
+    case "$1" in
+        --device) device="${2:?missing device}"; shift 2 ;;
+        --standard) standard="${2:?missing standard}"; shift 2 ;;
+        --input) input="${2:?missing input index}"; shift 2 ;;
+        --help|-h)
+            echo "Usage: ./scripts/prototype0 [--device /dev/video0] [--standard PAL|NTSC] [--input N] [FPVDeck options]"
+            exit 0 ;;
+        *) break ;;
+    esac
+done
+
+if [[ "${standard}" != "PAL" && "${standard}" != "NTSC" ]]; then
+    echo "Standard must be PAL or NTSC" >&2
+    exit 2
+fi
+
+cmake -S "${project_dir}" -B "${build_dir}" -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build "${build_dir}" --parallel
+export FPVDECK_DATA_DIR="${FPVDECK_DATA_DIR:-${project_dir}/generated/prototype0-data}"
+
+if [[ -z "${device}" ]]; then
+    device="$(python3 "${project_dir}/tools/video_devices.py" --path-only --match usbtv 2>/dev/null || true)"
+fi
+if [[ -n "${device}" && -c "${device}" ]]; then
+    if command -v v4l2-ctl >/dev/null; then
+        v4l2-ctl --device "${device}" --set-standard "${standard,,}" 2>/dev/null || true
+        if [[ -n "${input}" ]]; then
+            v4l2-ctl --device "${device}" --set-input "${input}"
+        fi
+    fi
+    echo "Launching Prototype 0 with ${device} (${standard})."
+    exec "${build_dir}/software/fpvdeck" --video-device "${device}" --video-standard "${standard}" "$@"
+fi
+
+echo "WARNING: no capture device found; launching the simulated PAL source." >&2
+"${project_dir}/scripts/generate-test-video"
+exec "${build_dir}/software/fpvdeck" --video "${project_dir}/generated/fpv-test-pal.mp4" "$@"

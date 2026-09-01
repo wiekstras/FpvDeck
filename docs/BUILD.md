@@ -6,7 +6,7 @@ Install the host toolchain:
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake ninja-build g++ ffmpeg \
+sudo apt-get install cmake ninja-build g++ ffmpeg v4l-utils \
   gstreamer1.0-libav gstreamer1.0-plugins-good gstreamer1.0-plugins-bad \
   qt6-base-dev qt6-declarative-dev qt6-multimedia-dev qt6-tools-dev-tools \
   qml6-module-qtquick qml6-module-qtquick-controls \
@@ -37,6 +37,22 @@ arguments.
 `xvfb` package above) and regenerates the committed deterministic UI previews.
 `./scripts/benchmark-ui` uses the same dependency to collect repeated desktop
 first-frame/RSS regression records under `generated/benchmarks/ui/`.
+
+## Raspberry Pi / Prototype 0
+
+On current 64-bit Raspberry Pi OS:
+
+```sh
+git clone https://github.com/wiekstras/FpvDeck.git
+cd FpvDeck
+./scripts/setup-pi
+./scripts/fpvdeck-video-list
+./scripts/prototype0 --device /dev/video0 --standard PAL
+```
+
+`setup-pi` installs only Debian packages and is idempotent. `--dry-run` prints
+the package transaction. The real device node and standard must match the output
+of `fpvdeck-video-list` and the Air65 configuration.
 
 ## macOS
 

@@ -36,7 +36,9 @@ contracts and do not open serial ports, mount cards, or sample ADCs themselves.
 Diagnostics reports T8L/ELRS control, dedicated 5.8 GHz VRX, CVBS decoder and
 digital-video health independently. `RadioService` owns receiver channel, RSSI,
 favorites and scan state; `VideoService` owns source standard, decoder/capture
-lock state and frames. This prevents an RF channel change from masquerading as a
+lock state and backend selection (`simulated`, `file`, or `v4l2`). The Prototype 0
+QCamera session feeds the same VideoOutput used by file playback; its recorder
+tee receives camera frames before the QML overlay. This prevents an RF channel change from masquerading as a
 decoder API and leaves room for separate real backends.
 
 InteractionService owns transient FPV controls, flight-lock navigation policy,

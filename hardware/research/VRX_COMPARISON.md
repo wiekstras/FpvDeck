@@ -9,6 +9,7 @@ without bandwidth, test criterion, calibration, and video-quality threshold.
 
 | Candidate | RF/video evidence | Control/RSSI evidence | Power/mechanical | Availability snapshot | Integration risk | Decision |
 | --- | --- | --- | --- | --- | --- | --- |
+| **RC832 Mini, Rotorama product 27309-1** | **CONFIRMED:** 4.9–5.9 GHz, A/B/E/F/R/L/X, 56 ch; PAL/NTSC 1.0 Vp-p/75 Ω; RP-SMA; supplied linear antenna and proprietary AV lead | front-panel FR/CH buttons and retained selection; no host control or RSSI output claimed | **CONFIRMED:** 12 V/130 mA; 50×50×15 mm, 43 g; supplied power cable | Rotorama CZ €55.49, in stock; ships all EU states, €6.49 GLS to Holland | exact OEM and 3.5 mm conductor map unknown, mitigated by using supplied leads; no diversity | **SELECTED for Prototype 0 functionality** |
 | Skyzone SteadyView X 5.8G | **CONFIRMED:** 5.3–6 GHz/48 ch; −98 dBm ±1 dB; narrow-band filter; mix 1/2/3, diversity and single; 2× SMA-K 50 Ω; 1.0 Vp-p typ/75 Ω CVBS | wheel and display confirmed; ELRS backpack channel sync confirmed; SBC API and calibrated external RSSI **UNKNOWN** | **CONFIRMED:** 6.5–26 V; 12 V×240 mA normal/180 mA single; 65×32×32 mm receiver, 49 g; 5.5×2.1 mm DC and 3.5 mm video | France €219 before tax and Lithuania €250.23 tax included, both in-stock snapshots | cable conductor map, fusion latency and complete decoder bridge remain open | **Prototype RF-to-CVBS lead; WAIT for complete chain gate** |
 | TBS Fusion | **CONFIRMED by manufacturer:** −96 dBm, active video fusion | UART protocol/Crossfire ecosystem documented; exact standalone CVBS breakout still needs adapter validation | goggle-bay module, 5 V×340 mA published | manufacturer previously reported filter-related stock interruption; refresh before any benchmark buy | adapter power/video extraction and lifecycle | A/B benchmark if borrowed/verified, not baseline |
 | ImmersionRC rapidFIRE | dual-receiver image reconstruction and strong field reputation | goggle controls; safe external control/RSSI API **UNKNOWN** | goggle-bay module needs power/video adapter | EU listings exist but price/stock and primary technical docs are fragmented | more reverse engineering than standalone kit | benchmark only after exact revision/manual inspection |
@@ -17,6 +18,11 @@ without bandwidth, test criterion, calibration, and video-quality threshold.
 | Custom dual RF frontend | architecture can expose full control/RSSI | project-defined | optimized size/power possible | requires selected production chipset | RF matching/filter/LNA/shielding/EMC/qualification and multipath algorithms | explicitly deferred beyond first prototypes |
 
 ## Selected prototype stage
+
+Prototype 0 uses RC832 Mini because it creates a complete, inexpensive CVBS
+handoff immediately. It is not selected for final RF performance and has no
+software channel-control claim. Prototype 1 retains SteadyView X as the measured
+quality/diversity lead after its downstream decoder bridge is available.
 
 Skyzone SteadyView X is the best-supported standalone RF-to-CVBS lead found. The
 [manufacturer page](https://www.skyzonefpv.com/en-de/products/skyzone-stvx-steadyview-x-receiver)

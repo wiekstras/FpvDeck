@@ -24,6 +24,14 @@ set_tests_properties(test_qml_benchmark PROPERTIES
     TIMEOUT 10
 )
 
+add_test(NAME test_qml_missing_v4l2
+    COMMAND fpvdeck --database :memory: --video-device /dev/video999
+        --exit-after-ms 300)
+set_tests_properties(test_qml_missing_v4l2 PROPERTIES
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+    TIMEOUT 10
+)
+
 foreach(state home fpv fpv-controls fpv-lock battery media media-playback receiver flights diagnostics)
     add_test(NAME test_qml_${state}
         COMMAND fpvdeck --database :memory: --demo-state ${state} --exit-after-ms 300)
@@ -40,7 +48,8 @@ add_test(NAME test_balance_frontend_error
         tools.test_check_test_pcb_bom
         tools.test_fpvdeck_hw_test
         tools.test_summarize_ui_benchmark
-        tools.test_test_board_source)
+        tools.test_test_board_source
+        tools.test_video_devices)
 set_tests_properties(test_balance_frontend_error PROPERTIES
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )

@@ -1,8 +1,10 @@
 # First bench prototype order list
 
-This legacy global list is retained for design context. EU purchasing uses the
-current compatibility-gated [EU order list](ORDER_LIST_EU.md) and
-[buy-now list](BUY_NOW.md). Recheck stock, VAT, and exact MPN at checkout.
+This legacy Prototype 1 list is retained for design context. **Do not use it for
+tonight's order.** The current functionality bench uses the short
+[Prototype 0 buy-tonight list](PROTOTYPE_0_BUY_TONIGHT.md). The compatibility-gated
+[EU order list](ORDER_LIST_EU.md) and [buy-now list](BUY_NOW.md) resume only after
+Prototype 0 produces real measurements. Recheck stock, VAT, and exact MPN at checkout.
 
 ## Already owned
 
