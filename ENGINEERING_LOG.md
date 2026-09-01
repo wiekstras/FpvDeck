@@ -254,3 +254,57 @@ and unresolved facts. Status labels are used deliberately:
   component joining them. Added R7, an explicit 1.00 kΩ sense-path resistor,
   regenerated the deterministic board, and expanded the BOM to all 60 footprints.
   The input-bias/calibration term and fault behavior remain release-gated.
+
+## 2026-09-01 — Corrected donor/video boundary and EU procurement gate
+
+- Completed a repository-wide audit of T8L, ELRS, receiver, VRX, 5.8 GHz, CVBS,
+  and decoder references. The canonical boundary is now explicit everywhere:
+  **T8L = 2.4 GHz ELRS control donor; dedicated FpvDeck VRX = 5.8 GHz RF to
+  CVBS; separate decoder = CVBS to digital; SBC = video/apps/overlay; HD panel =
+  display/touch; external balance port = measurement only; donor 2×18650 =
+  provisional internal source; removable SD = goggle/DVR media.**
+- Found and removed an unsafe hardware assumption. Rev A J4 had implied 5 V,
+  RSSI and UART for an undocumented commercial VRX, while J5 implied power/I²C/
+  reset for a decoder. Both headers now assign only project pins 2=GND and
+  3=CVBS; pins 1/4/5/6 are NC. Receiver and decoder keep their own documented
+  power/control connections. Automated source tests prohibit the removed nets.
+- **CONFIRMED:** Skyzone's current 5.8G SteadyView X documentation specifies
+  5.3–6 GHz/48 channels, −98 dBm ±1 dB, two standard SMA-K 50 Ω inputs,
+  mix/diversity/single modes, 1.0 Vp-p typical into 75 Ω, 6.5–26 V input, and
+  12 V×240 mA normal/180 mA single operation. Its current ground-station kits
+  include the XT60/barrel power lead, 3.5 mm video cable, RHCP patch and omni.
+  The 3.5 mm conductor map, host control/RSSI API and fusion latency remain
+  **UNKNOWN / NEEDS MEASUREMENT**.
+- Located two actual EU receiver offers at the research snapshot: La Caméra
+  Embarquée (France, €219 shown before tax, in stock) and Baltic Drones
+  (Lithuania, €250.23 tax included, in stock). This validates EU availability,
+  not end-to-end compatibility.
+- The receiver remains `WAIT`, not `BUY NOW`. Although RF→CVBS is credible,
+  `EVAL-ADV7282AMEBZ` exposes MIPI CSI-2 on SMA and direct Mouser inspection
+  reported restricted availability. No reviewed controlled-impedance
+  SMA-to-CM4IO bridge exists. An earlier cached Mouser result conflicted with the
+  direct page, so only checkout-time direct stock is accepted.
+- Purchase-cleared independent items are CM4104032, CM4IO, Waveshare 6.25-inch
+  DSI LCD B SKU 35000, adapter/supply, NUCLEO-G0B1RE, ST-LINK, Transcend RDF5
+  removable-media reader, and a 128 GB High Endurance test card. The snapshot
+  subtotal is €353.24 before shipping; a 10% small-adapter contingency makes
+  €388.56. Full gated bench architecture including video, a released Test PCB
+  and fixtures is budgeted at €1,280–1,920, excluding lab instruments.
+- Generated and committed top/bottom/component views for the 120×90 mm four-layer
+  board, plus layout, component-map, staged-build, and readiness documents. The
+  board still has **60 footprints and zero routed tracks**. Exports are inspection
+  views, not fabrication outputs; PCB fabrication and real-LiPo connection remain
+  prohibited.
+- Corrected self-test semantics: Rev A cannot automatically test a VRX link
+  because it exposes only a passive CVBS handoff. Protocol bit 5 is now named
+  `CVBS_BREAKOUT`; simulated/real tooling reports it `INTERACTIVE` or `NOT TESTED`
+  until a continuity/terminated-video fixture supplies evidence.
+- Simulator Diagnostics now displays separate T8L control, ELRS TX 2.4 GHz,
+  5.8 GHz video VRX, CVBS decoder and digital-video states. Independent T8L,
+  ELRS, VRX and decoder fault injection is service-tested. A follow-up software
+  boundary audit moved channel, RSSI, favorites and scanning out of `VideoService`
+  into a dedicated `RadioService`; video standard/capture state remains separate.
+- **VERIFIED:** documentation gates, 60-footprint BOM check, four Test PCB source
+  safety tests, firmware/tool self-test behavior, complete C/C++/QML build, and
+  all 19 CTest entries passed locally after the correction. The deterministic
+  diagnostics showcase was regenerated from the actual application.

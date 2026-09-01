@@ -1,20 +1,20 @@
 # Component selection summary
 
-Research snapshot: 2026-08-31. Prices are rough single-unit planning figures and
+Research snapshot: 2026-09-01. Prices are rough single-unit planning figures and
 must be refreshed at purchase time. Availability means the manufacturer lifecycle
 and visible supply posture, not a procurement guarantee.
 
 | Function | Prototype decision | Production lead | Rationale / open gate |
 | --- | --- | --- | --- |
 | SoM | Raspberry Pi CM4 4 GB/32 GB eMMC | i.MX 8M Plus industrial SoM | CM4 has documented ADV728x support and H.264 encode; i.MX offers stronger industrial multimedia/lifecycle options |
-| Decoder | `EVAL-ADV7282AMEBZ` (A-M), older `EVAL-ADV7282MEBZ` software baseline | Renesas TW9992 | Pi supports the ADV728x(A)-M family and tested the older ADV7282-M EVM; NRND lifecycle and SMA-to-CSI fixture are explicit prototype risks |
+| Decoder | `EVAL-ADV7282AMEBZ` candidate, older `EVAL-ADV7282MEBZ` software baseline | Renesas TW9992 | **WAIT:** direct distributor availability is restricted and the EVM's MIPI SMA-to-CM4IO bridge is not designed; NRND prototype only |
 | Display | **Waveshare 6.25inch DSI LCD (B), SKU 35000** | 5.5–6.25-inch high-brightness DSI, TBD | 720×1560, 500-nit, optical-bonded 5-point touch with documented CM4 support; landscape scan, latency, power, outdoor and pinch-grip fit remain measurement gates |
-| VRX | Skyzone SteadyView X | modular dual receiver | explicit standalone CVBS, strong published sensitivity; latency A/B mandatory |
+| VRX | dedicated Skyzone SteadyView X 5.8G ground-station kit | modular dual receiver; integrated RF later | explicit RF-to-CVBS output and EU stock; **WAIT** until decoder/CM4 chain gate; latency A/B mandatory |
 | MCU | STM32G0B1 Nucleo | STM32G0B1CB/CE class | USB, timers, watchdog, internal flash, CAN-FD/UCPD headroom |
-| ADC | ADS7066 and ADS8688A EVMs | not frozen | low-power compact versus protected integrated AFE |
+| ADC | ADS8688A for Test PCB Rev A | ADS8688A unless measurement rejects it | eight protected 16-bit inputs cover B−, deck and six taps; physical accuracy/safety validation still required |
 | Charger | BQ25792 EVM | BQ25792-class | integrated 1–4S buck-boost/NVDC; thermal/PD/protection design open |
 | 5 V converter | TPS55288 EVM | TPS55288-class | sufficient topology/current headroom; stability/EMI/thermal proof required |
-| Storage | CM4 eMMC + removable USB/SD export during prototype | soldered industrial eMMC plus recovery partition | avoid SD as primary writable root; exact production MPN deferred to SoM |
+| Storage | CM4 eMMC + Transcend TS-RDF5K USB removable SD/microSD reader | soldered industrial eMMC plus separate removable-media interface | avoid SD as primary writable root; removable media is for goggle/DVR footage and test cards |
 | Audio | MCU buzzer only | optional I²S codec later | avoid scope/power until a real use case exists |
 
 ## Primary sources

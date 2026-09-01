@@ -6,17 +6,15 @@ These items unlock independent work even if the custom PCB changes:
 
 - Raspberry Pi CM4 eMMC module and official CM4 IO Board;
 - Waveshare 6.25inch DSI LCD (B), exact SKU 35000;
-- Skyzone SteadyView X kit and correctly gendered antennas;
 - NUCLEO-G0B1RE, STLINK-V3MINIE and 3.3 V USB-UART;
-- 75 Ω coax/adapters/terminator;
 - JST XH connector samples and non-conductive bench hardware;
 - high-endurance removable microSD;
 - exact Test PCB semiconductors/passives in small spare quantities if shipping
   consolidation makes sense. These parts remain useful for breadboard/EVM work.
 
 Immediate exit tests: display/touch boots in landscape, CM4 runs simulator,
-firmware protocol runs on Nucleo, VRX produces terminated CVBS, and all item labels
-match their order records.
+firmware protocol runs on Nucleo, removable media mounts reliably, and all item
+labels match their order records.
 
 ## Verify stock and interface before order
 
@@ -26,7 +24,9 @@ match their order records.
   SMA-to-CM4IO CSI fixture before committing to the EVM purchase.
 - ADS8688EVM-PDK. It is valuable but expensive; skip if unavailable or if Rev A
   board release is close.
-- Any 5.8 GHz antenna whose connector gender/polarization is not explicit.
+- Skyzone SteadyView X 5.8 GHz kit. Its RF-to-CVBS stage is documented, but it may
+  move from `WAIT` only when the decoder-to-CM4 bridge is reviewed. Current EU
+  kits include a patch and an omni antenna; no separate initial antenna order.
 
 ## Order after Test PCB passes release review
 
@@ -52,4 +52,4 @@ match their order records.
 - T8L internal wiring harnesses based on unconfirmed pinouts.
 
 The purpose of `WAIT` is to prevent sunk cost, not to stall bench work. Display,
-compute, receiver, Nucleo and measurement equipment can be tested independently.
+compute, Nucleo, media and measurement equipment can be tested independently.

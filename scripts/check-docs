@@ -3,7 +3,7 @@ set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 required=(
-  README.md ENGINEERING_LOG.md TODO.md
+  README.md ENGINEERING_LOG.md TODO.md docs/README.md
   docs/ARCHITECTURE.md docs/HARDWARE_ARCHITECTURE.md docs/VIDEO_PIPELINE.md
   docs/LATENCY.md docs/T8L_INTEGRATION.md docs/POWER.md
   docs/BATTERY_MEASUREMENT.md docs/SOFTWARE_ARCHITECTURE.md docs/APP_API.md
@@ -25,12 +25,20 @@ required=(
   hardware/research/COMPONENT_SELECTION.md hardware/research/VRX_COMPARISON.md
   hardware/research/DISPLAY_COMPARISON.md hardware/research/SBC_COMPARISON.md
   hardware/research/VIDEO_DECODER_COMPARISON.md hardware/research/ADC_COMPARISON.md
-  hardware/ORDER_LIST.md hardware/PROCUREMENT_PLAN.md
+  hardware/ORDER_LIST.md hardware/ORDER_LIST_EU.md hardware/BUY_NOW.md
+  hardware/PROTOTYPE_COST.md hardware/TOOLS.md hardware/PROCUREMENT_PLAN.md
   hardware/bom/TEST_PCB_REV_A.csv hardware/bom/TEST_PCB_REV_A.md
-  hardware/bom/PROTOTYPE_SYSTEM.csv
+  hardware/bom/PROTOTYPE_SYSTEM.csv hardware/bom/PROTOTYPE_SYSTEM_EU.csv
   hardware/pcb/test-board-rev-a/test-board-rev-a.kicad_pro
   hardware/pcb/test-board-rev-a/test-board-rev-a.kicad_pcb
   hardware/pcb/test-board-rev-a/FABRICATION_NOTES.md
+  hardware/pcb/test-board-rev-a/LAYOUT.md
+  hardware/pcb/test-board-rev-a/COMPONENT_MAP.md
+  hardware/pcb/test-board-rev-a/BUILD_GUIDE.md
+  hardware/pcb/test-board-rev-a/READINESS.md
+  hardware/pcb/test-board-rev-a/exports/test-board-rev-a-top.svg
+  hardware/pcb/test-board-rev-a/exports/test-board-rev-a-bottom.svg
+  hardware/pcb/test-board-rev-a/exports/test-board-rev-a-component-map.svg
 )
 
 for path in "${required[@]}"; do

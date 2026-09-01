@@ -19,6 +19,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
   removable-SD/media simulation, receiver scan/favorites, and fault injection.
 - [x] Add service tests for touch timing/lockout, storage/media faults, deck state,
   receiver selection, and battery extrema.
+- [x] Split simulated 5.8 GHz receiver channel/RSSI/scan state into RadioService;
+  VideoService now owns only source/standard/decoder-capture state.
 - [ ] Add full battery/aircraft CRUD repositories and editing UI.
 - [ ] Implement actual test-file DVR segments and interruption recovery tests.
 - [ ] Add pointer-driven QML interaction/golden tests; service behavior and all
@@ -30,6 +32,10 @@ Items remain here until completed and evidenced by a test, document, or artifact
 ## Milestone 2 — bench architecture
 
 - [x] Establish initial compute/decoder/display/VRX shortlist from primary sources.
+- [x] Correct the repository-wide RF boundary: T8L/2.4 GHz ELRS is control only;
+  the dedicated 5.8 GHz analog VRX and CVBS decoder are separate added stages.
+- [x] Add EU-priced `BUY NOW` and compatibility-gated order lists with primary/
+  alternate purchase URLs, VAT/stock snapshots, and a realistic cost range.
 - [x] Select the currently shipping Waveshare 6.25inch DSI LCD (B), SKU 35000,
   as the Prototype 1 touchscreen module from documented display/touch support.
 - [ ] Measure/fit the 6.25-inch module and compare it against the 5-inch bright
@@ -37,7 +43,11 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Price the SMA-to-CM4 CSI fixture, then obtain/borrow `EVAL-ADV7282AMEBZ`
   or the exact older Pi-tested `EVAL-ADV7282MEBZ` only after stock confirmation.
 - [ ] Confirm exact CSI cable/adapter wiring from board documentation; do not infer.
-- [ ] Buy or borrow SteadyView X and at least one benchmark receiver.
+- [ ] Design and review the 100 Ω differential SMA-to-CM4IO CSI bridge (exact EVM
+  SMA lane/clock mapping, CM4IO connector mapping, stack-up and return path).
+- [ ] Only after that bridge gate, buy/borrow SteadyView X and ADV7282A-M EVM;
+  continuity-map the supplied 3.5 mm cable before J4 use.
+- [ ] Buy or borrow at least one benchmark receiver after exact adapter/pinout review.
 - [ ] Measure VRX mode latency, decoder latency, display latency, lock/recovery time.
 - [ ] Test PAL and NTSC with weak/nonstandard VTX signals.
 - [ ] Verify CM4 hardware encoder can record without adding display-path buffers.
@@ -79,6 +89,10 @@ Items remain here until completed and evidenced by a test, document, or artifact
   error budget; retain ADS7066 as a lower-power future integration candidate.
 - [x] Create a real Test PCB Rev A KiCad PCB/project with verified lead packages,
   explicit nets, probe points, modular headers, and manufacturing gates.
+- [x] Remove unverified VRX power/RSSI/UART assumptions from Rev A; J4/J5 now
+  express only pin 2 ground and pin 3 CVBS, with all other pins NC.
+- [x] Export source-controlled top/bottom/component-map views and add layout,
+  component-map, build and readiness documents with visible release gates.
 - [x] Add CI verification that the Test PCB BOM quantities/reference ranges match
   every footprint in the committed generated board.
 - [ ] Create the native KiCad schematic from the independently checked pin/net
@@ -104,6 +118,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Select charger, USB-C PD, 5 V converter, quiet RF/analog rails, and load switches.
 - [ ] Create Controller-I/O Rev A schematics only from verified datasheets.
 - [ ] Run ERC, peer checklist, footprint audit, and bring-up review before fabrication.
+- [ ] Route J4→J5 only after stack-up/75 Ω geometry and the actual decoder
+  termination are frozen; the current zero-track board cannot pass CVBS.
 
 ## Reliability and release
 

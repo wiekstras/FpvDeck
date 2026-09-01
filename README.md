@@ -54,6 +54,16 @@ data. [Media browser](docs/assets/ui/media.png),
 - real/simulated backend boundary for every hardware-dependent service
 - independent real-time MCU for measurement, controls, power, and watchdog duties
 
+## Radio & Video
+
+**Radio control:** the donor RadioMaster T8L supplies its built-in 2.4 GHz ELRS
+transmitter, associated ELRS RF path/antenna, Hall gimbals, useful switches and
+the controller electronics required to operate them.
+
+**FPV video:** FpvDeck adds a separate 5.8 GHz analog VRX. That receiver converts
+5.8 GHz RF to CVBS; a second, distinct video-decoder stage converts CVBS to a
+digital stream for the SBC. The T8L and ELRS transmitter do not receive video.
+
 ## Architecture
 
 ![FpvDeck system architecture](docs/assets/diagrams/overall-system.svg)
@@ -110,8 +120,8 @@ Rebuild the committed previews with `./scripts/screenshot-demo`.
 | T8L / ELRS | preserve donor control/RF path; characterize read-only interfaces | ❓ teardown measurements required |
 | Compute | Raspberry Pi CM4 for bench; i.MX 8M Plus production lead | 📐 selected direction, not validated |
 | Display | Waveshare 6.25inch DSI LCD (B), SKU 35000; 720×1560, IPS, 5-point touch | 📐 selected for bench, measurements pending |
-| Analog VRX | Skyzone SteadyView X module first | 📐 selected pending RF/latency A/B tests |
-| CVBS decoder | ADV728x-M evaluation path; TW9992 production investigation | 📐 bench hardware and driver work pending |
+| Analog VRX | dedicated Skyzone SteadyView X 5.8 GHz RF-to-CVBS module lead | 📐 specs/EU stock verified; purchase waits for full chain gate |
+| CVBS decoder | separate ADV728x-M CVBS-to-CSI evaluation path; TW9992 production investigation | 📐 EVM stock and SMA-to-CM4 bridge unresolved |
 | Controller | STM32G0B1CBT6 lead over versioned COBS/CRC protocol | ✅ host-tested command core; 📐 target HAL pending |
 | Balance ADC | ADS8688A + matched 31 kΩ/10 kΩ dividers | 🧪 error model; 📐 physical validation required |
 | Power | donor's two 18650 cells, managed shutdown, modular rails | ❓ series/parallel and charger topology need measurement |
@@ -139,11 +149,13 @@ The monorepo keeps firmware, Qt/C++ software, protocols, KiCad projects, researc
 and tests together. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and
 [DEVELOPMENT.md](docs/DEVELOPMENT.md). Important decisions are recorded in
 [ENGINEERING_LOG.md](ENGINEERING_LOG.md), while incomplete work remains in
-[TODO.md](TODO.md). The staged [order list](hardware/ORDER_LIST.md) separates
-safe bench-module purchases from the unreleased bare PCB.
+[TODO.md](TODO.md). The compatibility-gated [EU order list](hardware/ORDER_LIST_EU.md)
+and [buy-now list](hardware/BUY_NOW.md) separate safe bench purchases from the
+unresolved video chain and unreleased bare PCB.
 
 ## Documentation
 
+- [Complete documentation index](docs/README.md)
 - [System architecture](docs/ARCHITECTURE.md) · [hardware architecture](docs/HARDWARE_ARCHITECTURE.md)
 - [Video pipeline](docs/VIDEO_PIPELINE.md) · [latency budget and measurement](docs/LATENCY.md)
 - [T8L integration](docs/T8L_INTEGRATION.md) · [safe reverse engineering](docs/REVERSE_ENGINEERING.md)
@@ -151,7 +163,7 @@ safe bench-module purchases from the unreleased bare PCB.
 - [Software](docs/SOFTWARE_ARCHITECTURE.md) · [app API](docs/APP_API.md) · [MCU protocol](docs/MCU_PROTOCOL.md)
 - [Touch UX](docs/TOUCH_UX.md) · [simulator](docs/SIMULATOR.md) · [testing](docs/TESTING.md)
 - [Performance targets and benchmark](docs/PERFORMANCE.md)
-- [Test PCB bring-up](docs/TEST_PCB_BRINGUP.md) · [order list](hardware/ORDER_LIST.md) · [procurement gates](hardware/PROCUREMENT_PLAN.md)
+- [Test PCB bring-up](docs/TEST_PCB_BRINGUP.md) · [EU order list](hardware/ORDER_LIST_EU.md) · [buy now](hardware/BUY_NOW.md) · [procurement gates](hardware/PROCUREMENT_PLAN.md)
 - [Component decisions](hardware/research/COMPONENT_SELECTION.md) · [Test PCB BOM](hardware/bom/TEST_PCB_REV_A.md) · [risk register](docs/RISK_REGISTER.md)
 
 ## Roadmap

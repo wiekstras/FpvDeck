@@ -20,8 +20,9 @@ It is not being represented as manufacturing-ready while these gates remain:
 6. validate every footprint against the exact ordered MPN, then print 1:1.
 
 The component BOM and system order list intentionally place bare-PCB fabrication
-in `WAIT` until these gates close. Development boards, display, decoder EVM and
-measurement equipment can be ordered immediately.
+in `WAIT` until these gates close. Compute, display, MCU development hardware and
+measurement equipment can be ordered independently. The VRX and decoder remain
+behind the documented end-to-end compatibility gate.
 
 ## Regeneration
 
@@ -42,7 +43,7 @@ updating or retiring the generator.
 - left: JST-XH input, precision divider arrays, raw/ADC test points;
 - center: ADS8688A and STM32G0B1;
 - bottom: current-limited bench 5 V and local 3.3 V;
-- right: project-defined SBC, VRX and decoder-EVM headers;
+- right: SBC header plus separate VRX-CVBS and decoder-CVBS breakouts;
 - direct CM4-to-display DSI and decoder-to-CM4 CSI stay off-board.
 
 F2 (`1206L010/60WR`) and TP33/TP34 provide a replaceable, probeable experiment
@@ -57,5 +58,21 @@ closes.
 The controlled experiment matrix is
 [`docs/BALANCE_GROUND_FAULT_ANALYSIS.md`](../../../docs/BALANCE_GROUND_FAULT_ANALYSIS.md).
 
-The VRX and decoder headers are FpvDeck generic interfaces. They do not claim the
-pinout of any undocumented commercial module.
+J4 and J5 deliberately connect only pin 2 ground and pin 3 CVBS. All other pins
+are NC. The SteadyView X receiver is powered through its documented 6.5–26 V
+barrel/XT60 ground-station harness, not Test PCB 5 V. The decoder EVM also keeps
+its own documented power/control/MIPI connections. Rev A therefore proves the
+analog handoff without inventing either module's internal pinout.
+
+## Board documents and views
+
+- [Layout](LAYOUT.md)
+- [Component map](COMPONENT_MAP.md)
+- [Build guide](BUILD_GUIDE.md)
+- [Release readiness](READINESS.md)
+- [Fabrication notes](FABRICATION_NOTES.md)
+
+The committed [top](exports/test-board-rev-a-top.svg),
+[bottom](exports/test-board-rev-a-bottom.svg), and
+[component-map](exports/test-board-rev-a-component-map.svg) SVGs are inspection
+views of the placed, unrouted board. They are not fabrication outputs.

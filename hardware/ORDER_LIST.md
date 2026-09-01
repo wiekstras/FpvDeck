@@ -1,14 +1,15 @@
 # First bench prototype order list
 
-Prices are September 2026 planning values before VAT/shipping. Recheck stock and
-connector gender at checkout. The machine-readable module list is
-[PROTOTYPE_SYSTEM.csv](bom/PROTOTYPE_SYSTEM.csv); Test PCB line items are in
-[TEST_PCB_REV_A.csv](bom/TEST_PCB_REV_A.csv).
+This legacy global list is retained for design context. EU purchasing uses the
+current compatibility-gated [EU order list](ORDER_LIST_EU.md) and
+[buy-now list](BUY_NOW.md). Recheck stock, VAT, and exact MPN at checkout.
 
 ## Already owned
 
-- **1× RadioMaster T8L.** Do not open or modify it for the initial video/display
-  bench. T8L probing waits for the non-destructive reverse-engineering procedure.
+- **1× RadioMaster T8L.** It supplies the independent 2.4 GHz ELRS control radio,
+  its RF path, two Hall gimbals, useful controls/controller electronics, and the
+  initial two-18650 arrangement subject to verification. It supplies **no analog
+  VRX, decoder, display, media reader, or balance checker**.
 
 ## Compute — order now
 
@@ -30,13 +31,12 @@ connector gender at checkout. The machine-readable module list is
 
 ## Video
 
-- **1× Skyzone SteadyView X ground-station kit** — about US$120–160; order now if
-  current stock is confirmed. It provides standalone 1 Vpp/75 Ω CVBS, two SMA
-  antenna ports and 6.5–26 V input.
-- **2× quality 5.8 GHz 50 Ω antennas**, one omnidirectional and one patch — budget
-  US$50–80. Confirm SMA versus RP-SMA gender from the receiver in hand.
-- **1× Analog Devices `EVAL-ADV7282AMEBZ`** — budget US$250–350, but **verify
-  distributor stock before paying**. It evaluates the ADV7282A-M, which ADI says
+- **1× Skyzone SteadyView X ground-station kit — WAIT FOR CHAIN GATE.** It provides
+  the dedicated 5.8 GHz RF-to-CVBS stage: standalone 1 Vpp/75 Ω CVBS, two SMA
+  antenna ports and 6.5–26 V input. The EU kits identified in 2026 include one
+  RHCP patch and one omni antenna, so do not separately buy antennas initially.
+- **1× Analog Devices `EVAL-ADV7282AMEBZ` — WAIT FOR STOCK + BRIDGE.** Budget
+  US$250–350. It evaluates the ADV7282A-M, which ADI says
   is pin/software-compatible with ADV7282-M; Raspberry Pi tested its driver with
   the older `EVAL-ADV7282MEBZ`. Both silicon families are NRND and are prototype
   tools, not production selections. The EVM routes CSI D0± and CLK± to SMA ports,
@@ -62,8 +62,9 @@ Do not substitute a USB EasyCAP or HDMI capture device as the latency baseline.
   current limit. An ordinary bench supply plus resistor ladder is adequate for
   initial cumulative-tap tests; it does not replace independent-cell tests.
 
-The decoder EVM is in **VERIFY**, not unconditional ORDER NOW; the display, CM4,
-and VRX can be tested without it.
+The decoder EVM and VRX are not unconditional purchases. The display, CM4, MCU,
+and media reader remain useful without them, while the analog-video pair waits
+for a reviewed EVM-SMA-to-CM4IO CSI bridge.
 
 ## Test PCB
 
