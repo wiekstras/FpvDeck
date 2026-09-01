@@ -16,6 +16,7 @@ MSG_REPLY = 0x41
 CMD_IDENTIFY = 0x01
 CMD_SELF_TEST = 0x02
 CMD_ADC_MV = 0x11
+CMD_TAP_DUMP = 0x12
 
 CHECKS = (
     (1 << 0, "MCU"),
@@ -151,36 +152,46 @@ def run_simulated(faults: set[str]) -> int:
     return 1 if failed else 0
 
 
+def run_transport(transport: object) -> int:
+    identify = transport.request(CMD_IDENTIFY, sequence=1)
+    if len(identify) < 9 or identify[0] != 0:
+        raise RuntimeError("identify failed")
+    print(f"FpvDeck controller HW {identify[1]}.{identify[2]} FW {identify[3]}.{identify[4]}.{identify[5]}")
+    payload = transport.request(CMD_SELF_TEST, sequence=2)
+    if len(payload) < 13:
+        raise RuntimeError("short self-test response")
+    status = payload[0]
+    passed, interactive, failed = struct.unpack_from("<III", payload, 1)
+    for bit, label in CHECKS:
+        if failed & bit:
+            print_result(label, "FAIL")
+        elif interactive & bit:
+            print_result(label, "INTERACTIVE")
+        elif passed & bit:
+            print_result(label, "PASS")
+        else:
+            print_result(label, "NOT TESTED")
+
+    for channel, label, sequence in ((0, "B- OFFSET", 10), (1, "DECK MON", 11)):
+        adc = transport.request(CMD_ADC_MV, channel, sequence=sequence)
+        if len(adc) < 6 or adc[0] != 0 or adc[1] != channel:
+            raise RuntimeError(f"{label.lower()} ADC request failed")
+        millivolts = struct.unpack_from("<i", adc, 2)[0]
+        print_result(label, "PASS", f"{millivolts / 1000:7.3f} V")
+
+    taps = transport.request(CMD_TAP_DUMP, sequence=12)
+    if len(taps) < 26 or taps[0] != 0 or taps[1] != 6:
+        raise RuntimeError("tap dump failed or returned wrong channel count")
+    for tap in range(6):
+        millivolts = struct.unpack_from("<i", taps, 2 + tap * 4)[0]
+        print_result(f"BALANCE CH{tap + 1}", "PASS", f"{millivolts / 1000:6.3f} V cumulative")
+    return 1 if status != 0 or failed else 0
+
+
 def run_serial(path: str, timeout: float) -> int:
     transport = SerialTransport(path, timeout)
     try:
-        identify = transport.request(CMD_IDENTIFY, sequence=1)
-        if len(identify) < 9 or identify[0] != 0:
-            raise RuntimeError("identify failed")
-        print(f"FpvDeck controller HW {identify[1]}.{identify[2]} FW {identify[3]}.{identify[4]}.{identify[5]}")
-        payload = transport.request(CMD_SELF_TEST, sequence=2)
-        if len(payload) < 13:
-            raise RuntimeError("short self-test response")
-        status = payload[0]
-        passed, interactive, failed = struct.unpack_from("<III", payload, 1)
-        for bit, label in CHECKS:
-            if failed & bit:
-                print_result(label, "FAIL")
-            elif interactive & bit:
-                print_result(label, "INTERACTIVE")
-            elif passed & bit:
-                print_result(label, "PASS")
-            else:
-                print_result(label, "NOT TESTED")
-        for channel in range(6):
-            adc = transport.request(CMD_ADC_MV, channel, sequence=10 + channel)
-            if len(adc) >= 6 and adc[0] == 0:
-                millivolts = struct.unpack_from("<i", adc, 2)[0]
-                print_result(f"BALANCE CH{channel + 1}", "PASS", f"{millivolts / 1000:6.3f} V cumulative")
-            else:
-                print_result(f"BALANCE CH{channel + 1}", "FAIL", "ADC request failed")
-                failed |= 1 << 2
-        return 1 if status != 0 or failed else 0
+        return run_transport(transport)
     finally:
         transport.close()
 

@@ -85,12 +85,13 @@ fpvdeck_board_status_t fpvdeck_board_handle(
     case FPVDECK_BOARD_TAP_DUMP:
         if (hal->read_adc == NULL) return finish(reply, FPVDECK_BOARD_STATUS_NOT_READY);
         reply->payload[2] = 6u;
-        for (uint8_t channel = 0u; channel < 6u; ++channel) {
+        for (uint8_t tap = 0u; tap < 6u; ++tap) {
             uint32_t raw = 0u;
             int32_t millivolts = 0;
+            const uint8_t channel = (uint8_t)FPVDECK_ADC_TAP1 + tap;
             if (!hal->read_adc(hal->context, channel, &raw, &millivolts))
                 return finish(reply, FPVDECK_BOARD_STATUS_HARDWARE_FAULT);
-            put_u32(&reply->payload[3u + (uint16_t)channel * 4u], (uint32_t)millivolts);
+            put_u32(&reply->payload[3u + (uint16_t)tap * 4u], (uint32_t)millivolts);
         }
         reply->payload_length = 27u;
         return FPVDECK_BOARD_STATUS_OK;

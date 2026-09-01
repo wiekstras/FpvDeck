@@ -6,7 +6,9 @@ static bool read_adc(void *context, uint8_t channel, uint32_t *raw, int32_t *mil
 {
     (void)context;
     *raw = 1000u + channel;
-    *millivolts = 4200 * (int32_t)(channel + 1u);
+    if (channel == FPVDECK_ADC_BNEG) *millivolts = -3;
+    else if (channel == FPVDECK_ADC_DECK) *millivolts = 7400;
+    else *millivolts = 4200 * ((int32_t)channel - 1);
     return true;
 }
 
@@ -37,12 +39,12 @@ int main(void)
     request.payload_length = 2u;
 
     request.payload[0] = FPVDECK_BOARD_ADC_MILLIVOLTS;
-    request.payload[1] = 3u;
+    request.payload[1] = FPVDECK_ADC_TAP2;
     CHECK(fpvdeck_board_handle(&hal, &request, &reply) == FPVDECK_BOARD_STATUS_OK);
     CHECK(reply.sequence == 42u);
     CHECK(reply.type == FPVDECK_MSG_BOARD_REPLY);
-    CHECK(reply.payload[2] == 3u);
-    CHECK(read_u32(&reply.payload[3]) == 16800u);
+    CHECK(reply.payload[2] == FPVDECK_ADC_TAP2);
+    CHECK(read_u32(&reply.payload[3]) == 8400u);
 
     request.payload[0] = FPVDECK_BOARD_TAP_DUMP;
     request.payload_length = 1u;
@@ -50,6 +52,12 @@ int main(void)
     CHECK(reply.payload_length == 27u);
     CHECK(read_u32(&reply.payload[3]) == 4200u);
     CHECK(read_u32(&reply.payload[23]) == 25200u);
+
+    request.payload[0] = FPVDECK_BOARD_ADC_MILLIVOLTS;
+    request.payload[1] = FPVDECK_ADC_BNEG;
+    request.payload_length = 2u;
+    CHECK(fpvdeck_board_handle(&hal, &request, &reply) == FPVDECK_BOARD_STATUS_OK);
+    CHECK((int32_t)read_u32(&reply.payload[3]) == -3);
 
     request.payload[0] = FPVDECK_BOARD_SELF_TEST;
     CHECK(fpvdeck_board_handle(&hal, &request, &reply) == FPVDECK_BOARD_STATUS_OK);

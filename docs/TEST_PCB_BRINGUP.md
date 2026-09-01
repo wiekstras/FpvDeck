@@ -80,6 +80,10 @@ time. Scope SCLK/CS/SDI/SDO and confirm levels stay within DVDD rails.
 **Pass:** repeatable register readback, no ADC alarm, reference stable and no supply
 overshoot. A plausible conversion alone is not proof of correct SPI framing.
 
+Verify the logical channel identity before calibration: ADC0 = bipolar B− sense,
+ADC1 = deck monitor, and ADC2–ADC7 = cumulative taps 1–6. A channel-order mismatch
+is a hard fail; do not compensate by relabeling fixture wires.
+
 ## 6. Zero and cumulative voltage injection
 
 With no LiPo present, short protected simulator inputs to balance reference and

@@ -111,6 +111,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
   remain to implement.
 - [x] Add a versioned bring-up command subset, host-tested board dispatch layer,
   simulated `fpvdeck-hw-test`, and a staged hardware bring-up procedure.
+- [x] Align firmware/host ADC identities with the audited board map: B− on ADC0,
+  deck monitor on ADC1, and balance taps on ADC2–ADC7.
 - [ ] Bind firmware board HAL callbacks to STM32G0 peripherals and validate the
   commands on NUCLEO-G0B1RE before porting to the Rev A MCU footprint.
 - [ ] Run `fpvdeck-hw-test` against physical hardware and add fixture-assisted

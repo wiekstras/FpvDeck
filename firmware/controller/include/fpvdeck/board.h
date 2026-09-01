@@ -10,6 +10,17 @@
 #define FPVDECK_MSG_BOARD_REPLY 0x41u
 
 typedef enum {
+    FPVDECK_ADC_BNEG = 0u,
+    FPVDECK_ADC_DECK = 1u,
+    FPVDECK_ADC_TAP1 = 2u,
+    FPVDECK_ADC_TAP2 = 3u,
+    FPVDECK_ADC_TAP3 = 4u,
+    FPVDECK_ADC_TAP4 = 5u,
+    FPVDECK_ADC_TAP5 = 6u,
+    FPVDECK_ADC_TAP6 = 7u
+} fpvdeck_adc_channel_t;
+
+typedef enum {
     FPVDECK_BOARD_IDENTIFY = 0x01,
     FPVDECK_BOARD_SELF_TEST = 0x02,
     FPVDECK_BOARD_ADC_RAW = 0x10,

@@ -58,5 +58,11 @@ millivolts, six-tap dump, two temperatures, LEDs, buzzer, fan, buttons, SD detec
 and the 5 V/3.3 V/deck rails. Requests and replies retain the outer CRC and sequence
 number. Tests cover the dispatcher and framing corruption.
 
+The physical ADS8688A map is fixed in `fpvdeck_adc_channel_t`: channel 0 is
+signed/bipolar pack-negative sense, channel 1 is deck monitoring, and channels
+2–7 are cumulative balance taps 1–6. `TAP_DUMP` returns only those six taps in
+order, insulating the host self-test from confusing B− or deck voltage with a
+cell input.
+
 `tools/fpvdeck_hw_test.py --port /dev/ttyACM0` is the Linux-side bring-up client;
 `--simulate` exercises its output before hardware exists.

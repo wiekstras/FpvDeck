@@ -235,3 +235,14 @@ and unresolved facts. Status labels are used deliberately:
   video latency, or physical-display evidence.
 - The automated suite now has 19 tests, including the benchmark first-frame path
   and schema validation. All passed locally after this change.
+
+## 2026-09-01 — ADC logical-channel correction
+
+- Cross-checking firmware against the audited ADS8688A board map found a
+  pre-hardware defect: `TAP_DUMP` iterated ADC0–ADC5 even though ADC0 is B− sense,
+  ADC1 is deck monitor, and cumulative taps occupy ADC2–ADC7. The host tool also
+  mislabeled its six individual ADC requests as balance channels.
+- Added the explicit `fpvdeck_adc_channel_t` map. Firmware now reads ADC2–ADC7
+  for `TAP_DUMP`; the Linux tool separately reports signed B− offset and deck
+  monitoring, then consumes the ordered six-tap dump. Host and C dispatcher tests
+  lock the map. No released hardware was affected.
