@@ -21,10 +21,15 @@ Sources:
 
 ## V1 reuse decision
 
-Reuse the complete T8L mainboard, gimbals, controls, antennas, charge behavior,
-and ELRS path without changing RF matching or firmware. Mount the FPV computer as
-an electrically separate subsystem. Shared power is allowed only after load,
-ground, charging, brownout, and conducted-noise tests.
+Reuse the complete T8L mainboard, two Hall gimbals, useful controls, associated
+2.4 GHz ELRS antenna/RF path, and its two-cell compartment. Existing charge/USB
+behavior is reused only where measurement confirms it remains safe with the added
+load. Mount the FPV computer as an electrically separate subsystem. Shared power
+is allowed only after load, ground, charging, brownout, and conducted-noise tests.
+
+The T8L contains **no FpvDeck analog-video subsystem**. It does not provide the
+5.8 GHz VRX, CVBS decoder, compute, touchscreen, removable media, or external
+balance checker. ELRS control and 5.8 GHz analog video are independent RF paths.
 
 The Linux/MCU side does not sit in the stick-to-ELRS path. Read-only T8L status may
 come first from USB HID/VCP if tests prove RF remains fully active and timing is
@@ -48,7 +53,7 @@ its near field without chamber/field comparison. Disable CM4 Wi-Fi by default;
 if later enabled, use an external antenna isolated from ELRS and prove link margin.
 
 Keep switcher hot loops, CSI/DSI, USB, and high-edge-rate clocks away from both
-2.4 and 5.8 GHz receive paths. Filter VRX/decoder rails, use shield footprints
+2.4 GHz ELRS transmit/control and 5.8 GHz analog receive paths. Filter VRX/decoder
+rails, use shield footprints
 where measurements justify them, and compare receiver noise floor with each
 digital subsystem enabled/disabled.
-

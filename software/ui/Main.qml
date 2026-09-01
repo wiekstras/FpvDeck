@@ -98,7 +98,7 @@ ApplicationWindow {
             if (action === "menu" && window.currentApp === "fpv" && !window.simulatorOpen) InteractionService.showControls()
             else if (action === "dvr") DvrService.toggleRecording()
             else if (action === "battery" && window.currentApp === "fpv") InteractionService.showControls()
-            else if (action === "signal") VideoService.toggleLoss()
+            else if (action === "signal") { VideoService.toggleLoss(); RadioService.toggleLoss() }
             else if (action === "simulator") window.simulatorOpen = !window.simulatorOpen
             else if (action === "right" || action === "down") window.moveFocus(true)
             else if (action === "left" || action === "up") window.moveFocus(false)

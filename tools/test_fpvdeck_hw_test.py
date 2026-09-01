@@ -12,6 +12,7 @@ from tools.fpvdeck_hw_test import (
     cobs_encode,
     crc16,
     decode_reply,
+    run_simulated,
     run_transport,
 )
 
@@ -55,6 +56,13 @@ class HardwareTestProtocolTest(unittest.TestCase):
         self.assertIn((CMD_ADC_MV, 1, 11), transport.requests)
         self.assertIn((CMD_TAP_DUMP, 0, 12), transport.requests)
         self.assertNotIn((CMD_ADC_MV, 2, 12), transport.requests)
+
+    def test_passive_cvbs_breakout_is_not_reported_as_automatic_pass(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            self.assertEqual(run_simulated(set()), 0)
+        self.assertIn("CVBS BREAKOUT      INTERACTIVE", output.getvalue())
+        self.assertNotIn("VRX LINK", output.getvalue())
 
 
 if __name__ == "__main__":

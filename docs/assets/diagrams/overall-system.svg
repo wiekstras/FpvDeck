@@ -5,14 +5,15 @@
   <text x="42" y="48" class="t" font-size="23">CONTROL PLANE · INDEPENDENT OF LINUX</text>
   <g><rect class="b" x="42" y="75" width="210" height="72" rx="14"/><text class="t" x="68" y="108">T8L controls</text><text class="s" x="68" y="130">gimbals + switches</text></g>
   <g><rect class="b" x="340" y="75" width="205" height="72" rx="14"/><text class="t" x="365" y="108">T8L + ELRS</text><text class="s" x="365" y="130">2.4 GHz control RF</text></g>
-  <g><rect class="b" x="635" y="75" width="205" height="72" rx="14"/><text class="t" x="662" y="108">Aircraft</text><text class="s" x="662" y="130">camera · FC · VTX</text></g>
+  <g><rect class="b" x="635" y="75" width="205" height="72" rx="14"/><text class="t" x="662" y="108">Aircraft</text><text class="s" x="662" y="130">ELRS RX · FC · camera · VTX</text></g>
   <path class="l g" d="M252 111h88"/><path class="l g" d="M545 111h90"/>
   <text x="42" y="208" class="t" font-size="23">VIDEO + COMPUTE PLANE</text>
-  <g><rect class="b" x="42" y="235" width="155" height="78" rx="14"/><text class="t" x="68" y="268">5.8 GHz VRX</text><text class="s" x="68" y="290">diversity module</text></g>
-  <g><rect class="b" x="245" y="235" width="155" height="78" rx="14"/><text class="t" x="269" y="268">CVBS decode</text><text class="s" x="269" y="290">field-rate CSI-2</text></g>
+  <g><rect class="b" x="42" y="235" width="155" height="78" rx="14"/><text class="t" x="68" y="268">5.8 GHz VRX</text><text class="s" x="68" y="290">RF → CVBS · added</text></g>
+  <g><rect class="b" x="245" y="235" width="155" height="78" rx="14"/><text class="t" x="269" y="268">CVBS decoder</text><text class="s" x="269" y="290">analog → CSI-2</text></g>
   <g><rect class="b" x="448" y="235" width="155" height="78" rx="14"/><text class="t" x="475" y="268">Linux SoM</text><text class="s" x="475" y="290">video + apps</text></g>
-  <g><rect class="b" x="651" y="235" width="155" height="78" rx="14"/><text class="t" x="681" y="268">HD display</text><text class="s" x="681" y="290">large, high-mounted</text></g>
-  <path class="l" d="M197 274h48"/><path class="l" d="M400 274h48"/><path class="l" d="M603 274h48"/><path class="l" d="M738 147v88"/>
+  <g><rect class="b" x="651" y="235" width="155" height="78" rx="14"/><text class="t" x="681" y="268">HD touchscreen</text><text class="s" x="681" y="290">display + touch UI</text></g>
+  <path class="l" d="M197 274h48"/><path class="l" d="M400 274h48"/><path class="l" d="M603 274h48"/><path class="l" d="M738 147v38H120v50"/>
+  <text class="s" x="445" y="180">independent 5.8 GHz analog video return</text>
   <g><rect class="b" x="865" y="235" width="285" height="78" rx="14"/><text class="t" x="891" y="268">Removable storage</text><text class="s" x="891" y="290">DVR + media · filesystem TBD</text></g>
   <path class="l" d="M603 296h262"/>
   <g><rect class="b" x="42" y="376" width="225" height="78" rx="14"/><text class="t" x="68" y="409">Internal 2×18650</text><text class="s" x="68" y="431">topology to verify</text></g>

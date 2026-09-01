@@ -24,7 +24,7 @@ CHECKS = (
     (1 << 2, "BALANCE INPUT"),
     (1 << 3, "SD DETECT"),
     (1 << 4, "TEMP SENSOR"),
-    (1 << 5, "VRX LINK"),
+    (1 << 5, "CVBS BREAKOUT"),
     (1 << 6, "BUTTONS"),
     (1 << 7, "POWER RAILS"),
 )
@@ -138,7 +138,7 @@ def run_simulated(faults: set[str]) -> int:
         if key in faults:
             print_result(label, "FAIL", "injected fault")
             failed += 1
-        elif label in ("BALANCE INPUT", "BUTTONS"):
+        elif label in ("BALANCE INPUT", "BUTTONS", "CVBS BREAKOUT"):
             print_result(label, "INTERACTIVE", "follow bring-up prompts on real hardware")
         else:
             print_result(label, "PASS")

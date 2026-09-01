@@ -1,5 +1,7 @@
 flowchart LR
-  CAM[FPV camera] --> OSD[FC / Betaflight OSD] --> VTX[Analog VTX] --> VRX[Diversity VRX] --> DEC[CVBS decoder] --> VID[VideoService]
+  CAM[FPV camera] --> OSD[FC / Betaflight analog OSD] --> VTX[5.8 GHz analog VTX]
+  VTX -. 5.8 GHz RF .-> VRX[Dedicated FpvDeck analog VRX\nRF to CVBS]
+  VRX -->|75-ohm CVBS| DEC[Separate video decoder\nCVBS to digital] --> VID[VideoService]
   VID --> COMP[GPU compositor] --> LCD[HD display]
   RGB[RGB widgets / menus] --> COMP
   VID -. bounded tee .-> DVR[Pre-overlay DVR]

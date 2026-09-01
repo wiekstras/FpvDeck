@@ -4,6 +4,7 @@
 #include "services/InputService.h"
 #include "services/InteractionService.h"
 #include "services/MediaService.h"
+#include "services/RadioService.h"
 #include "services/StorageService.h"
 #include "services/SystemService.h"
 #include "services/TelemetryService.h"
@@ -65,6 +66,7 @@ int main(int argc, char* argv[])
     InputService inputService;
     InteractionService interactionService;
     MediaService mediaService(QUrl::fromLocalFile(videoPath));
+    RadioService radioService;
     StorageService storageService;
     SystemService systemService;
     TelemetryService telemetryService;
@@ -105,6 +107,7 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("InputService", &inputService);
     engine.rootContext()->setContextProperty("InteractionService", &interactionService);
     engine.rootContext()->setContextProperty("MediaService", &mediaService);
+    engine.rootContext()->setContextProperty("RadioService", &radioService);
     engine.rootContext()->setContextProperty("StorageService", &storageService);
     engine.rootContext()->setContextProperty("SystemService", &systemService);
     engine.rootContext()->setContextProperty("TelemetryService", &telemetryService);

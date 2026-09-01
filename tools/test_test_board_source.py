@@ -36,6 +36,14 @@ class TestBoardPinMapTest(unittest.TestCase):
         self.assertIn('assign("F2", {"1": "BNEG_RAW", "2": "GND"})', source)
         self.assertIn('assign("R7", {"1": "BNEG_RAW", "2": "BNEG_SENSE"})', source)
 
+    def test_vrx_and_decoder_headers_are_cvbs_only(self) -> None:
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn('assign("J4", {"2": "GND", "3": "VRX_VIDEO"})', source)
+        self.assertIn('assign("J5", {"2": "GND", "3": "VRX_VIDEO"})', source)
+        self.assertNotIn('"VRX_RSSI"', source)
+        self.assertNotIn('"VRX_TX"', source)
+        self.assertNotIn('"VRX_RX"', source)
+
     def test_ads8688a_dbt_map(self) -> None:
         mapping = literal_assignment("adc_mapping")
         expected_analog = {

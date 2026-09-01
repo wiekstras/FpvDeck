@@ -1,10 +1,12 @@
 flowchart LR
-  T8L["T8L controls"] --> ELRS["ELRS 2.4 GHz"] --> AIR["Aircraft"]
-  AIR --> VTX["Camera + FC OSD + VTX"] --> VRX["Diversity VRX"] --> DEC["CVBS decoder"] --> SOM["Linux SoM"] --> LCD["HD display"]
+  T8L["T8L gimbals + controls"] --> ELRS["T8L 2.4 GHz ELRS TX"] --> AIR["Aircraft ELRS RX + FC"]
+  CAM["Aircraft camera"] --> OSD["FC / Betaflight analog OSD"] --> VTX["5.8 GHz analog VTX"]
+  VTX -. "5.8 GHz RF" .-> VRX["FpvDeck dedicated analog VRX\nRF → CVBS"]
+  VRX --> DEC["Separate CVBS decoder\nanalog → digital"] --> SOM["Linux SoM\nvideo + overlay + apps"] --> LCD["HD capacitive touchscreen"]
   PACK["Internal 2x 18650; topology TBD"] --> PM["Power management"] --> T8L
   PM --> VRX
   PM --> SOM
   MCU["Controller MCU"] <--> SOM
   MCU --> PM
   LIPO["External LiPo taps"] --> ADC["Protected precision ADC"] --> MCU
-  SD["Removable DVR storage"] <--> SOM
+  SD["Removable goggle/DVR media"] <--> SOM

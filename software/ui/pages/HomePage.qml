@@ -12,7 +12,7 @@ Item {
         TopBar { width: parent.width; title: "FPVDECK"; subtitle: "Ready to fly" }
         Row {
             width: parent.width; spacing: 10
-            StatusChip { text: "VRX R" + VideoService.channel + " · " + VideoService.rssi + "%"; icon: "⌁"; accent: Theme.accent }
+            StatusChip { text: "VRX R" + RadioService.channel + " · " + RadioService.rssi + "%"; icon: "⌁"; accent: Theme.accent }
             StatusChip { text: DvrService.recording ? "DVR RECORDING" : "DVR READY"; icon: "●"; accent: DvrService.recording ? Theme.error : Theme.textMuted }
             StatusChip { visible: BatteryService.connected; text: BatteryService.cellCount + "S EXT · " + BatteryService.packVoltage.toFixed(2) + "V"; icon: "▰"; accent: BatteryService.warning.length ? Theme.warning : Theme.blue; alert: BatteryService.warning.length }
             StatusChip { visible: SystemService.warning.length; text: SystemService.warning; icon: "!"; accent: Theme.error; alert: true }

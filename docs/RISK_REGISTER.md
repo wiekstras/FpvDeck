@@ -14,5 +14,6 @@
 | D1 | Selected 6.25-inch module has unacceptable latency/outdoor/landscape behavior | High | Medium | CM4-supported bench module; photodiode, luminance, thermal and scan-direction tests; Winstar production sample later |
 | D2 | Touch produces false input or poor field/glove response | High | Medium | large controls, flight lock, physical critical paths, water/RF/glove bench matrix |
 | M1 | Added mass/heat makes T8L ergonomics poor | High | Medium | measured CAD envelope, center-of-gravity mockup, two-cell energy budget, thermal dummy |
-| C1 | Current VRX modules become unavailable | High | Medium | standardized modular CVBS/power/control bay; qualify two receivers |
+| C1 | Current VRX modules become unavailable | High | Medium | modular 75 Ω CVBS handoff, separate documented power and only optional verified control; qualify two receivers |
+| C2 | ADV7282A-M EVM cannot be safely/cheaply bridged to CM4IO | Critical | High | hold VRX/decoder purchase; review 100 Ω SMA-to-CSI fixture, stock and lane mapping; evaluate alternate active decoder/SoM pair |
 | E1 | Pre-release PCB pad/net/footprint error reaches fabrication | Critical | Medium | NOT RELEASED marker, native schematic/ERC, source pin-map test, independent audit, 1:1 print, DRC and signed release checklist |

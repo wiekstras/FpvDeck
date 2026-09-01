@@ -13,9 +13,18 @@ QR, or NFC. FPV's BatteryWidget reads the same service as the full Battery app.
 
 ## VideoService snapshot
 
-`standard`, `lockState`, `sourceFormat`, `frameSequence`, `lastFrameTime`, VRX
-`channel`, `rssi`, and fault counters. Pixel buffers are never exposed to general
-QML plugins; only the trusted video item owns them.
+`standard`, `lockState`, `sourceFormat`, `frameSequence`, `lastFrameTime`, decoder
+health and fault counters. RadioService separately owns the dedicated 5.8 GHz VRX
+channel/RSSI/scan state. Neither service represents the T8L 2.4 GHz ELRS control
+transmitter. Pixel buffers are never exposed to general QML plugins; only the
+trusted video item owns them.
+
+## RadioService snapshot
+
+Represents only the dedicated FpvDeck 5.8 GHz analog VRX and publishes `channel`,
+`rssi`, `favorite`, and `scanning`. It does not represent the T8L/ELRS control
+link or the CVBS decoder. The simulator exposes channel/favorite/scan behavior
+even though the selected SteadyView X host-control protocol remains **UNKNOWN**.
 
 ## InteractionService
 
@@ -33,7 +42,8 @@ and safe-eject policy; Media never shells out or mounts a device.
 
 ## SystemService
 
-Publishes internal deck battery/charging, MCU/ADC/VRX health, temperatures,
+Publishes internal deck battery/charging, independent T8L-control/ELRS-TX status,
+MCU/ADC health, dedicated 5.8 GHz VRX status, CVBS-decoder status, temperatures,
 brightness, uptime, and developer touch-debug state. External balance-pack values
 never enter this service; that separation prevents UI or backend code from
 confusing the measurement-only port with the internal energy source.

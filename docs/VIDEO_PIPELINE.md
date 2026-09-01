@@ -5,15 +5,28 @@
 ## Prototype 1 path
 
 ```text
-SteadyView X 1 Vpp / 75 Ω CVBS
+Aircraft camera -> Betaflight analog OSD -> 5.8 GHz analog VTX
+  -> 5.8 GHz antenna
+  -> dedicated SteadyView X analog VRX (RF receiver; not supplied by T8L)
+  -> 1 Vpp / 75 Ω CVBS
   -> correctly terminated/protected analog input
-  -> ADV7282A-M evaluation path with low-delay line-based I2P
+  -> ADV7282A-M decoder evaluation path with low-delay line-based I2P
   -> one-lane CSI-2 YUV422
   -> CM4 Unicam/V4L2 capture
   -> DMABUF-backed live queue (depth 1; newest frame wins)
   -> Qt Quick scene graph / DRM-KMS compositor
   -> DSI scanout
 ```
+
+These are two distinct hardware stages: SteadyView X demodulates 5.8 GHz RF into
+composite video, while ADV7282A-M digitizes composite video. The decoder has no RF
+receiver. The donor T8L's separate 2.4 GHz ELRS transmitter carries aircraft
+control only.
+
+The current EVM path is not purchase-cleared. `EVAL-ADV7282AMEBZ` exposes MIPI
+clock/data on SMA connectors, and a reviewed controlled-impedance SMA-to-CM4IO
+bridge is still required. This interface gap is tracked rather than represented
+as an ordinary cable.
 
 Raspberry Pi's camera documentation explicitly supports ADV728x-M through the
 `adv7180` driver and explicitly does not support interlaced input. Therefore I2P

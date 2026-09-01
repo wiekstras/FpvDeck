@@ -1,7 +1,8 @@
 # Simulator
 
 The same FPVDeck executable runs simulated and real backends. Desktop development
-currently instantiates simulated battery, VRX/video, DVR, input, removable
+currently instantiates simulated battery, dedicated 5.8 GHz Radio/VRX, separate
+video/decoder, DVR, input, removable
 storage, media playback, deck health, and system state.
 
 `./scripts/demo` opens the deterministic showcase Home state. The Home, FPV,
@@ -14,7 +15,7 @@ The normal `./scripts/dev` path retains the developer database and opens FPV.
 The `F10` panel injects video lock, weak signal, vertical roll, signal loss,
 black frames, PAL/NTSC selection, channel changes, balance lead events,
 imbalance, under/overvoltage, deck battery drain/charging, storage insertion,
-removal/corruption/full, MCU/ADC/VRX disconnects, and temperature warnings. The
+removal/corruption/full, T8L/ELRS/MCU/ADC/VRX/decoder disconnects, and temperature warnings. The
 fault strip is deliberately visible only in development mode.
 
 Mouse input is treated as a single touch point. Enable **Show touch points** in

@@ -10,12 +10,15 @@ video, persistent flight records work, simulator faults are repeatable, CI green
 
 ## Prototype 1 — modular bench
 
-**BOM:** CM4/IO carrier, selected 6.25-inch DSI touch display, ADV7282A-M evaluation
-board, SteadyView X ground station, STM32G0 devboard, two ADC EVMs, isolated bench
+**BOM:** CM4/IO carrier, selected 6.25-inch DSI touch display, dedicated 5.8 GHz
+SteadyView X RF-to-CVBS ground station, separate ADV7282A-M CVBS-to-CSI evaluation
+board, STM32G0 devboard, ADC evaluation hardware, isolated bench
 supplies, RF dummy/attenuation/test equipment, logic analyzer and scope.
 
-**Connections:** documented module cables only. Separate current-limited supplies
-until grounds/load behavior are validated. No unknown T8L connection.
+**Connections:** documented module cables only. The decoder EVM's SMA CSI output
+needs a reviewed controlled-impedance CM4IO bridge before purchase/use. Separate
+current-limited supplies remain in use until grounds/load behavior are validated.
+No unknown T8L connection.
 
 **Tests:** PAL/NTSC lock/recovery; photodiode latency; DMABUF queue; DVR stress;
 VRX sensitivity/mode latency; DSI scan; conducted noise; ADC precision/faults;

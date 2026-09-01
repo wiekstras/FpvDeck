@@ -14,7 +14,8 @@ side is powered down, booting, overloaded, or crashed.
                          MCU hardware controller
                                   │ COBS + CRC protocol
                                   ▼
- FPV camera -> FC OSD -> VTX -> dual VRX -> CVBS decoder -> CSI-2 -> Linux SoM
+ FPV camera -> FC OSD -> 5.8 GHz VTX -- RF --> dedicated 5.8 GHz VRX -> CVBS
+                                                    -> CVBS decoder -> CSI-2 -> Linux SoM
                                                                     │
                      ┌──────────────────────────────────────────────┤
                      │ VideoService: bounded live path              │
@@ -31,10 +32,15 @@ contains transient menus/apps. Secondary service failure must not block Layer 1.
 
 ## Prototype architecture
 
+The T8L/ELRS path is control only. FpvDeck's dedicated VRX performs RF-to-CVBS;
+the decoder performs CVBS-to-digital conversion; neither function is supplied by
+the donor radio.
+
 Prototype 0 is the desktop simulator in this repository. Prototype 1 is a CM4
 development carrier, selected 720×1560 DSI touch module, ADV7282A-M evaluation
 hardware, standalone SteadyView X VRX, STM32G0 development board, and protected
-ADC evaluation hardware. Each module remains replaceable.
+ADC evaluation hardware. Each module remains replaceable, and the analog-video
+modules remain procurement-gated until the decoder-to-CM4 bridge is reviewed.
 
 Prototype 2 is a Controller-I/O PCB: MCU, protected battery measurement, controls,
 power button/sequencing logic, fans/temperature, debug, and module connectors.

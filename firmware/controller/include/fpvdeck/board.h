@@ -49,7 +49,8 @@ enum {
     FPVDECK_SELFTEST_BALANCE = 1u << 2,
     FPVDECK_SELFTEST_SD_DETECT = 1u << 3,
     FPVDECK_SELFTEST_TEMPERATURE = 1u << 4,
-    FPVDECK_SELFTEST_VRX_LINK = 1u << 5,
+    /* Rev A has a passive CVBS-only breakout, not a testable VRX control link. */
+    FPVDECK_SELFTEST_CVBS_BREAKOUT = 1u << 5,
     FPVDECK_SELFTEST_BUTTONS = 1u << 6,
     FPVDECK_SELFTEST_POWER = 1u << 7
 };

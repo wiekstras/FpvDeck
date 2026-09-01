@@ -29,10 +29,15 @@ runtime/boot/memory cost; Flutter's Linux embedded/video interop adds ecosystem
 risk; bespoke rendering would spend effort recreating accessibility, text, and
 layout infrastructure.
 
-The repository currently implements Battery, Video/VRX, DVR, Telemetry, Input,
+The repository currently implements Battery, Video, Radio/VRX, DVR, Telemetry, Input,
 Storage, Media, Interaction, System, and Database services. Hardware-dependent
 state has a deterministic simulator path. The QML pages consume these QObject
 contracts and do not open serial ports, mount cards, or sample ADCs themselves.
+Diagnostics reports T8L/ELRS control, dedicated 5.8 GHz VRX, CVBS decoder and
+digital-video health independently. `RadioService` owns receiver channel, RSSI,
+favorites and scan state; `VideoService` owns source standard, decoder/capture
+lock state and frames. This prevents an RF channel change from masquerading as a
+decoder API and leaves room for separate real backends.
 
 InteractionService owns transient FPV controls, flight-lock navigation policy,
 and touch-debug state. A lock rejection is explicit and testable. StorageService

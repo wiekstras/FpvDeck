@@ -48,8 +48,8 @@ for name in (
     "GND", "+5V_RAW", "+5V_FUSED", "+3V3", "BNEG_RAW", "BNEG_SENSE",
     "SPI_SCLK", "SPI_MOSI", "SPI_MISO", "ADC_CS", "ADC_RESET", "ADC_ALARM",
     "UART_TX", "UART_RX", "USB_DP", "USB_DM", "I2C_SCL", "I2C_SDA",
-    "SHUTDOWN_REQ", "SBC_POWER_OK", "FAN_PWM", "VRX_VIDEO", "VRX_RSSI",
-    "VRX_TX", "VRX_RX", "SD_DETECT", "SWDIO", "SWCLK", "NRST",
+    "SHUTDOWN_REQ", "SBC_POWER_OK", "FAN_PWM", "VRX_VIDEO",
+    "SD_DETECT", "SWDIO", "SWCLK", "NRST",
     "ADC_REFIO", "ADC_REFCAP", "DECK_MON",
 ):
     net(name)
@@ -211,10 +211,13 @@ for ref, value, x, rail in (("C20", "1u 10V X7R", 72, "+5V_FUSED"), ("C21", "1u 
 # any undocumented T8L or VRX internal connector.
 add_fp("J3", "SBC LINK", "Connector_PinHeader_2.54mm", "PinHeader_2x10_P2.54mm_Vertical", 128, 48, 90)
 assign("J3", {"1": "+5V_FUSED", "2": "GND", "3": "+3V3", "4": "GND", "5": "UART_TX", "6": "UART_RX", "7": "SHUTDOWN_REQ", "8": "SBC_POWER_OK", "9": "I2C_SCL", "10": "I2C_SDA", "11": "SD_DETECT"})
-add_fp("J4", "VRX GENERIC", "Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical", 132, 76, 90)
-assign("J4", {"1": "+5V_FUSED", "2": "GND", "3": "VRX_VIDEO", "4": "VRX_RSSI", "5": "VRX_TX", "6": "VRX_RX"})
-add_fp("J5", "DECODER EVM", "Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical", 132, 88, 90)
-assign("J5", {"1": "+5V_FUSED", "2": "GND", "3": "VRX_VIDEO", "4": "I2C_SCL", "5": "I2C_SDA", "6": "ADC_RESET"})
+# The selected receiver is a separately powered ground-station module. Only its
+# documented 75-ohm CVBS output and ground cross Rev A. Pins 1/4/5/6 are NC and
+# must not be repurposed from an undocumented receiver/module-bay pinout.
+add_fp("J4", "VRX CVBS ONLY", "Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical", 132, 76, 90)
+assign("J4", {"2": "GND", "3": "VRX_VIDEO"})
+add_fp("J5", "DECODER CVBS ONLY", "Connector_PinHeader_2.54mm", "PinHeader_1x06_P2.54mm_Vertical", 132, 88, 90)
+assign("J5", {"2": "GND", "3": "VRX_VIDEO"})
 add_fp("J6", "SWD", "Connector_PinHeader_1.27mm", "PinHeader_2x05_P1.27mm_Vertical", 106, 103)
 assign("J6", {"1": "+3V3", "2": "SWDIO", "3": "GND", "4": "SWCLK", "5": "GND", "10": "NRST"})
 
@@ -230,6 +233,7 @@ add_text("F2 B- LINK: DNP / REVIEW", 22, 106, 0.75)
 add_text("ANALOG / PROBE AREA", 40, 24, 0.9)
 add_text("MCU / ADC", 82, 35, 0.9)
 add_text("MODULE INTERFACES", 116, 24, 0.9)
+add_text("J4/J5: 2 GND  3 CVBS  OTHERS NC", 109, 96, 0.65)
 
 board.SetFileName(str(OUT))
 pcbnew.SaveBoard(str(OUT), board)

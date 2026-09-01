@@ -15,6 +15,8 @@ add_library(fpvdeck_core STATIC
     services/InteractionService.h
     services/MediaService.cpp
     services/MediaService.h
+    services/RadioService.cpp
+    services/RadioService.h
     services/StorageService.cpp
     services/StorageService.h
     services/SystemService.cpp

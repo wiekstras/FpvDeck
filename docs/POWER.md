@@ -14,6 +14,12 @@ USB-C receptacle + ESD/CC/PD
               └─ always-on low-power MCU rail -> power button/load switches
 ```
 
+The provisional diagram does not mean these rails exist in the T8L. The donor's
+two-18650 topology and safe added-load budget remain unknown. On the modular bench,
+CM4IO, the dedicated 5.8 GHz VRX, decoder EVM, and Test PCB use their separately
+documented/current-limited supplies. External balance taps are measurement inputs
+only and never power any FpvDeck rail.
+
 BQ25792 is an active 1–4 cell, 5 A buck-boost charger with NVDC power path,
 integrated FETs/ADC, I²C, 3.6–24 V input, and USB-PD-range OTG. It does not itself
 remove the need for correct USB-C policy/protection, pack protection, thermistors,

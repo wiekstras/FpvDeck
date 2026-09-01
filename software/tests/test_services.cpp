@@ -2,6 +2,7 @@
 #include "services/InputService.h"
 #include "services/InteractionService.h"
 #include "services/MediaService.h"
+#include "services/RadioService.h"
 #include "services/StorageService.h"
 #include "services/SystemService.h"
 #include "services/TelemetryService.h"
@@ -71,7 +72,11 @@ private slots:
         video.setStandard("SECAM");
         QCOMPARE(video.standard(), QString("NTSC"));
         video.setScenario("lost");
-        QCOMPARE(video.rssi(), 0);
+        QCOMPARE(video.state(), QString("lost"));
+
+        RadioService radio;
+        radio.setScenario("lost");
+        QCOMPARE(radio.rssi(), 0);
     }
 
     void touchControlsAutoHideAndFlightLock()
@@ -135,8 +140,17 @@ private slots:
         system.setScenario("adc error");
         QCOMPARE(system.warning(), QString("BALANCE ADC ERROR"));
         system.resetFaults();
+        system.setScenario("t8l offline");
+        QCOMPARE(system.warning(), QString("T8L CONTROL OFFLINE"));
+        system.resetFaults();
+        system.setScenario("elrs not ready");
+        QCOMPARE(system.warning(), QString("ELRS TX NOT READY"));
+        system.resetFaults();
         system.setScenario("vrx offline");
-        QCOMPARE(system.warning(), QString("RECEIVER OFFLINE"));
+        QCOMPARE(system.warning(), QString("VIDEO RECEIVER OFFLINE"));
+        system.resetFaults();
+        system.setScenario("decoder offline");
+        QCOMPARE(system.warning(), QString("VIDEO DECODER OFFLINE"));
         system.resetFaults();
         system.setScenario("over temp");
         QCOMPARE(system.warning(), QString("SYSTEM OVER TEMPERATURE"));
@@ -148,16 +162,16 @@ private slots:
 
     void receiverScanAndFavorites()
     {
-        VideoService video(QUrl::fromLocalFile("/nonexistent"));
-        video.setChannel(3);
-        QCOMPARE(video.channel(), 3);
-        video.toggleFavorite();
-        QVERIFY(video.favorite());
-        video.scanStrongest();
-        QVERIFY(video.scanning());
-        QTRY_VERIFY_WITH_TIMEOUT(!video.scanning(), 1000);
-        QCOMPARE(video.channel(), 6);
-        QCOMPARE(video.rssi(), 93);
+        RadioService radio;
+        radio.setChannel(3);
+        QCOMPARE(radio.channel(), 3);
+        radio.toggleFavorite();
+        QVERIFY(radio.favorite());
+        radio.scanStrongest();
+        QVERIFY(radio.scanning());
+        QTRY_VERIFY_WITH_TIMEOUT(!radio.scanning(), 1000);
+        QCOMPARE(radio.channel(), 6);
+        QCOMPARE(radio.rssi(), 93);
     }
 };
 

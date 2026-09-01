@@ -122,8 +122,12 @@ the fan, and confirm failure-safe off states after heartbeat loss.
 
 Before connecting modules, compare each cable pin-to-pin with the FpvDeck interface
 table and the module's own documentation. Verify voltage and ground first. Inject
-terminated CVBS and confirm it is not routed through an MCU pin. The generic J4/J5
-headers are not undocumented commercial-module pinouts.
+terminated CVBS and confirm it is not routed through an MCU pin. J4 and J5 have
+only pin 2 ground and pin 3 CVBS assigned; all other pins are NC. Neither header
+powers a module or claims RSSI/UART/enable. The current board has no routed copper,
+so the exported placement cannot yet pass this test. After routing, validate the
+breakout interactively with continuity and a terminated source/sink; firmware must
+report it as `NOT TESTED` or `INTERACTIVE`, never an automatic VRX-link pass.
 
 ## 10. Thermal and endurance
 

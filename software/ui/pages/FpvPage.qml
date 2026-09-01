@@ -28,7 +28,7 @@ Item {
         TapHandler { onTapped: InteractionService.toggleControls() }
         Column { anchors.centerIn: parent; spacing: 10
             Text { anchors.horizontalCenter: parent.horizontalCenter; text: VideoService.state === "lost" ? "NO VIDEO" : "BLACK FRAME"; color: Theme.text; font.pixelSize: 28; font.bold: true; font.letterSpacing: 3 }
-            Text { anchors.horizontalCenter: parent.horizontalCenter; text: "VRX " + VideoService.standard + " · R" + VideoService.channel; color: Theme.textMuted; font.pixelSize: 14 }
+            Text { anchors.horizontalCenter: parent.horizontalCenter; text: "VIDEO " + VideoService.standard + " · VRX R" + RadioService.channel; color: Theme.textMuted; font.pixelSize: 14 }
         }
     }
 
@@ -38,7 +38,7 @@ Item {
         anchors.margins: 20
         spacing: 8
         StatusChip { text: VideoService.standard; accent: Theme.blue }
-        StatusChip { text: "R" + VideoService.channel + "  " + VideoService.rssi + "%"; icon: VideoService.favorite ? "★" : "⌁"; accent: VideoService.rssi < 35 ? Theme.warning : Theme.accent; alert: VideoService.rssi < 20 }
+        StatusChip { text: "R" + RadioService.channel + "  " + RadioService.rssi + "%"; icon: RadioService.favorite ? "★" : "⌁"; accent: RadioService.rssi < 35 ? Theme.warning : Theme.accent; alert: RadioService.rssi < 20 }
         StatusChip { text: TelemetryService.connected ? "LQ " + TelemetryService.linkQuality : "TLM LOST"; accent: TelemetryService.connected ? Theme.purple : Theme.warning; alert: !TelemetryService.connected }
         StatusChip { visible: InteractionService.flightLocked; text: "FLIGHT LOCK"; icon: "▣"; accent: Theme.warning }
     }
@@ -71,7 +71,7 @@ Item {
         height: 112; color: "#ee0b111a"; border.color: Theme.border
         Row { anchors.centerIn: parent; spacing: 10
             TouchButton { icon: DvrService.recording ? "■" : "●"; text: DvrService.recording ? "Stop DVR" : "Record"; accent: Theme.error; checked: DvrService.recording; onClicked: { DvrService.toggleRecording(); InteractionService.showControls() } }
-            TouchButton { icon: VideoService.favorite ? "★" : "☆"; text: "R" + VideoService.channel; accent: Theme.accent; onClicked: { VideoService.nextChannel(); InteractionService.showControls() } }
+            TouchButton { icon: RadioService.favorite ? "★" : "☆"; text: "R" + RadioService.channel; accent: Theme.accent; onClicked: { RadioService.nextChannel(); InteractionService.showControls() } }
             TouchButton { icon: "☀"; text: SystemService.displayBrightness + "%"; accent: Theme.warning; onClicked: { SystemService.setDisplayBrightness(SystemService.displayBrightness >= 100 ? 55 : SystemService.displayBrightness + 15); InteractionService.showControls() } }
             TouchButton { icon: "▰"; text: "Battery"; accent: Theme.blue; onClicked: root.appRequested("battery") }
             TouchButton { icon: "▶"; text: "Media"; accent: Theme.cyan; enabled: !InteractionService.flightLocked; onClicked: root.appRequested("media") }

@@ -20,7 +20,10 @@ QString SystemService::warning() const
 {
     if (!m_mcuOnline) return "CONTROLLER OFFLINE";
     if (!m_adcHealthy) return "BALANCE ADC ERROR";
-    if (!m_vrxOnline) return "RECEIVER OFFLINE";
+    if (!m_t8lConnected) return "T8L CONTROL OFFLINE";
+    if (!m_elrsReady) return "ELRS TX NOT READY";
+    if (!m_vrxOnline) return "VIDEO RECEIVER OFFLINE";
+    if (!m_decoderOnline) return "VIDEO DECODER OFFLINE";
     if (m_temperatureC >= 75.0) return "SYSTEM OVER TEMPERATURE";
     if (m_deckBatteryPercent <= 15) return "LOW DECK BATTERY";
     return {};
@@ -37,7 +40,10 @@ void SystemService::setScenario(const QString& scenario)
 {
     if (scenario == "mcu offline") m_mcuOnline = false;
     else if (scenario == "adc error") m_adcHealthy = false;
+    else if (scenario == "t8l offline") m_t8lConnected = false;
+    else if (scenario == "elrs not ready") m_elrsReady = false;
     else if (scenario == "vrx offline") m_vrxOnline = false;
+    else if (scenario == "decoder offline") m_decoderOnline = false;
     else if (scenario == "over temp") m_temperatureC = 82.0;
     else if (scenario == "low deck battery") m_deckBatteryPercent = 9;
     else if (scenario == "nominal") resetFaults();
@@ -55,7 +61,10 @@ void SystemService::resetFaults()
 {
     m_mcuOnline = true;
     m_adcHealthy = true;
+    m_t8lConnected = true;
+    m_elrsReady = true;
     m_vrxOnline = true;
+    m_decoderOnline = true;
     m_temperatureC = 48.0;
     if (m_deckBatteryPercent <= 15) m_deckBatteryPercent = 78;
     emit changed();
