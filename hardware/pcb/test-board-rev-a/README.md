@@ -46,7 +46,8 @@ updating or retiring the generator.
 - direct CM4-to-display DSI and decoder-to-CM4 CSI stay off-board.
 
 F2 (`1206L010/60WR`) and TP33/TP34 provide a replaceable, probeable experiment
-between `BNEG_RAW` and local ground. F2 is **not an approved protection design**.
+between `BNEG_RAW` and local ground; R7 explicitly connects `BNEG_RAW` to the
+separate ADC `BNEG_SENSE` net. F2 is **not an approved protection design**.
 The PPTC's normal resistance produces measurable offset, its trip behavior is not
 a substitute for a complete ground-fault design, and USB/bench/SBC grounds can
 create alternate current paths. Keep it DNP and use only a current-limited,

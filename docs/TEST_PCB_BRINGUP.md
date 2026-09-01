@@ -105,7 +105,7 @@ healthy pack. Test USB-connected and standalone ground states.
 
 The F2 experiment is a separate, reviewed test phase. Populate only after the
 ground-fault matrix authorizes it, limit available energy, measure TP33−TP34,
-and configure ADC channel 6 for a bipolar range before interpreting B− sense.
+and configure physical ADC channel 0 bipolar before interpreting B− sense.
 Compare measured drop with total divider current; unexpected alternate return
 current is an immediate fail and power-off condition.
 

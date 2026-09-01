@@ -207,7 +207,7 @@ and unresolved facts. Status labels are used deliberately:
   to exact drawing review.
 - Six ideal 4.2 V/cell divider channels draw 2.151 mA total. That produces about
   3.23 mV typical and as much as 21.5 mV at the published post-trip/reflow maximum
-  between pack B− and local ground. ADC channel 6 can observe the negative
+  between pack B− and local ground. Physical ADC channel 0 can observe the
   `BNEG_SENSE` offset only when configured for a suitable bipolar range.
 - **OPEN / SAFETY GATE:** F2 is not approval for real-LiPo use. Fault-tree review
   and current-limited isolated-simulator tests must cover all externally grounded
@@ -248,5 +248,9 @@ and unresolved facts. Status labels are used deliberately:
   lock the map. No released hardware was affected.
 - Added `tools/check_test_pcb_bom.py`: it expands CSV ranges, rejects duplicate or
   inconsistent quantities, and compares the BOM with every generated KiCad
-  footprint without needing KiCad in CI. The current BOM exactly covers 59 board
+  footprint without needing KiCad in CI. The then-current BOM covered 59 board
   footprints (with `PCB1` explicitly treated as the one non-footprint line).
+- A subsequent net audit found `BNEG_RAW` and the ADC's `BNEG_SENSE` net had no
+  component joining them. Added R7, an explicit 1.00 kΩ sense-path resistor,
+  regenerated the deterministic board, and expanded the BOM to all 60 footprints.
+  The input-bias/calibration term and fault behavior remain release-gated.

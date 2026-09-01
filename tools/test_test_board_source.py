@@ -34,6 +34,7 @@ class TestBoardPinMapTest(unittest.TestCase):
         source = SOURCE.read_text(encoding="utf-8")
         self.assertIn('add_fp("F2", "1206L010/60WR DNP"', source)
         self.assertIn('assign("F2", {"1": "BNEG_RAW", "2": "GND"})', source)
+        self.assertIn('assign("R7", {"1": "BNEG_RAW", "2": "BNEG_SENSE"})', source)
 
     def test_ads8688a_dbt_map(self) -> None:
         mapping = literal_assignment("adc_mapping")

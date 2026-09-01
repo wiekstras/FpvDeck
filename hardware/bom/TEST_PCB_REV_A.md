@@ -6,7 +6,7 @@ ratings, sources, alternatives, and assembly status.
 
 Run `python3 tools/check_test_pcb_bom.py` after any board or BOM change. CI
 expands grouped designators, verifies each declared quantity, and requires an
-exact match with all 59 current board footprints. This checks completeness of
+exact match with all 60 current board footprints. This checks completeness of
 references, not component correctness, footprint geometry, stock, or safety.
 
 ## Cost snapshot

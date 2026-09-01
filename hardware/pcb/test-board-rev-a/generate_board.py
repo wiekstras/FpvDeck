@@ -129,6 +129,11 @@ for ref, value, net_name, x in (
     add_fp(ref, value, "TestPoint", "TestPoint_Loop_D2.50mm_Drill1.0mm", x, 102)
     assign(ref, {"1": net_name})
 
+# Pack-negative sense is intentionally a distinct ADC net so R7 is visible in
+# both the netlist and probing path. Its ADC input-bias error requires calibration.
+add_fp("R7", "1K00 0.1%", "Resistor_SMD", "R_0603_1608Metric_Pad0.98x0.95mm_HandSolder", 68, 40, 90)
+assign("R7", {"1": "BNEG_RAW", "2": "BNEG_SENSE"})
+
 for channel in range(1, 7):
     y = 34 + (channel - 1) * 11.5
     add_fp(f"R{channel}", "1K00 0.1%", "Resistor_SMD", "R_0603_1608Metric_Pad0.98x0.95mm_HandSolder", 42, y, 90)

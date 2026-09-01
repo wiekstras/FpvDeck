@@ -11,12 +11,17 @@ power FpvDeck. F2 (`1206L010/60WR`) is a DNP experiment between `BNEG_RAW` and
 local ground; TP33 and TP34 expose both sides. A wire or zero-ohm bridge is not an
 allowed substitute.
 
+R7 (1.00 kΩ) connects `BNEG_RAW` to the ADC's `BNEG_SENSE` input. It makes the
+sense path explicit and limits input current, but it is not enough to approve a
+ground fault. ADS8688A input bias through R7 creates a calibration term, so test
+limits apply to both TP33/TP34 and the ADC code.
+
 ## Intended normal state
 
 With no other external ground, the six divider paths draw a modeled 2.152796 mA
 from a 6S pack at 4.2 V/cell. The F2 candidate creates a modeled 3.229 mV offset
 at its 1.5 Ω typical initial resistance and 21.528 mV at the published 10 Ω
-post-trip/reflow maximum. ADC channel 6 measures B− below local ground using a
+post-trip/reflow maximum. Physical ADC channel 0 measures B− using a
 bipolar range. Production firmware **must** correct cumulative taps by subtracting
 measured B−, but that correction is not implemented or hardware-validated yet;
 raw and corrected values must both pass sanity checks before release.
@@ -57,12 +62,12 @@ Unknown values block that test; they are not filled with assumptions.
 
 Use six isolated series sources or an approved resistor ladder, limited to 5 mA
 and physically unable to connect to a battery. Start with F2 DNP and verify no
-alternate TP33–TP34 path. Populate F2 only for a reviewed test, configure ADC
-channel 6 bipolar, then ramp cumulative taps while monitoring:
+alternate TP33–TP34 path. Populate F2 only for a reviewed test, configure physical
+ADC channel 0 bipolar, then ramp cumulative taps while monitoring:
 
 - TP33−TP34 with a differential measurement;
 - total simulator current and current through F2;
-- ADC channel 6 raw code and corrected tap values;
+- ADC channel 0 raw code and corrected tap values;
 - F2, divider, ADC and connector temperature;
 - all attached-cable states one at a time.
 

@@ -40,7 +40,8 @@ bench supply, decoder, or another grounded instrument. Rev A therefore places:
 
 - F2, a **DNP** `1206L010/60WR` PPTC candidate from `BNEG_RAW` to local ground;
 - TP33 on `BNEG_RAW` and TP34 on local ground;
-- ADC channel 6 on `BNEG_SENSE`, measuring B− relative to local ground.
+- R7, 1.00 kΩ from `BNEG_RAW` to `BNEG_SENSE`;
+- ADC physical channel 0 on `BNEG_SENSE`, measuring B− relative to local ground.
 
 This is test infrastructure, not a completed protection design. Littelfuse rates
 the candidate at 0.10 A hold, 0.25 A trip and 60 V maximum. Its datasheet gives
@@ -55,10 +56,12 @@ At ideal 4.2 V cell increments, a simple 41 kΩ approximation gives:
 
 The repository estimator also includes nominal ADS8688A input loading and reports
 2.152796 mA, making local ground approximately 3.229 mV above B− at 1.5 Ω and
-21.528 mV above B− at 10 Ω. `BNEG_SENSE` consequently appears negative
-relative to the ADC ground and must use a suitable bipolar ADS8688A input range.
-Firmware can measure this offset, but correction does not make an unsafe ground
-path safe. The existing Monte Carlo result excludes this effect.
+21.528 mV above B− at 10 Ω. The external `BNEG_RAW` node is consequently
+negative relative to ADC ground. R7 and the ADS8688A input-bias network add a
+calibratable pin-level error, so neither its sign nor magnitude may be assumed
+from the PPTC drop alone. Physical ADC channel 0 must use a suitable bipolar
+range. Firmware can measure the calibrated offset, but correction does not make
+an unsafe ground path safe. The existing Monte Carlo result excludes this effect.
 
 F2 remains unpopulated until a reviewed fault tree covers at least: USB attached,
 earth-referenced oscilloscope, grounded lab supply, SBC and VRX ground paths,
