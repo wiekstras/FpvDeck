@@ -8,4 +8,6 @@ build/
 *.db-shm
 *.db-wal
 *.kicad_prl
+__pycache__/
+*.py[cod]
 generated/
