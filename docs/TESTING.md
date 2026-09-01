@@ -21,6 +21,8 @@ output and a Python test rejects incomplete/unknown metric records.
 The screenshot script runs the same executable with deterministic data. A Python
 source audit checks the manufacturer-verified critical ADS8688A and STM32 pad map
 without requiring KiCad in CI. It does not replace schematic ERC or design review.
+Another source check expands every grouped Test PCB BOM reference and quantity,
+then compares the result with all footprints in the committed generated board.
 
 The next layers are synthesized pointer/swipe and golden-diff tests, service
 recovery integration tests, generated PAL/NTSC video pipeline assertions, DVR interruption tests,

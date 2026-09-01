@@ -37,6 +37,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_test(NAME test_balance_frontend_error
     COMMAND ${Python3_EXECUTABLE} -m unittest
         tools.test_balance_frontend_error
+        tools.test_check_test_pcb_bom
         tools.test_fpvdeck_hw_test
         tools.test_summarize_ui_benchmark
         tools.test_test_board_source)

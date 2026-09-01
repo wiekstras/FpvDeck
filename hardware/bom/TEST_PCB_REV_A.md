@@ -4,6 +4,11 @@ The machine-readable source is [TEST_PCB_REV_A.csv](TEST_PCB_REV_A.csv). It list
 every footprint currently generated on the board, exact non-commodity MPNs,
 ratings, sources, alternatives, and assembly status.
 
+Run `python3 tools/check_test_pcb_bom.py` after any board or BOM change. CI
+expands grouped designators, verifies each declared quantity, and requires an
+exact match with all 59 current board footprints. This checks completeness of
+references, not component correctness, footprint geometry, stock, or safety.
+
 ## Cost snapshot
 
 | Group | Approximate single-board cost |

@@ -79,6 +79,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
   error budget; retain ADS7066 as a lower-power future integration candidate.
 - [x] Create a real Test PCB Rev A KiCad PCB/project with verified lead packages,
   explicit nets, probe points, modular headers, and manufacturing gates.
+- [x] Add CI verification that the Test PCB BOM quantities/reference ranges match
+  every footprint in the committed generated board.
 - [ ] Create the native KiCad schematic from the independently checked pin/net
   map; run ERC before routing. The placed/unrouted board is **NOT RELEASED**.
 - [ ] Independently verify ACAS 0612 resistor-array pad pairing and every ADC/MCU

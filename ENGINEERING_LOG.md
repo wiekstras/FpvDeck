@@ -246,3 +246,7 @@ and unresolved facts. Status labels are used deliberately:
   for `TAP_DUMP`; the Linux tool separately reports signed B− offset and deck
   monitoring, then consumes the ordered six-tap dump. Host and C dispatcher tests
   lock the map. No released hardware was affected.
+- Added `tools/check_test_pcb_bom.py`: it expands CSV ranges, rejects duplicate or
+  inconsistent quantities, and compares the BOM with every generated KiCad
+  footprint without needing KiCad in CI. The current BOM exactly covers 59 board
+  footprints (with `PCB1` explicitly treated as the one non-footprint line).
