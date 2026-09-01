@@ -35,12 +35,14 @@ connector gender at checkout. The machine-readable module list is
   antenna ports and 6.5–26 V input.
 - **2× quality 5.8 GHz 50 Ω antennas**, one omnidirectional and one patch — budget
   US$50–80. Confirm SMA versus RP-SMA gender from the receiver in hand.
-- **1× Analog Devices `EVAL-ADV7280AMEBZ`** — budget US$250–350, but **verify stock
-  and interconnect before paying**. ADI lists the EVM; Raspberry Pi documents the
-  ADV728x-M driver class, while specifically noting there are no normal commercial
-  bridge boards. The EVM's CSI connector is not assumed to plug directly into
-  CM4IO. Obtain the UG-1179 schematic and build/verify an interposer only after its
-  signal voltage, lane/pin order and I²C path are reviewed.
+- **1× Analog Devices `EVAL-ADV7282AMEBZ`** — budget US$250–350, but **verify
+  distributor stock before paying**. It evaluates the ADV7282A-M, which ADI says
+  is pin/software-compatible with ADV7282-M; Raspberry Pi tested its driver with
+  the older `EVAL-ADV7282MEBZ`. Both silicon families are NRND and are prototype
+  tools, not production selections. The EVM routes CSI D0± and CLK± to SMA ports,
+  not a camera FFC. Obtain UG-1175 and the schematic before buying/building the
+  separate controlled-impedance SMA-to-CM4IO fixture. If an exact older
+  `EVAL-ADV7282MEBZ` is genuinely available, it is the closest Pi-tested baseline.
 - **2× 75 Ω BNC/coax patch leads**, **1× BNC-to-RCA adapter**, and **1× 75 Ω
   feed-through terminator** — budget US$35. Match the actual EVM/VRX connectors.
 
@@ -59,6 +61,9 @@ Do not substitute a USB EasyCAP or HDMI capture device as the latency baseline.
 - Precision bench source or battery simulator capable of 0–25.5 V at a 5 mA
   current limit. An ordinary bench supply plus resistor ladder is adequate for
   initial cumulative-tap tests; it does not replace independent-cell tests.
+
+The decoder EVM is in **VERIFY**, not unconditional ORDER NOW; the display, CM4,
+and VRX can be tested without it.
 
 ## Test PCB
 

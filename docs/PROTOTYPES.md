@@ -10,7 +10,7 @@ video, persistent flight records work, simulator faults are repeatable, CI green
 
 ## Prototype 1 — modular bench
 
-**BOM:** CM4/IO carrier, supported DSI display, ADV7280A-M or ADV7282-M evaluation
+**BOM:** CM4/IO carrier, selected 6.25-inch DSI touch display, ADV7282A-M evaluation
 board, SteadyView X ground station, STM32G0 devboard, two ADC EVMs, isolated bench
 supplies, RF dummy/attenuation/test equipment, logic analyzer and scope.
 
@@ -52,4 +52,3 @@ all carrier interfaces pass manufacturing diagnostics.
 
 Integrate only proven circuits. Complete DFM/DFT, enclosure/drop/ingress/ergonomic
 tests, compliance pre-scan, service procedure, supply-chain audit and pilot build.
-

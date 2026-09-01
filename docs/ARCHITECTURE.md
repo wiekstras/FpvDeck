@@ -32,7 +32,7 @@ contains transient menus/apps. Secondary service failure must not block Layer 1.
 ## Prototype architecture
 
 Prototype 0 is the desktop simulator in this repository. Prototype 1 is a CM4
-development carrier, supported 720×1280 DSI panel, ADV7280A-M/ADV7282-M evaluation
+development carrier, selected 720×1560 DSI touch module, ADV7282A-M evaluation
 hardware, standalone SteadyView X VRX, STM32G0 development board, and protected
 ADC evaluation hardware. Each module remains replaceable.
 

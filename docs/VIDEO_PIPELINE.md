@@ -7,7 +7,7 @@
 ```text
 SteadyView X 1 Vpp / 75 Ω CVBS
   -> correctly terminated/protected analog input
-  -> ADV7280A-M/ADV7282-M low-delay line-based I2P
+  -> ADV7282A-M evaluation path with low-delay line-based I2P
   -> one-lane CSI-2 YUV422
   -> CM4 Unicam/V4L2 capture
   -> DMABUF-backed live queue (depth 1; newest frame wins)

@@ -8,7 +8,7 @@ product claims.
 
 ```text
 camera -> FC analog OSD -> VTX/RF -> SteadyView X CVBS
-       -> ADV7280A-M/ADV7282-M evaluation hardware (I2P enabled)
+       -> ADV7282A-M evaluation hardware (I2P enabled)
        -> one-lane CSI-2 -> V4L2/DMABUF -> Qt scene graph compositor
        -> DRM/KMS -> Waveshare 6.25inch DSI LCD (B)
 ```
@@ -19,6 +19,11 @@ states that the CSI receiver does not support interlaced input. The `-M` CSI
 variant with the line-based I2P block is therefore mandatory for this path.
 Analog Devices describes I2P as line based; it avoids a full-frame
 motion-adaptive deinterlacer but still needs physical latency verification.
+
+The evaluation board is not a cable-ready Pi accessory. ADI routes its CSI clock
+and data pairs to SMA connectors for a MIPI analyzer. The CM4 experiment therefore
+needs a reviewed controlled-impedance SMA-to-CSI fixture plus I²C/power wiring;
+Test PCB Rev A's generic decoder header is not that high-speed fixture.
 
 The live branch must use V4L2 buffers exported as DMABUFs and imported by a
 custom Qt Quick scene-graph video item. CPU copies, a `QVideoSink` image-copy

@@ -185,3 +185,10 @@ and unresolved facts. Status labels are used deliberately:
 - Created exact-MPN Test PCB and system BOMs plus procurement staging. The bare
   PCB and unresolved EVM/adaptor connections are in **WAIT**, preventing an
   apparently complete shopping list from becoming an unsafe fabrication order.
+- Post-procurement audit corrected the decoder evaluation-board assumption. ADI's
+  `EVAL-ADV7282AMEBZ` exposes the CSI clock/data pairs on SMA connectors for a
+  MIPI analyzer, not a Pi FFC. Raspberry Pi tested the older, software-compatible
+  `EVAL-ADV7282MEBZ`; ADI marks the silicon family NRND. The current A-M kit is now
+  a **VERIFY STOCK AND BRIDGE** item, with a separate controlled-impedance
+  SMA-to-CM4IO fixture required before purchase/use. Production remains TW9992
+  research rather than an ADV728x lifecycle commitment.

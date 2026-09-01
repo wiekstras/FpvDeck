@@ -34,7 +34,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
   as the Prototype 1 touchscreen module from documented display/touch support.
 - [ ] Measure/fit the 6.25-inch module and compare it against the 5-inch bright
   fallback; the production outdoor panel remains measurement-gated.
-- [ ] Obtain/borrow ADV7280A-M or ADV7282-M evaluation hardware.
+- [ ] Price the SMA-to-CM4 CSI fixture, then obtain/borrow `EVAL-ADV7282AMEBZ`
+  or the exact older Pi-tested `EVAL-ADV7282MEBZ` only after stock confirmation.
 - [ ] Confirm exact CSI cable/adapter wiring from board documentation; do not infer.
 - [ ] Buy or borrow SteadyView X and at least one benchmark receiver.
 - [ ] Measure VRX mode latency, decoder latency, display latency, lock/recovery time.

@@ -5,7 +5,7 @@
 | Function | Prototype 1 | Production-oriented lead | Status |
 | --- | --- | --- | --- |
 | Compute | Raspberry Pi CM4, 4 GB/32 GB eMMC, no wireless preferred | i.MX 8M Plus industrial SoM | Prototype selected; production shortlist |
-| CVBS decode | ADV7280A-M or ADV7282-M evaluation hardware | Renesas TW9992 | Prototype selected; production driver work open |
+| CVBS decode | EVAL-ADV7282AMEBZ candidate; older EVAL-ADV7282MEBZ is Pi-tested baseline | Renesas TW9992 | NRND prototype path; exact EVM stock and SMA-to-CSI fixture open |
 | VRX | Skyzone SteadyView X standalone ground-station kit | modular dual-VRX bay; integrated RF later | Selected pending latency A/B |
 | Display | Waveshare 6.25inch DSI LCD (B), SKU 35000 | 5.5–6.25-inch high-brightness DSI panel | Prototype selected; five-touch required; latency/outdoor/pinch-grip gates open |
 | Controller MCU | NUCLEO-G0B1RE then STM32G0B1CBT6 | STM32G0B1CB/CE class | Test-board package selected from current ST pinout |
@@ -48,5 +48,7 @@ control mechanism; no undocumented module-bay pins are assumed.
 
 Test PCB Rev A keeps DSI, CSI and RF off-board. Display connects directly to the
 CM4IO DSI port, ADV728x evaluation hardware to CSI through a reviewed interposer,
-and VRX through 75-ohm coax. Its generic low-speed headers carry only project-
+and VRX through 75-ohm coax. The decoder EVM's MIPI SMA ports require a dedicated
+controlled-impedance bridge fixture; they are not connected through Test PCB Rev A.
+Its generic low-speed headers carry only project-
 defined UART/I²C/status/control nets.

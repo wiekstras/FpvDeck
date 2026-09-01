@@ -20,9 +20,10 @@ match their order records.
 
 ## Verify stock and interface before order
 
-- Analog Devices EVAL-ADV7280AMEBZ or EVAL-ADV7282-M. Obtain the exact user guide,
-  board revision, connector drawing and seller stock confirmation. Do not assume a
-  Raspberry Pi camera cable fits.
+- Analog Devices `EVAL-ADV7282AMEBZ` or exact Pi-tested `EVAL-ADV7282MEBZ`.
+  Obtain the exact user guide, board revision and seller stock confirmation.
+  These boards expose MIPI lanes on SMA; price and design a controlled-impedance
+  SMA-to-CM4IO CSI fixture before committing to the EVM purchase.
 - ADS8688EVM-PDK. It is valuable but expensive; skip if unavailable or if Rev A
   board release is close.
 - Any 5.8 GHz antenna whose connector gender/polarization is not explicit.
