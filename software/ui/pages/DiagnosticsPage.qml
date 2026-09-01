@@ -1,38 +1,37 @@
 import QtQuick
 import QtQuick.Layouts
+import FPVDeck
+import "../components"
 
 Item {
-    Rectangle { anchors.fill: parent; color: "#0c121c" }
+    Rectangle { anchors.fill: parent; color: Theme.background }
     Column {
-        anchors.fill: parent; anchors.margins: 38; spacing: 18
-        Row { width: parent.width
-            Column { width: parent.width - 210
-                Text { text: "DIAGNOSTICS"; color: "#f4f8ff"; font.pixelSize: 28; font.bold: true }
-                Text { text: "Development-mode hardware self-test"; color: "#71839a"; font.pixelSize: 13 }
-            }
-            Rectangle { width: 190; height: 36; radius: 11; color: "#282314"; border.color: "#66582a"; Text { anchors.centerIn: parent; text: "SIMULATED BACKENDS"; color: "#ffbf5a"; font.pixelSize: 10; font.bold: true; font.letterSpacing: 1 } }
-        }
+        anchors.fill: parent; anchors.margins: Theme.space5; spacing: 16
+        TopBar { width: parent.width; title: "DIAGNOSTICS"; subtitle: "Boot, bench and field self-test" }
         GridLayout {
-            width: parent.width; columns: 3; columnSpacing: 14; rowSpacing: 14
+            width: parent.width; columns: 4; columnSpacing: 12; rowSpacing: 12
             Repeater {
                 model: [
-                    { name: "VIDEO", value: "PAL 50 · ONLINE", state: "PASS", color: "#67e8a5" },
-                    { name: "CONTROLLER MCU", value: "Simulator protocol v1", state: "SIM", color: "#6fb4ff" },
-                    { name: "BALANCE ADC", value: "6 channels · 12.24 V", state: "SIM", color: "#6fb4ff" },
-                    { name: "DVR STORAGE", value: "47.2 GB available", state: "PASS", color: "#67e8a5" },
-                    { name: "TELEMETRY", value: "LQ 97 · heartbeat", state: "SIM", color: "#6fb4ff" },
-                    { name: "SYSTEM", value: "52°C · watchdog armed", state: "PASS", color: "#67e8a5" }
+                    { name: "SOFTWARE", value: "0.1.0-dev", state: "PASS", tint: Theme.accent },
+                    { name: "MCU", value: SystemService.mcuOnline ? "sim-protocol v1" : "No heartbeat", state: SystemService.mcuOnline ? "SIM" : "FAIL", tint: SystemService.mcuOnline ? Theme.blue : Theme.error },
+                    { name: "BALANCE ADC", value: SystemService.adcHealthy ? BatteryService.cellCount + " channels" : "Read error", state: SystemService.adcHealthy ? "SIM" : "FAIL", tint: SystemService.adcHealthy ? Theme.blue : Theme.error },
+                    { name: "TOUCHSCREEN", value: SystemService.touchDebug ? "Touch trace on" : "Input online", state: "PASS", tint: Theme.accent },
+                    { name: "VIDEO", value: VideoService.standard + " · " + VideoService.state, state: VideoService.state === "locked" ? "PASS" : "WARN", tint: VideoService.state === "locked" ? Theme.accent : Theme.warning },
+                    { name: "VRX", value: SystemService.vrxOnline ? "R" + VideoService.channel + " · " + VideoService.rssi + "%" : "Offline", state: SystemService.vrxOnline ? "SIM" : "FAIL", tint: SystemService.vrxOnline ? Theme.blue : Theme.error },
+                    { name: "STORAGE", value: StorageService.status + " · " + StorageService.freeGigabytes.toFixed(1) + "GB", state: StorageService.sdPresent && !StorageService.sdCorrupt ? "PASS" : "WARN", tint: StorageService.sdPresent && !StorageService.sdCorrupt ? Theme.accent : Theme.warning },
+                    { name: "SYSTEM", value: SystemService.temperatureC.toFixed(0) + "°C · " + SystemService.deckBatteryPercent + "%", state: SystemService.warning.length ? "WARN" : "PASS", tint: SystemService.warning.length ? Theme.warning : Theme.accent },
+                    { name: "DISPLAY", value: "1280×720 sim · " + SystemService.displayBrightness + "%", state: "SIM", tint: Theme.blue },
+                    { name: "TELEMETRY", value: TelemetryService.connected ? "LQ " + TelemetryService.linkQuality : "Disconnected", state: TelemetryService.connected ? "SIM" : "WARN", tint: TelemetryService.connected ? Theme.blue : Theme.warning },
+                    { name: "UPTIME", value: Math.floor(SystemService.uptimeSeconds / 60) + "m " + (SystemService.uptimeSeconds % 60) + "s", state: "PASS", tint: Theme.accent },
+                    { name: "NETWORK", value: "Not required for FPV", state: "ISOLATED", tint: Theme.textMuted }
                 ]
                 Rectangle {
                     required property var modelData
-                    Layout.fillWidth: true; Layout.preferredHeight: 150; radius: 17; color: "#121d2b"; border.color: "#29394e"
-                    Column { anchors.fill: parent; anchors.margins: 18; spacing: 12
-                        Row { width: parent.width
-                            Text { width: parent.width - 64; text: modelData.name; color: "#71839a"; font.pixelSize: 11; font.bold: true; font.letterSpacing: 1.1 }
-                            Text { text: modelData.state; color: modelData.color; font.pixelSize: 11; font.bold: true }
-                        }
-                        Text { text: modelData.value; color: "#f4f8ff"; font.pixelSize: 18; font.weight: Font.DemiBold }
-                        Rectangle { width: parent.width; height: 5; radius: 3; color: "#253448"; Rectangle { width: parent.width * 0.88; height: parent.height; radius: 3; color: modelData.color } }
+                    Layout.fillWidth: true; Layout.preferredHeight: 118; radius: Theme.radius; color: Theme.surface; border.color: Theme.border
+                    Column { anchors.fill: parent; anchors.margins: 15; spacing: 9
+                        Row { width: parent.width; Text { width: parent.width - 58; text: modelData.name; color: Theme.textDim; font.pixelSize: 10; font.bold: true; font.letterSpacing: 1 } Text { text: modelData.state; color: modelData.tint; font.pixelSize: 10; font.bold: true } }
+                        Text { text: modelData.value; color: Theme.text; font.pixelSize: 15; font.bold: true; elide: Text.ElideRight; width: parent.width }
+                        Rectangle { width: parent.width; height: 5; radius: 3; color: Theme.border; Rectangle { width: parent.width * 0.88; height: parent.height; radius: 3; color: modelData.tint } }
                     }
                 }
             }

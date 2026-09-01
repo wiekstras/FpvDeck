@@ -1,48 +1,74 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
+import QtMultimedia
+import FPVDeck
+import "../components"
 
 Item {
-    Rectangle { anchors.fill: parent; color: "#0c121c" }
-    RowLayout {
-        anchors.fill: parent; anchors.margins: 38; spacing: 22
-        Column {
-            Layout.preferredWidth: 310; Layout.fillHeight: true; spacing: 14
-            Text { text: "MEDIA"; color: "#f4f8ff"; font.pixelSize: 28; font.bold: true }
-            Text { text: "DVR browser"; color: "#71839a"; font.pixelSize: 13 }
-            Rectangle {
-                width: parent.width; height: 118; radius: 16; color: "#11221f"; border.color: "#24544b"
-                Column { anchors.fill: parent; anchors.margins: 18; spacing: 9
-                    Text { text: "REMOVABLE CARD"; color: "#4ed7d1"; font.pixelSize: 11; font.bold: true; font.letterSpacing: 1.2 }
-                    Text { text: "47.2 GB free"; color: "#f4f8ff"; font.pixelSize: 24; font.bold: true }
-                    Text { text: "SIMULATED MOUNT"; color: "#71839a"; font.pixelSize: 10; font.letterSpacing: 1.2 }
-                }
-            }
-            Text { text: "Recording and card mounting are not yet connected to physical storage."; width: parent.width; wrapMode: Text.WordWrap; color: "#71839a"; font.pixelSize: 12; lineHeight: 1.35 }
+    id: root
+    property bool playbackControls: true
+    Rectangle { anchors.fill: parent; color: Theme.background }
+    Column {
+        anchors.fill: parent; anchors.margins: Theme.space5; spacing: 16; visible: !MediaService.open
+        TopBar { width: parent.width; title: "MEDIA"; subtitle: "Internal DVR and removable SD" }
+        Row { width: parent.width; spacing: 10
+            StatusChip { text: StorageService.status; icon: "SD"; accent: StorageService.sdPresent && !StorageService.sdCorrupt ? Theme.cyan : Theme.warning; alert: !StorageService.sdPresent || StorageService.sdCorrupt }
+            StatusChip { visible: StorageService.sdPresent; text: StorageService.freeGigabytes.toFixed(1) + " GB FREE"; accent: StorageService.freeGigabytes < 1 ? Theme.error : Theme.textMuted; alert: StorageService.freeGigabytes < 1 }
+            TouchButton { text: "List"; icon: "☷"; checked: true }
         }
         Rectangle {
-            Layout.fillWidth: true; Layout.fillHeight: true; radius: 18; color: "#101927"; border.color: "#28364a"
-            Column { anchors.fill: parent; anchors.margins: 22; spacing: 12
-                Text { text: "RECENT RECORDINGS"; color: "#f4f8ff"; font.pixelSize: 17; font.bold: true }
+            width: parent.width; height: parent.height - 126; radius: Theme.radiusLarge; color: Theme.surface; border.color: Theme.border
+            Column { anchors.fill: parent; anchors.margins: 20; spacing: 10
+                Text { visible: !StorageService.sdPresent; text: "INSERT A REMOVABLE SD CARD TO BROWSE RECORDINGS"; color: Theme.warning; font.pixelSize: 16; font.bold: true }
+                Text { visible: StorageService.sdCorrupt; text: "CARD REQUIRES A FILESYSTEM CHECK BEFORE PLAYBACK"; color: Theme.error; font.pixelSize: 16; font.bold: true }
                 Repeater {
-                    model: [
-                        { name: "RIDGE RUN", date: "30 AUG · 06:21", size: "2.8 GB", channel: "R1" },
-                        { name: "PARK LINE", date: "28 AUG · 05:14", size: "2.3 GB", channel: "R3" },
-                        { name: "SUNSET TEST", date: "24 AUG · 04:09", size: "1.9 GB", channel: "F4" }
-                    ]
-                    Rectangle {
-                        required property var modelData
-                        width: parent.width; height: 92; radius: 13; color: "#162233"
-                        Row { anchors.fill: parent; anchors.margins: 14; spacing: 18
-                            Rectangle { width: 112; height: 64; radius: 9; color: "#26364b"; Text { anchors.centerIn: parent; text: "▶"; color: "#4ed7d1"; font.pixelSize: 22 } }
-                            Column { width: parent.width - 265; anchors.verticalCenter: parent.verticalCenter; spacing: 7
-                                Text { text: modelData.name; color: "#f4f8ff"; font.pixelSize: 15; font.bold: true }
-                                Text { text: modelData.date + "  ·  " + modelData.channel; color: "#71839a"; font.pixelSize: 11 }
-                            }
-                            Text { text: modelData.size; color: "#91a2b8"; font.pixelSize: 12; anchors.verticalCenter: parent.verticalCenter }
-                        }
-                    }
+                    model: StorageService.sdPresent && !StorageService.sdCorrupt ? StorageService.mediaFiles : []
+                    MediaTile { required property var modelData; width: parent.width; media: modelData; onClicked: { MediaService.openFile(modelData.title, modelData.duration, modelData.aspect); root.playbackControls = true } }
                 }
             }
         }
+    }
+
+    Item {
+        anchors.fill: parent; visible: MediaService.open
+        MediaPlayer { id: playback; source: MediaService.source; videoOutput: playbackOutput; loops: MediaPlayer.Infinite; onPlaybackStateChanged: if (MediaService.open && playbackState === MediaPlayer.StoppedState) play() }
+        VideoOutput { id: playbackOutput; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectFit; TapHandler { onTapped: { root.playbackControls = !root.playbackControls; hideTimer.restart() } } }
+        Rectangle { anchors.fill: parent; visible: root.playbackControls; color: "#45000000" }
+        TouchButton {
+            visible: root.playbackControls
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
+            icon: "‹"
+            text: "Media"
+            onClicked: { playback.stop(); MediaService.close() }
+        }
+        StatusChip {
+            visible: root.playbackControls
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 24
+            text: MediaService.title + " · " + MediaService.aspect
+            accent: Theme.cyan
+        }
+        Rectangle {
+            visible: root.playbackControls
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 20
+            height: 112; radius: Theme.radiusLarge; color: "#ed0b111a"; border.color: Theme.border
+            Column { anchors.fill: parent; anchors.margins: 14; spacing: 8
+                Slider { width: parent.width; from: 0; to: Math.max(1, MediaService.durationSeconds); value: MediaService.positionSeconds; onMoved: MediaService.seek(value) }
+                Row { anchors.horizontalCenter: parent.horizontalCenter; spacing: 10
+                    TouchButton { icon: "↶"; text: "10s"; onClicked: MediaService.skip(-10) }
+                    TouchButton { icon: MediaService.playing ? "Ⅱ" : "▶"; text: MediaService.playing ? "Pause" : "Play"; accent: Theme.cyan; checked: MediaService.playing; onClicked: { MediaService.togglePlaying(); if (MediaService.playing) playback.play(); else playback.pause(); hideTimer.restart() } }
+                    TouchButton { icon: "↷"; text: "10s"; onClicked: MediaService.skip(10) }
+                }
+            }
+        }
+        Timer { id: hideTimer; interval: 3500; running: root.playbackControls; onTriggered: root.playbackControls = false }
+        Component.onCompleted: if (MediaService.open) playback.play()
     }
 }

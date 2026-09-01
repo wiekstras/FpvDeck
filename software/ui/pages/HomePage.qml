@@ -1,50 +1,31 @@
 import QtQuick
 import QtQuick.Layouts
+import FPVDeck
+import "../components"
 
 Item {
     id: root
     signal appRequested(string app)
-    Rectangle { anchors.fill: parent; color: "#0a1018" }
+    Rectangle { anchors.fill: parent; color: Theme.background }
     Column {
-        anchors.fill: parent; anchors.margins: 38; spacing: 22
+        anchors.fill: parent; anchors.margins: Theme.space5; spacing: 20
+        TopBar { width: parent.width; title: "FPVDECK"; subtitle: "Ready to fly" }
         Row {
-            width: parent.width
-            Column {
-                width: parent.width - 230
-                Text { text: "FPVDECK"; color: "#f4f8ff"; font.pixelSize: 30; font.bold: true; font.letterSpacing: 2 }
-                Text { text: "Radio · video · flight computer"; color: "#71839a"; font.pixelSize: 13 }
-            }
-            Rectangle {
-                width: 190; height: 38; radius: 12; color: "#14241f"; border.color: "#285945"
-                Text { anchors.centerIn: parent; text: "●  SIMULATOR ONLINE"; color: "#67e8a5"; font.pixelSize: 11; font.bold: true; font.letterSpacing: 0.8 }
-            }
+            width: parent.width; spacing: 10
+            StatusChip { text: "VRX R" + VideoService.channel + " · " + VideoService.rssi + "%"; icon: "⌁"; accent: Theme.accent }
+            StatusChip { text: DvrService.recording ? "DVR RECORDING" : "DVR READY"; icon: "●"; accent: DvrService.recording ? Theme.error : Theme.textMuted }
+            StatusChip { visible: BatteryService.connected; text: BatteryService.cellCount + "S EXT · " + BatteryService.packVoltage.toFixed(2) + "V"; icon: "▰"; accent: BatteryService.warning.length ? Theme.warning : Theme.blue; alert: BatteryService.warning.length }
+            StatusChip { visible: SystemService.warning.length; text: SystemService.warning; icon: "!"; accent: Theme.error; alert: true }
         }
         GridLayout {
             width: parent.width; columns: 4; columnSpacing: 14; rowSpacing: 14
-            Repeater {
-                model: [
-                    { id: "fpv", title: "FPV", detail: "Live view + overlays", glyph: "◉", tint: "#67e8a5" },
-                    { id: "battery", title: "Balance", detail: "6S simulated input", glyph: "▰", tint: "#6fb4ff" },
-                    { id: "media", title: "Media", detail: "Removable DVR card", glyph: "▶", tint: "#4ed7d1" },
-                    { id: "flights", title: "Flights", detail: "Local history", glyph: "↗", tint: "#c38cff" },
-                    { id: "batteries", title: "Batteries", detail: "Pack inventory", glyph: "▥", tint: "#7cc6ff" },
-                    { id: "aircraft", title: "Aircraft", detail: "Model profiles", glyph: "✦", tint: "#ffbf5a" },
-                    { id: "diagnostics", title: "Diagnostics", detail: "System self-test", glyph: "◇", tint: "#8bd5ca" },
-                    { id: "settings", title: "Settings", detail: "Device preferences", glyph: "⚙", tint: "#91a2b8" }
-                ]
-                Rectangle {
-                    required property var modelData
-                    Layout.fillWidth: true; Layout.preferredHeight: 170; radius: 18
-                    color: hit.containsMouse ? "#192638" : "#111a27"; border.color: hit.containsMouse ? modelData.tint : "#253448"
-                    Column {
-                        anchors.fill: parent; anchors.margins: 20; spacing: 10
-                        Text { text: modelData.glyph; color: modelData.tint; font.pixelSize: 30 }
-                        Text { text: modelData.title; color: "#f4f8ff"; font.pixelSize: 19; font.bold: true }
-                        Text { text: modelData.detail; color: "#71839a"; font.pixelSize: 12 }
-                    }
-                    MouseArea { id: hit; anchors.fill: parent; hoverEnabled: true; onClicked: root.appRequested(modelData.id) }
-                }
-            }
+            AppTile { Layout.columnSpan: 2; Layout.fillWidth: true; title: "FLY"; detail: "Live analog video + FpvDeck overlay"; icon: "◉"; accent: Theme.accent; primary: true; onClicked: root.appRequested("fpv") }
+            AppTile { Layout.fillWidth: true; title: "Battery"; detail: BatteryService.connected ? BatteryService.cellCount + "S connected" : "Balance checker"; icon: "▰"; accent: Theme.blue; onClicked: root.appRequested("battery") }
+            AppTile { Layout.fillWidth: true; title: "Media"; detail: StorageService.status; icon: "▶"; accent: Theme.cyan; onClicked: root.appRequested("media") }
+            AppTile { Layout.fillWidth: true; title: "Flights"; detail: "Local history"; icon: "↗"; accent: Theme.purple; onClicked: root.appRequested("flights") }
+            AppTile { Layout.fillWidth: true; title: "Aircraft"; detail: "Profiles"; icon: "✦"; accent: Theme.warning; onClicked: root.appRequested("aircraft") }
+            AppTile { Layout.fillWidth: true; title: "Receiver"; detail: "Channel + scan"; icon: "⌁"; accent: Theme.accent; onClicked: root.appRequested("receiver") }
+            AppTile { Layout.fillWidth: true; title: "Diagnostics"; detail: SystemService.mcuOnline ? "Systems nominal" : "Attention required"; icon: "◇"; accent: SystemService.warning.length ? Theme.error : Theme.cyan; onClicked: root.appRequested("diagnostics") }
         }
     }
 }

@@ -12,7 +12,8 @@ void InputService::setNavigationLocked(const bool locked)
 void InputService::dispatch(const QString& action)
 {
     static const QSet<QString> allowed = {
-        "back", "battery", "dvr", "menu", "signal", "simulator"
+        "back", "battery", "down", "dvr", "left", "menu", "right",
+        "select", "signal", "simulator", "up"
     };
     if (!allowed.contains(action) || (m_navigationLocked && action == "menu")) {
         emit rejected(action);

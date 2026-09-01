@@ -1,61 +1,39 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
+import FPVDeck
+import "../components"
 
 Item {
-    Rectangle { anchors.fill: parent; color: "#0c121c" }
+    Rectangle { anchors.fill: parent; color: Theme.background }
     RowLayout {
-        anchors.fill: parent; anchors.margins: 34; spacing: 28
+        anchors.fill: parent; anchors.margins: Theme.space5; spacing: Theme.space4
         Rectangle {
-            Layout.fillHeight: true; Layout.preferredWidth: 350; radius: 20
-            color: "#131d2b"; border.color: "#2b3a50"
-            Column {
-                anchors.fill: parent; anchors.margins: 28; spacing: 14
-                Text { text: "BALANCE CHECK"; color: "#71839a"; font.pixelSize: 12; font.letterSpacing: 1.8 }
-                Text { text: BatteryService.connected ? BatteryService.packVoltage.toFixed(2) + " V" : "—"; color: "#f4f8ff"; font.pixelSize: 52; font.weight: Font.DemiBold }
-                Text { text: BatteryService.cellCount + "S LiPo  •  Δ " + (BatteryService.delta * 1000).toFixed(0) + " mV"; color: "#91a2b8"; font.pixelSize: 15 }
-                Rectangle { width: parent.width; height: 1; color: "#2a374b" }
-                Text { text: BatteryService.warning.length ? BatteryService.warning : "PACK HEALTHY"; color: BatteryService.warning.length ? "#ffbf5a" : "#67e8a5"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1 }
-                Item { width: 1; height: 18 }
-                Text { text: "SIMULATED INPUT"; color: "#53647c"; font.pixelSize: 10; font.letterSpacing: 1.5 }
-                Row {
-                    spacing: 8
-                    Repeater {
-                        model: 6
-                        Button { text: (index + 1) + "S"; onClicked: BatteryService.configureCells(index + 1) }
-                    }
+            Layout.fillHeight: true; Layout.preferredWidth: 370; radius: Theme.radiusLarge; color: Theme.surface; border.color: Theme.border
+            Column { anchors.fill: parent; anchors.margins: 26; spacing: 13
+                Text { text: "EXTERNAL BALANCE PACK"; color: Theme.blue; font.pixelSize: 12; font.bold: true; font.letterSpacing: 1.5 }
+                Text { text: BatteryService.connected ? BatteryService.packVoltage.toFixed(2) + " V" : "NOT CONNECTED"; color: Theme.text; font.pixelSize: BatteryService.connected ? 48 : 27; font.bold: true }
+                Text { visible: BatteryService.connected; text: BatteryService.cellCount + "S " + BatteryService.chemistry + " · Δ " + (BatteryService.delta * 1000).toFixed(0) + " mV"; color: Theme.textMuted; font.pixelSize: 15 }
+                Rectangle { width: parent.width; height: 1; color: Theme.border }
+                Text { text: BatteryService.health; color: BatteryService.warning.length ? Theme.warning : Theme.accent; font.pixelSize: 15; font.bold: true; font.letterSpacing: 1 }
+                GridLayout { visible: BatteryService.connected; width: parent.width; columns: 2; columnSpacing: 10; rowSpacing: 10
+                    Rectangle { Layout.fillWidth: true; height: 72; radius: 12; color: Theme.surfaceRaised; Column { anchors.centerIn: parent; Text { text: "WEAKEST"; color: Theme.textDim; font.pixelSize: 9; font.bold: true } Text { text: "C" + BatteryService.weakestCell + " · " + BatteryService.weakestVoltage.toFixed(3) + "V"; color: Theme.warning; font.pixelSize: 16; font.bold: true } } }
+                    Rectangle { Layout.fillWidth: true; height: 72; radius: 12; color: Theme.surfaceRaised; Column { anchors.centerIn: parent; Text { text: "STRONGEST"; color: Theme.textDim; font.pixelSize: 9; font.bold: true } Text { text: "C" + BatteryService.strongestCell + " · " + BatteryService.strongestVoltage.toFixed(3) + "V"; color: Theme.accent; font.pixelSize: 16; font.bold: true } } }
                 }
+                Text { text: "This port measures the drone pack only. It never powers FpvDeck."; width: parent.width; wrapMode: Text.WordWrap; color: Theme.textMuted; font.pixelSize: 12; lineHeight: 1.35 }
+                Text { text: "INTERNAL DECK BATTERY"; color: Theme.textDim; font.pixelSize: 10; font.bold: true; font.letterSpacing: 1.3 }
+                StatusChip { text: SystemService.deckBatteryPercent + "%" + (SystemService.deckCharging ? " · CHARGING" : ""); icon: "▰"; accent: Theme.accent }
             }
         }
         Rectangle {
-            Layout.fillHeight: true; Layout.fillWidth: true; radius: 20
-            color: "#101927"; border.color: "#28364a"
-            Column {
-                anchors.fill: parent; anchors.margins: 28; spacing: 14
-                Text { text: "CELL VOLTAGES"; color: "#f4f8ff"; font.pixelSize: 18; font.bold: true }
-                Repeater {
-                    model: BatteryService.cellVoltages
-                    Rectangle {
-                        width: parent.width; height: 54; radius: 11; color: "#172334"
-                        Row {
-                            anchors { fill: parent; margins: 14 }
-                            spacing: 14
-                            Text { width: 35; text: "C" + (index + 1); color: "#71839a"; font.pixelSize: 14; anchors.verticalCenter: parent.verticalCenter }
-                            Rectangle {
-                                width: parent.width - 180; height: 10; radius: 5; color: "#2a374b"; anchors.verticalCenter: parent.verticalCenter
-                                Rectangle { height: parent.height; radius: 5; width: parent.width * Math.max(0, Math.min(1, (modelData - 3.0) / 1.25)); color: modelData < 3.4 || modelData > 4.25 ? "#ff6f78" : "#67e8a5" }
-                            }
-                            Text { text: Number(modelData).toFixed(3) + " V"; color: "#f4f8ff"; font.pixelSize: 17; font.bold: true; anchors.verticalCenter: parent.verticalCenter }
-                        }
-                    }
+            Layout.fillWidth: true; Layout.fillHeight: true; radius: Theme.radiusLarge; color: Theme.surface; border.color: Theme.border
+            Column { anchors.fill: parent; anchors.margins: 26; spacing: 12
+                Row { width: parent.width
+                    Text { width: parent.width - 170; text: "CELL VOLTAGES"; color: Theme.text; font.pixelSize: 19; font.bold: true }
+                    StatusChip { text: "SIMULATED ADC"; accent: Theme.warning }
                 }
-                Text { text: "DEVELOPMENT FAULTS"; color: "#53647c"; font.pixelSize: 10; font.letterSpacing: 1.5 }
-                Flow {
-                    width: parent.width; spacing: 8
-                    Repeater {
-                        model: ["nominal", "imbalanced", "undervoltage", "overvoltage", "disconnected", "invalid taps"]
-                        Button { required property string modelData; text: modelData; onClicked: BatteryService.setScenario(modelData) }
-                    }
+                Repeater { model: BatteryService.cellVoltages; CellVoltageRow { width: parent.width; cellNumber: index + 1; voltage: modelData; weakest: index + 1 === BatteryService.weakestCell } }
+                Flow { width: parent.width; spacing: 8
+                    Repeater { model: [1, 2, 3, 4, 5, 6]; TouchButton { required property int modelData; text: modelData + "S"; checked: BatteryService.cellCount === modelData; onClicked: BatteryService.configureCells(modelData) } }
                 }
             }
         }

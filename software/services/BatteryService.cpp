@@ -36,6 +36,36 @@ double BatteryService::delta() const
     return *maximum - *minimum;
 }
 
+double BatteryService::weakestVoltage() const
+{
+    return m_cells.isEmpty() ? 0.0 : *std::min_element(m_cells.cbegin(), m_cells.cend());
+}
+
+double BatteryService::strongestVoltage() const
+{
+    return m_cells.isEmpty() ? 0.0 : *std::max_element(m_cells.cbegin(), m_cells.cend());
+}
+
+int BatteryService::weakestCell() const
+{
+    if (m_cells.isEmpty()) return 0;
+    return static_cast<int>(std::distance(m_cells.cbegin(), std::min_element(m_cells.cbegin(), m_cells.cend()))) + 1;
+}
+
+int BatteryService::strongestCell() const
+{
+    if (m_cells.isEmpty()) return 0;
+    return static_cast<int>(std::distance(m_cells.cbegin(), std::max_element(m_cells.cbegin(), m_cells.cend()))) + 1;
+}
+
+QString BatteryService::health() const
+{
+    if (!m_connected) return "DISCONNECTED";
+    if (!m_warning.isEmpty()) return "ATTENTION";
+    if (delta() > 0.040) return "CHECK BALANCE";
+    return "HEALTHY";
+}
+
 void BatteryService::configureCells(const int count)
 {
     const int bounded = std::clamp(count, 1, 6);
@@ -84,4 +114,3 @@ void BatteryService::update()
     }
     emit changed();
 }
-

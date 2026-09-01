@@ -16,7 +16,7 @@ set_tests_properties(test_qml_smoke PROPERTIES
     TIMEOUT 10
 )
 
-foreach(state home fpv battery media flights diagnostics)
+foreach(state home fpv fpv-controls fpv-lock battery media media-playback receiver flights diagnostics)
     add_test(NAME test_qml_${state}
         COMMAND fpvdeck --database :memory: --demo-state ${state} --exit-after-ms 300)
     set_tests_properties(test_qml_${state} PROPERTIES
@@ -24,3 +24,13 @@ foreach(state home fpv battery media flights diagnostics)
         TIMEOUT 10
     )
 endforeach()
+
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME test_balance_frontend_error
+    COMMAND ${Python3_EXECUTABLE} -m unittest
+        tools.test_balance_frontend_error
+        tools.test_fpvdeck_hw_test
+        tools.test_test_board_source)
+set_tests_properties(test_balance_frontend_error PROPERTIES
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)

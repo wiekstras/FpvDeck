@@ -15,13 +15,26 @@ cmake -S "${project_dir}" -B "${build_dir}" -G Ninja -DCMAKE_BUILD_TYPE=RelWithD
 cmake --build "${build_dir}" --parallel
 mkdir -p "${output_dir}"
 
-for state in home fpv battery media flights diagnostics; do
+states=(
+    "home:home"
+    "fpv-controls:fpv"
+    "battery:battery"
+    "media:media"
+    "media-playback:media-playback"
+    "receiver:receiver"
+    "flights:flights"
+    "diagnostics:diagnostics"
+)
+
+for entry in "${states[@]}"; do
+    state="${entry%%:*}"
+    filename="${entry##*:}"
     xvfb-run -a -s "-screen 0 1280x720x24" \
         "${build_dir}/software/fpvdeck" \
         --database :memory: \
         --video "${project_dir}/generated/fpv-test-pal.mp4" \
         --demo-state "${state}" \
-        --screenshot "${output_dir}/${state}.png"
+        --screenshot "${output_dir}/${filename}.png"
 done
 
 echo "Wrote reproducible showcase screenshots to ${output_dir}"

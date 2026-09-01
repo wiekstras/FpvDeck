@@ -2,6 +2,10 @@
 #include "services/DatabaseService.h"
 #include "services/DvrService.h"
 #include "services/InputService.h"
+#include "services/InteractionService.h"
+#include "services/MediaService.h"
+#include "services/StorageService.h"
+#include "services/SystemService.h"
 #include "services/TelemetryService.h"
 #include "services/VideoService.h"
 
@@ -49,6 +53,10 @@ int main(int argc, char* argv[])
     BatteryService batteryService;
     DvrService dvrService;
     InputService inputService;
+    InteractionService interactionService;
+    MediaService mediaService(QUrl::fromLocalFile(videoPath));
+    StorageService storageService;
+    SystemService systemService;
     TelemetryService telemetryService;
     VideoService videoService(QUrl::fromLocalFile(videoPath));
     DatabaseService databaseService(databasePath);
@@ -58,7 +66,10 @@ int main(int argc, char* argv[])
         return 2;
     }
     const QString demoState = parser.value(demoStateOption).trimmed().toLower();
-    const QStringList validDemoStates = {"home", "fpv", "battery", "media", "flights", "diagnostics"};
+    const QStringList validDemoStates = {
+        "home", "fpv", "fpv-controls", "fpv-lock", "battery", "media",
+        "media-playback", "receiver", "flights", "diagnostics"
+    };
     if (parser.isSet(demoStateOption) && !validDemoStates.contains(demoState)) {
         qCritical("Unknown showcase state: %s", qPrintable(demoState));
         return 7;
@@ -68,16 +79,29 @@ int main(int argc, char* argv[])
         return 6;
     }
     if (parser.isSet(demoStateOption) && demoState == "battery") batteryService.setScenario("imbalanced");
-    if (parser.isSet(demoStateOption) && demoState == "fpv") dvrService.toggleRecording();
+    if (parser.isSet(demoStateOption) && demoState.startsWith("fpv")) dvrService.toggleRecording();
+    if (parser.isSet(demoStateOption) && demoState == "fpv-controls") interactionService.showControls();
+    if (parser.isSet(demoStateOption) && demoState == "fpv-lock") {
+        interactionService.setFlightLocked(true);
+        interactionService.showControls();
+    }
+    if (parser.isSet(demoStateOption) && demoState == "media-playback") {
+        mediaService.openFile("RIDGE RUN", 381, "4:3");
+    }
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("BatteryService", &batteryService);
     engine.rootContext()->setContextProperty("DvrService", &dvrService);
     engine.rootContext()->setContextProperty("InputService", &inputService);
+    engine.rootContext()->setContextProperty("InteractionService", &interactionService);
+    engine.rootContext()->setContextProperty("MediaService", &mediaService);
+    engine.rootContext()->setContextProperty("StorageService", &storageService);
+    engine.rootContext()->setContextProperty("SystemService", &systemService);
     engine.rootContext()->setContextProperty("TelemetryService", &telemetryService);
     engine.rootContext()->setContextProperty("VideoService", &videoService);
     engine.rootContext()->setContextProperty("DatabaseService", &databaseService);
     engine.rootContext()->setContextProperty("StartupDemoState", demoState);
+    engine.rootContext()->setContextProperty("StartupDemoMode", parser.isSet(demoStateOption));
     engine.load(QUrl(QStringLiteral("qrc:/FPVDeck/ui/Main.qml")));
     if (engine.rootObjects().isEmpty()) return 3;
     if (parser.isSet(screenshotOption)) {

@@ -7,5 +7,5 @@ build/
 *.sqlite3
 *.db-shm
 *.db-wal
+*.kicad_prl
 generated/
-

@@ -44,3 +44,32 @@ void VideoService::nextChannel()
     emit changed();
 }
 
+void VideoService::setChannel(const int channel)
+{
+    if (channel < 1 || channel > 8) return;
+    m_channel = channel;
+    m_state = "locked";
+    m_rssi = 74 + channel * 2;
+    emit changed();
+}
+
+void VideoService::toggleFavorite()
+{
+    if (m_favorites.contains(m_channel)) m_favorites.remove(m_channel);
+    else m_favorites.insert(m_channel);
+    emit changed();
+}
+
+void VideoService::scanStrongest()
+{
+    if (m_scanning) return;
+    m_scanning = true;
+    emit changed();
+    QTimer::singleShot(650, this, [this] {
+        m_channel = 6;
+        m_rssi = 93;
+        m_state = "locked";
+        m_scanning = false;
+        emit changed();
+    });
+}
