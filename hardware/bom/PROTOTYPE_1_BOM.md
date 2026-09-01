@@ -17,7 +17,7 @@ This is a purchase-planning list, not an approved assembly BOM. Prices are rough
 | 1 | Texas Instruments | BQ25792EVM | charger/power-path evaluation | €220 allowance | [EVM](https://www.ti.com/tool/BQ25792EVM) | do not attach cells before procedure review |
 | 1 | Texas Instruments | TPS55288EVM-053 | 5 V rail evaluation | €150 allowance | [EVM](https://www.ti.com/tool/TPS55288EVM-053) | output configuration/thermal design required |
 | 2 | TBD | 50 Ω lab antennas / conducted fixture | VRX comparison | €60 | fixture design pending | connectors/adapters included |
-| 1 | TBD | protected 2S2P pack test fixture | energy source, fused/monitored | €100 | pack design pending | bench supply first |
+| 1 | TBD | protected two-cell pack test fixture | energy source, fused/monitored | €100 | donor series/parallel topology unknown | bench supply first |
 | lot | known vendors | documented cables, FFC adapters, 75 Ω coax/termination | interconnect/test | €150 | freeze in wiring doc | no improvised CSI wiring |
 
 Expected module/evaluation spend is roughly €1,700 before instruments. EVM cost is

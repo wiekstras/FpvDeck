@@ -29,10 +29,34 @@ Initial reserved types:
 | `0x20` | Output command | Linux → MCU |
 | `0x30` | Shutdown request | MCU → Linux |
 | `0x31` | Shutdown ready | Linux → MCU |
+| `0x40` | Board bring-up request | Linux → MCU |
+| `0x41` | Board bring-up reply | MCU → Linux |
 | `0x7e` | Error | both |
 
-Type payloads are not yet frozen and must not be invented in firmware. The C++
-codec and corruption tests in `software/core` are the current executable framing
-specification. Golden byte vectors will be shared with MCU C tests before the
-first hardware protocol release.
+Core runtime payloads `0x01`–`0x31` are not yet frozen. The board bring-up subset
+is now executable and versioned in `firmware/controller/include/fpvdeck/board.h`.
 
+## Board bring-up payload
+
+Request payload:
+
+| Offset | Field |
+| ---: | --- |
+| 0 | command ID |
+| 1 | optional channel/value byte |
+
+Reply payload:
+
+| Offset | Field |
+| ---: | --- |
+| 0 | echoed command ID |
+| 1 | status: 0 OK, 1 bad command, 2 bad argument, 3 not ready, 4 hardware fault |
+| 2 | command-specific fixed-width little-endian data |
+
+Implemented commands include identify, self-test bitmasks, raw ADC, calibrated ADC
+millivolts, six-tap dump, two temperatures, LEDs, buzzer, fan, buttons, SD detect,
+and the 5 V/3.3 V/deck rails. Requests and replies retain the outer CRC and sequence
+number. Tests cover the dispatcher and framing corruption.
+
+`tools/fpvdeck_hw_test.py --port /dev/ttyACM0` is the Linux-side bring-up client;
+`--simulate` exercises its output before hardware exists.

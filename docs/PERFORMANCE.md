@@ -13,9 +13,8 @@
 | services | idle resident memory | <350 MB CM4 target | cgroup/`smaps` |
 | thermals | 60 min sun-equivalent steady state | no throttling at design ambient | thermocouples + SoC telemetry |
 | power | typical FPV+DVR input | ≤16 W target | calibrated power analyzer |
-| runtime | typical brightness, healthy 2S2P | ≥2.5 h | coulomb/energy log |
+| runtime | typical brightness, healthy two-cell 18650 pack | ≥1.25 h; 1.5 h stretch | coulomb/energy log |
 
 Benchmarks report versions, build mode, backend, fixture, environment and full
 distributions. Desktop simulator numbers are tracked for regressions but never
 substituted for target hardware evidence.
-

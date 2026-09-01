@@ -53,6 +53,6 @@ layout, thermal, EMC, and latency behavior has been proven on the bench.
 | Channel switch/relock | <500 ms target, measured by mode | RF generator/VTX fixture |
 | Warm boot to live video | <8 s target | power-cycle fixture; live path may precede full shell |
 | Normal shutdown | database/storage clean after 1,000 cycles | automated power controller |
-| FPV runtime | ≥2.5 h target at typical brightness | measured 2S2P pack test |
+| FPV runtime | ≥1.25 h target; 1.5 h stretch at typical brightness | measured two-cell pack test |
 
 Targets are engineering gates, not current measured results.

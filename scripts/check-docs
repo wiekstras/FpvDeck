@@ -8,12 +8,14 @@ required=(
   docs/LATENCY.md docs/T8L_INTEGRATION.md docs/POWER.md
   docs/BATTERY_MEASUREMENT.md docs/SOFTWARE_ARCHITECTURE.md docs/APP_API.md
   docs/MCU_PROTOCOL.md docs/SIMULATOR.md docs/TESTING.md docs/BUILD.md
-  docs/DEVELOPMENT.md docs/ROADMAP.md docs/RISK_REGISTER.md
+  docs/DEVELOPMENT.md docs/TOUCH_UX.md docs/ROADMAP.md docs/RISK_REGISTER.md
   docs/REVERSE_ENGINEERING.md
+  docs/TEST_PCB_BRINGUP.md
   CONTRIBUTING.md SECURITY.md LICENSE
   docs/assets/renders/README.md docs/assets/renders/fpvdeck-concept-render-v2.png
   docs/assets/ui/README.md docs/assets/ui/home.png docs/assets/ui/fpv.png
   docs/assets/ui/battery.png docs/assets/ui/media.png docs/assets/ui/flights.png
+  docs/assets/ui/media-playback.png docs/assets/ui/receiver.png
   docs/assets/ui/diagnostics.png docs/assets/branding/fpvdeck-icon.svg
   docs/assets/branding/fpvdeck-wordmark.svg docs/assets/branding/social-preview.svg
   docs/assets/diagrams/overall-system.svg docs/assets/diagrams/overall-system.mmd
@@ -23,6 +25,12 @@ required=(
   hardware/research/COMPONENT_SELECTION.md hardware/research/VRX_COMPARISON.md
   hardware/research/DISPLAY_COMPARISON.md hardware/research/SBC_COMPARISON.md
   hardware/research/VIDEO_DECODER_COMPARISON.md hardware/research/ADC_COMPARISON.md
+  hardware/ORDER_LIST.md hardware/PROCUREMENT_PLAN.md
+  hardware/bom/TEST_PCB_REV_A.csv hardware/bom/TEST_PCB_REV_A.md
+  hardware/bom/PROTOTYPE_SYSTEM.csv
+  hardware/pcb/test-board-rev-a/test-board-rev-a.kicad_pro
+  hardware/pcb/test-board-rev-a/test-board-rev-a.kicad_pcb
+  hardware/pcb/test-board-rev-a/FABRICATION_NOTES.md
 )
 
 for path in "${required[@]}"; do

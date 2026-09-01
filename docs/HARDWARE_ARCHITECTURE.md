@@ -7,16 +7,20 @@
 | Compute | Raspberry Pi CM4, 4 GB/32 GB eMMC, no wireless preferred | i.MX 8M Plus industrial SoM | Prototype selected; production shortlist |
 | CVBS decode | ADV7280A-M or ADV7282-M evaluation hardware | Renesas TW9992 | Prototype selected; production driver work open |
 | VRX | Skyzone SteadyView X standalone ground-station kit | modular dual-VRX bay; integrated RF later | Selected pending latency A/B |
-| Display | 5-inch Pi DSI fallback; evaluate Waveshare 6.25-inch DSI mechanics/software | 5.5–6.25-inch high-brightness DSI panel, part not frozen | Larger direction selected; all latency unmeasured |
-| Controller MCU | STM32G0B1 development board | STM32G0B1CB/CE class | Selected family; exact package after pin budget |
-| Battery ADC | ADS7066 and ADS8688A EVM A/B | not frozen | Bench decision required |
-| Main battery | bench supplies, then protected 2S2P 18650 fixture | serviceable protected 2S2P | Cell and regulatory design open |
+| Display | Waveshare 6.25inch DSI LCD (B), SKU 35000 | 5.5–6.25-inch high-brightness DSI panel | Prototype selected; five-touch required; latency/outdoor/pinch-grip gates open |
+| Controller MCU | NUCLEO-G0B1RE then STM32G0B1CBT6 | STM32G0B1CB/CE class | Test-board package selected from current ST pinout |
+| Battery ADC | ADS8688A EVM/direct Test PCB | ADS8688A unless measurements reject it | Test-board selected with calibrated matched divider |
+| Main battery | bench supplies, then protected two-cell 18650 fixture | serviceable two-cell pack matching verified donor topology | Series/parallel topology **UNKNOWN**; charger not frozen |
 | Charger | BQ25792 evaluation | BQ25792-class 1–4S buck-boost/NVDC | Lead; not schematic-approved |
 | 5 V rail | TPS55288 evaluation | TPS55288-class buck-boost | Lead; load/EMI validation open |
 
 CM4 is preferred over CM5 for Prototype 1 because CM4's documented H.264 encoder
 and established ADV728x capture path reduce two critical risks. CM5 remains a CPU
 performance benchmark, not the baseline DVR platform.
+
+The 6.25-inch screen is mounted landscape above the gimbal finger envelopes. Its
+159.18 mm cover-lens width is confirmed; T8L placement and pinch-grip clearance are
+not. A non-powered ergonomic buck is an enclosure gate.
 
 ## Physical partitioning
 
@@ -41,3 +45,8 @@ separation, standard host support, and power-domain visibility. A debug UART is
 retained. SPI is reserved as a future performance option, not needed for human-
 rate controls/sensors. The VRX interface is initially 75-ohm CVBS plus its native
 control mechanism; no undocumented module-bay pins are assumed.
+
+Test PCB Rev A keeps DSI, CSI and RF off-board. Display connects directly to the
+CM4IO DSI port, ADV728x evaluation hardware to CSI through a reviewed interposer,
+and VRX through 75-ohm coax. Its generic low-speed headers carry only project-
+defined UART/I²C/status/control nets.

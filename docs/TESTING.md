@@ -7,13 +7,21 @@ Run the local CI-equivalent suite with:
 ```
 
 Current automated coverage includes cumulative balance-tap derivation for 1S–6S,
-imbalance/noise and invalid tap cases; MCU protocol CRC/framing/corruption; and
-SQLite migration plus flight persistence/reopen. Service tests cover battery
-faults, telemetry loss/corruption, PAL/NTSC validation, and input allowlist/lockout.
-A headless QML smoke test proves the complete application graph loads and exits.
+imbalance/noise and invalid tap cases; Monte Carlo balance-front-end calculations;
+MCU protocol CRC/framing/corruption and board-command dispatch; and SQLite
+migration plus flight persistence/reopen. Service tests cover touch auto-hide,
+flight lock, battery extrema/faults, media seek/playback, storage faults,
+deck/MCU/ADC/VRX health, receiver scan/favorites, telemetry loss/corruption,
+PAL/NTSC validation, and physical-input lockout.
 
-The next layers are QML smoke/screenshot tests, service recovery integration
-tests, generated PAL/NTSC video pipeline assertions, DVR interruption tests,
+Headless tests launch the complete QML graph in Home, Fly, Fly controls, flight
+lock, Battery, Media, touch playback, Receiver, Flights, and Diagnostics states.
+The screenshot script runs the same executable with deterministic data. A Python
+source audit checks the manufacturer-verified critical ADS8688A and STM32 pad map
+without requiring KiCad in CI. It does not replace schematic ERC or design review.
+
+The next layers are synthesized pointer/swipe and golden-diff tests, service
+recovery integration tests, generated PAL/NTSC video pipeline assertions, DVR interruption tests,
 and hardware-in-the-loop fixtures. Hardware tests must report measurements with
 fixture version, firmware version, sample count, median, p95, minimum, maximum,
 and environmental notes.

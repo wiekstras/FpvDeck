@@ -6,8 +6,8 @@
 
 ```text
 USB-C receptacle + ESD/CC/PD
-       -> BQ25792-class 1–4S buck-boost NVDC charger/power path
-       -> protected, serviceable 2S2P 18650 pack
+       -> charger/power path selected after donor cell topology is measured
+       -> protected, serviceable two-cell 18650 pack
               ├─ fused/filtered T8L input (only after original topology verified)
               ├─ TPS55288-class 5.1 V high-current buck-boost -> CM4/display/USB
               ├─ quiet filtered VRX/video rails
@@ -17,7 +17,9 @@ USB-C receptacle + ESD/CC/PD
 BQ25792 is an active 1–4 cell, 5 A buck-boost charger with NVDC power path,
 integrated FETs/ADC, I²C, 3.6–24 V input, and USB-PD-range OTG. It does not itself
 remove the need for correct USB-C policy/protection, pack protection, thermistors,
-fusing, cell matching, regulatory work, and safe mechanical cell retention.
+fusing, cell matching, regulatory work, and safe mechanical cell retention. It
+is only a valid lead after confirming whether the T8L's two cells are series or
+parallel and whether its existing charging circuit stays in use.
 
 TPS55288 is an active four-switch 2.7–36 V buck-boost with programmable current
 limit and spread spectrum. Its 16 A figure is switch/inductor current, not a claim
@@ -36,10 +38,17 @@ stability, peak battery current, and EMI must be calculated and measured.
 | MCU/ADC/storage/misc. | 0.8 W | 2 W | estimate |
 | **system before conversion loss** | **10.8 W** | **19.8 W** | not measured |
 
-A nominal 2S2P pack using four 3 Ah, 3.6 V cells stores about 43 Wh before pack,
-temperature, reserve, age, and conversion derating. At 11–16 W input this suggests
-roughly 2.3–3.3 h, so the ≥2.5 h goal is plausible but unproven. A two-cell 2S pack
-roughly halves runtime and is not the production baseline.
+The required two-cell pack using 3 Ah, 3.6 V cells stores about 21.6 Wh nominal,
+regardless of whether the cells are 2S1P or 1S2P. At 11–16 W input, before reserve,
+age, cold-weather, and conversion losses, this suggests roughly 1.0–1.7 hours.
+The initial runtime gate is therefore ≥1.25 h at typical FPV+DVR load, with a
+1.5 h stretch goal. Lower screen brightness, a more efficient VRX rail, and
+measured compute tuning matter. Adding cells is not assumed because the product
+requirement specifies the T8L's two internal 18650 cells.
+
+The exact pack topology, protection, charger, and power-path IC are **UNKNOWN**
+until the donor is measured non-destructively. Bench Prototype 1 uses isolated,
+current-limited supplies; it does not connect to or charge the T8L cells.
 
 ## Shutdown state machine
 

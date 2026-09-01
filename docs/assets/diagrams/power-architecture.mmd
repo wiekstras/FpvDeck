@@ -1,6 +1,6 @@
 flowchart LR
   USB[USB-C input] --> PMIC[Charger / NVDC power path]
-  CELL[Internal protected 2S2P 18650] <--> PMIC
+  CELL[Internal protected 2x 18650; topology TBD] <--> PMIC
   PMIC --> T8L[T8L / ELRS rail]
   PMIC --> FIVE[5.1 V compute/display rail]
   PMIC --> QUIET[Filtered VRX/video rails]

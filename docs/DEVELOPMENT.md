@@ -6,7 +6,9 @@ open devices directly.
 
 ## Keyboard input backend
 
-- Arrows / Enter: reserved for directional navigation as focus handling expands.
+- Arrows: cycle the current screen's large actionable controls; Enter activates
+  the focused control. This is a desktop stand-in for the dedicated navigation
+  cluster, not a connection to any gimbal or flight switch.
 - Escape: close overlay or return to FPV.
 - `M`: application menu.
 - `R`: DVR start/stop.
@@ -23,4 +25,3 @@ events only from a physically separate navigation allowlist.
 A change is not complete because it compiles. Relevant automated tests must pass,
 the simulator path must remain usable, failure behavior must be considered, and
 hardware claims must carry a source or a `NEEDS MEASUREMENT` marker.
-

@@ -15,17 +15,25 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [x] Add unit, integration, protocol, database, service, and QML smoke tests.
 - [x] Run CI-equivalent build/test locally and fix all failures.
 - [x] Add deterministic demo states and reproducible 1280×720 showcase captures.
+- [x] Add touchscreen-first navigation, FPV auto-hide controls, flight lock,
+  removable-SD/media simulation, receiver scan/favorites, and fault injection.
+- [x] Add service tests for touch timing/lockout, storage/media faults, deck state,
+  receiver selection, and battery extrema.
 - [ ] Add full battery/aircraft CRUD repositories and editing UI.
 - [ ] Implement actual test-file DVR segments and interruption recovery tests.
-- [ ] Add QML interaction/screenshot tests, not only graph startup.
+- [ ] Add pointer-driven QML interaction/golden tests; service behavior and all
+  deterministic page states are covered, but current QML tests still launch
+  complete graphs rather than synthesizing taps/swipes.
 - [ ] Add simulated source disconnect/reconnect and resolution-change assertions.
 - [ ] Verify and package the macOS development path.
 
 ## Milestone 2 — bench architecture
 
 - [x] Establish initial compute/decoder/display/VRX shortlist from primary sources.
-- [ ] Measure/fit the 6.25-inch DSI evaluation display and compare it against the
-  5-inch bright fallback; select a 5.5–6.25-inch outdoor production panel.
+- [x] Select the currently shipping Waveshare 6.25inch DSI LCD (B), SKU 35000,
+  as the Prototype 1 touchscreen module from documented display/touch support.
+- [ ] Measure/fit the 6.25-inch module and compare it against the 5-inch bright
+  fallback; the production outdoor panel remains measurement-gated.
 - [ ] Obtain/borrow ADV7280A-M or ADV7282-M evaluation hardware.
 - [ ] Confirm exact CSI cable/adapter wiring from board documentation; do not infer.
 - [ ] Buy or borrow SteadyView X and at least one benchmark receiver.
@@ -33,7 +41,10 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Test PAL and NTSC with weak/nonstandard VTX signals.
 - [ ] Verify CM4 hardware encoder can record without adding display-path buffers.
 - [ ] Prototype pre-overlay and composited recording concurrently.
-- [ ] Freeze Prototype 1 BOM only after source/stock checks at purchase time.
+- [x] Create a part-numbered bench system BOM, Test PCB BOM, human order list,
+  and procurement staging plan.
+- [ ] Refresh distributor stock/pricing and ADV728x EVM/interface availability at
+  purchase time; do not treat documented approximate prices as live quotations.
 - [ ] Produce a verified wiring document with connector part numbers.
 
 ## T8L reverse engineering
@@ -63,12 +74,26 @@ Items remain here until completed and evidenced by a test, document, or artifact
 
 ## Electrical and PCB
 
-- [ ] Bench-evaluate ADS7066 and ADS8688A frontends before selecting ADC topology.
+- [x] Select ADS8688A for Test PCB Rev A and model the calibrated divider/ADC
+  error budget; retain ADS7066 as a lower-power future integration candidate.
+- [x] Create a real Test PCB Rev A KiCad PCB/project with verified lead packages,
+  explicit nets, probe points, modular headers, and manufacturing gates.
+- [ ] Create the native KiCad schematic from the independently checked pin/net
+  map; run ERC before routing. The placed/unrouted board is **NOT RELEASED**.
+- [ ] Independently verify ACAS 0612 resistor-array pad pairing and every ADC/MCU
+  pad mapping against manufacturer package drawings.
+- [ ] Resolve protected external-pack negative/reference connection and prove no
+  unsafe backfeed path before any LiPo connection.
+- [ ] Route planes/tracks, run DRC, print 1:1 footprints, and complete independent
+  design review before generating an orderable fabrication release.
+- [ ] Bench-evaluate the ADS8688A frontend and compare measured calibration drift
+  with `tools/balance_frontend_error.py`.
 - [ ] Specify hot-plug/reverse/ESD protection with worst-case fault calculations.
 - [ ] Build 1S–8S precision source test jig and calibration procedure.
 - [x] Select STM32G0B1 family lead and add host-tested firmware protocol core.
 - [ ] Freeze exact STM32G0B1 package/part after I/O and flash budget.
-- [ ] Finalize 2S/2S2P power budget from measured module consumption.
+- [ ] Finalize the required two-cell 18650 power budget from measured module
+  consumption and confirmed donor series/parallel topology.
 - [ ] Select charger, USB-C PD, 5 V converter, quiet RF/analog rails, and load switches.
 - [ ] Create Controller-I/O Rev A schematics only from verified datasheets.
 - [ ] Run ERC, peer checklist, footprint audit, and bring-up review before fabrication.
@@ -77,6 +102,11 @@ Items remain here until completed and evidenced by a test, document, or artifact
 
 - [ ] Implement watchdog, bounded service restarts, safe shutdown, and brownout tests.
 - [ ] Define performance benchmark tooling and acceptance thresholds.
-- [ ] Add HIL protocol and manufacturing diagnostics.
+- [x] Add a versioned bring-up command subset, host-tested board dispatch layer,
+  simulated `fpvdeck-hw-test`, and a staged hardware bring-up procedure.
+- [ ] Bind firmware board HAL callbacks to STM32G0 peripherals and validate the
+  commands on NUCLEO-G0B1RE before porting to the Rev A MCU footprint.
+- [ ] Run `fpvdeck-hw-test` against physical hardware and add fixture-assisted
+  per-channel pass/fail limits.
 - [ ] Create reproducible embedded image and A/B update/recovery design.
 - [ ] Add KiCad CI checks and firmware cross-build once toolchains are pinned.

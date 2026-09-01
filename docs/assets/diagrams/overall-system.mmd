@@ -1,7 +1,7 @@
 flowchart LR
   T8L["T8L controls"] --> ELRS["ELRS 2.4 GHz"] --> AIR["Aircraft"]
   AIR --> VTX["Camera + FC OSD + VTX"] --> VRX["Diversity VRX"] --> DEC["CVBS decoder"] --> SOM["Linux SoM"] --> LCD["HD display"]
-  PACK["Internal 2S2P 18650"] --> PM["Power management"] --> T8L
+  PACK["Internal 2x 18650; topology TBD"] --> PM["Power management"] --> T8L
   PM --> VRX
   PM --> SOM
   MCU["Controller MCU"] <--> SOM

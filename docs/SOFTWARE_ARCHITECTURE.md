@@ -11,7 +11,7 @@ QML apps/widgets
    │ stable QObject APIs, queued signals, immutable snapshots
 AppManager ──────────────────────────────────────────────┐
    │                                                     │
-Video  Battery  Telemetry  Input  DVR  Radio  Storage  Database services
+Video Battery Telemetry Input DVR Radio Storage Media Interaction System Database
    │                                                     │
 real backend / simulated backend / replay backend        │
    └──────────── isolated drivers and worker processes ──┘
@@ -29,6 +29,19 @@ runtime/boot/memory cost; Flutter's Linux embedded/video interop adds ecosystem
 risk; bespoke rendering would spend effort recreating accessibility, text, and
 layout infrastructure.
 
-The repository currently implements BatteryService, VideoService simulator,
-DVR simulator, SQLite DatabaseService, application pages, and a file video source.
-Telemetry/Input/Radio/Storage interfaces will be added before real backends.
+The repository currently implements Battery, Video/VRX, DVR, Telemetry, Input,
+Storage, Media, Interaction, System, and Database services. Hardware-dependent
+state has a deterministic simulator path. The QML pages consume these QObject
+contracts and do not open serial ports, mount cards, or sample ADCs themselves.
+
+InteractionService owns transient FPV controls, flight-lock navigation policy,
+and touch-debug state. A lock rejection is explicit and testable. StorageService
+models the removable-card lifecycle independently from MediaService playback;
+this prevents a media view from inventing mount behavior. SystemService owns
+deck power/thermal/connectivity state used by Home and Diagnostics.
+
+The current implementation is one process for desktop iteration. The embedded
+architecture will move capture/recording and noncritical workers across bounded
+IPC boundaries where failure isolation or privilege separation is justified.
+That split must preserve the service contracts rather than exposing driver APIs
+to QML.

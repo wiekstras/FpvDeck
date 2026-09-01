@@ -125,3 +125,63 @@ and unresolved facts. Status labels are used deliberately:
   tests and required-document checks. Its Node 20 deprecation annotation prompted
   an upgrade to official `actions/checkout@v6` and `actions/cache@v5`, both using
   the Node 24 action runtime on current GitHub-hosted runners.
+
+## 2026-09-01 — Touchscreen vertical slice and Test PCB Rev A pre-release
+
+- Touch is now a hard product requirement. The simulator was converted to a
+  touchscreen-first interaction model with reusable QML components, minimum
+  field-friendly targets, FPV tap-to-reveal controls, timed auto-hide, deliberate
+  flight lock, a detailed external-battery card, touch media playback, receiver
+  scan/favorites, and a development touch indicator. Physical/keyboard paths
+  remain available for critical functions.
+- Added separate `InteractionService`, `StorageService`, `MediaService`, and
+  `SystemService` interfaces. Simulation covers SD removal/corruption/full,
+  MCU/ADC/VRX loss, over-temperature, deck drain/charging, touch, media playback,
+  and video/receiver faults. Diagnostics exposes those states without coupling
+  the UI directly to hardware code.
+- **VERIFIED:** the expanded local suite has 18 passing tests, including all
+  deterministic application states, service fault/state behavior, the MCU frame
+  codec, board-command dispatch, and host hardware-test tool.
+- **CONFIRMED:** Waveshare currently documents `6.25inch DSI LCD (B)`, SKU 35000,
+  as a 720×1560 IPS module with 500 cd/m² luminance, 178-degree viewing, up to
+  60 Hz, five-point capacitive touch, I2C touch, optical bonding, and a
+  74.70×159.18 mm cover. It is selected for Prototype 1 because the user requires
+  a larger screen and pinch-grip geometry. Module latency, landscape scan,
+  sunlight performance, thermal behavior, glove behavior, and actual fit are
+  **NEEDS MEASUREMENT**; it is not a production-panel freeze.
+- CM4 remains the Prototype 1 compute choice because the selected module has a
+  documented CM4 DSI connection, ADV728x-M has a documented Raspberry Pi capture
+  path, and CM4 provides an H.264 encoder. This is an evaluation convenience
+  decision, not proof that CM4 is the production SoM.
+- Selected ADS8688A for Test PCB Rev A: eight protected 16-bit channels and a
+  0–10.24 V input range allow all six cumulative balance taps, pack-negative
+  sense, and deck monitoring without per-channel op amps. The exact resistor
+  network is Vishay `ACASA1002U1002P1AT`; three matched 10 kΩ elements form the
+  top leg and one forms the bottom leg, followed by a separate 1 kΩ input
+  resistor. All values remain subject to physical calibration and review.
+- **VERIFIED BY MODEL, NOT HARDWARE:** a seeded 20,000-sample Monte Carlo across
+  -20 to 70 °C after two-point calibration produced 2.76 mV tap p95 and 3.84 mV
+  derived-cell p95; p99 was 4.26/6.19 mV. This model includes documented ADC
+  gain/offset/input-impedance drift, ratio tracking, quantization, and calibration
+  uncertainty. It is not a guaranteed accuracy specification.
+- Created Test PCB Rev A as a real KiCad project and generated a 120×90 mm placed,
+  net-assigned, **unrouted** board containing exact lead packages, six divider
+  arrays, ADS8688A, STM32G0B1CBT6, power protection/regulation, test points, and
+  modular SBC/VRX/decoder/debug headers. PDF, Gerber, and drill export succeed.
+  The design is explicitly **NOT RELEASED FOR FABRICATION** until a native
+  schematic/ERC, ground-reference protection, independent pad-map audit, routing,
+  DRC, 1:1 footprint check, and design review are complete.
+- A primary-datasheet audit before release found the initial generator had
+  misassigned ADS8688A channel 2/4/5 and AVDD pads. Because the board was unrouted
+  and explicitly gated, no released hardware was affected. The DBT mapping was
+  corrected to channel-positive pads 16/18/21/23/25/27, AVDD pads 9/30, and the
+  paired ground pins. CI now parses and verifies the critical ADC and MCU mapping.
+- High-speed MIPI/DSI/CSI and RF circuitry stay off Test PCB Rev A. Decoder EVM,
+  display, CM4 IO board, and VRX remain replaceable modules, reducing Rev A risk.
+- Added a host-tested MCU board-command subset and `tools/fpvdeck_hw_test.py`.
+  It can run deterministically with `--simulate` now and will use a POSIX serial
+  port when HAL firmware exists. It reports identity, MCU/ADC state, six balance
+  channels, storage detect, temperature, and VRX communication.
+- Created exact-MPN Test PCB and system BOMs plus procurement staging. The bare
+  PCB and unresolved EVM/adaptor connections are in **WAIT**, preventing an
+  apparently complete shopping list from becoming an unsafe fabrication order.
