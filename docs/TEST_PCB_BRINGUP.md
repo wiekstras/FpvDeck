@@ -19,6 +19,11 @@ Confirm board revision, fab traveler, polarity marks, pin-1 marks, solder bridge
 connector keys, unpopulated DNP options and component labels. Verify J1 orientation
 against the purchased JST drawing and harness using continuity mode only.
 
+Confirm **F2 is not populated**. TP33 (`BNEG_RAW`) and TP34 (local ground) must
+remain open-circuit except for ADC input leakage before an approved simulator
+fixture intentionally provides a characterized link. Never bridge F2 with solder
+or a zero-ohm resistor.
+
 **Pass:** all exact MPNs and orientations match the released BOM/photos. **Fail:**
 quarantine the board; do not “try power” to resolve ambiguity.
 
@@ -90,6 +95,12 @@ Using only the protected simulator, test every missing intermediate tap, adjacen
 short, partial insertion order, disconnect, overvoltage up to the documented
 fixture limit and ADC/MCU power removal. Verify stale data is never presented as a
 healthy pack. Test USB-connected and standalone ground states.
+
+The F2 experiment is a separate, reviewed test phase. Populate only after the
+ground-fault matrix authorizes it, limit available energy, measure TP33−TP34,
+and configure ADC channel 6 for a bipolar range before interpreting B− sense.
+Compare measured drop with total divider current; unexpected alternate return
+current is an immediate fail and power-off condition.
 
 Do not attempt reverse LiPo connection; test reverse fixture behavior with a
 strict current limit and the approved fault-analysis procedure.

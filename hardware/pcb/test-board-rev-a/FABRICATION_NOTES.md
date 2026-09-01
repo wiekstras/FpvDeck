@@ -9,6 +9,9 @@
 - J1 must be exact JST `B7B-XH-A(LF)(SN)`. Print the land pattern at 1:1 and place
   the purchased connector before release.
 - RN1–RN6 are exact Vishay `ACASA1002U1002P1AT`; do not substitute a bussed array.
+- F2 is an experimental `1206L010/60WR` pack-reference link and is DNP. Its
+  generic KiCad land pattern must be checked against the Littelfuse drawing, and
+  it must not be fitted for initial power-up or real-LiPo use.
 - Clean flux around high-impedance analog nodes and inspect at magnification.
 - No conformal coat until leakage and calibration stability have been measured.
 - Production files require schematic/ERC, PCB DRC, netlist comparison, fab drawing,

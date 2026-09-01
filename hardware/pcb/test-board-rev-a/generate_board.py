@@ -14,6 +14,11 @@ HERE = Path(__file__).resolve().parent
 FP_ROOT = Path("/usr/share/kicad/footprints")
 OUT = HERE / "test-board-rev-a.kicad_pcb"
 
+# Keep the source-controlled generated board byte-for-byte reproducible. KiCad's
+# default KIID generator is random, which otherwise rewrites every footprint and
+# pad UUID even when electrical intent is unchanged.
+pcbnew.KIID.SeedGenerator(0x46505644)  # ASCII-ish "FPVD"
+
 
 def mm(value: float) -> int:
     return pcbnew.FromMM(value)
@@ -111,6 +116,19 @@ for ref, x, y in (("H1", 24, 24), ("H2", 136, 24), ("H3", 24, 106), ("H4", 136, 
 add_fp("J1", "B7B-XH-A(LF)(SN)", "Connector_JST", "JST_XH_B7B-XH-A_1x07_P2.50mm_Vertical", 28, 54, 90)
 assign("J1", {"1": "BNEG_RAW", **{str(i + 1): f"TAP{i}_RAW" for i in range(1, 7)}})
 
+# Provisional pack-negative reference link. F2 is deliberately DNP: its
+# footprint gives Rev A a measurable, replaceable experiment without approving
+# this topology for a real LiPo. Ground-fault, USB-ground and PPTC-drop tests in
+# BATTERY_MEASUREMENT.md remain release gates.
+add_fp("F2", "1206L010/60WR DNP", "Fuse", "Fuse_1206_3216Metric_Pad1.42x1.75mm_HandSolder", 32, 102)
+assign("F2", {"1": "BNEG_RAW", "2": "GND"})
+for ref, value, net_name, x in (
+    ("TP33", "BNEG_RAW", "BNEG_RAW", 39),
+    ("TP34", "LOCAL_GND", "GND", 45),
+):
+    add_fp(ref, value, "TestPoint", "TestPoint_Loop_D2.50mm_Drill1.0mm", x, 102)
+    assign(ref, {"1": net_name})
+
 for channel in range(1, 7):
     y = 34 + (channel - 1) * 11.5
     add_fp(f"R{channel}", "1K00 0.1%", "Resistor_SMD", "R_0603_1608Metric_Pad0.98x0.95mm_HandSolder", 42, y, 90)
@@ -203,6 +221,7 @@ for index, (name, net_name, x) in enumerate((("5V", "+5V_FUSED", 92), ("3V3", "+
 add_text("FPVDECK TEST PCB REV A", 66, 24, 1.6)
 add_text("NOT RELEASED - REVIEW GATES IN README", 58, 28, 1.0)
 add_text("BALANCE INPUT: MEASUREMENT ONLY", 24, 92, 0.9)
+add_text("F2 B- LINK: DNP / REVIEW", 22, 106, 0.75)
 add_text("ANALOG / PROBE AREA", 40, 24, 0.9)
 add_text("MCU / ADC", 82, 35, 0.9)
 add_text("MODULE INTERFACES", 116, 24, 0.9)

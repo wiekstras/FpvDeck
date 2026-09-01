@@ -23,6 +23,9 @@ least two ADCs/MCUs and ten divider arrays if hand assembling.
 
 - `Required` means the component belongs on the current electrical architecture.
 - `Optional` means the feature can be omitted during initial assembly.
+- `DNP` means the footprint is an unapproved experiment and must remain empty
+  unless the associated fault-analysis procedure explicitly authorizes it. F2 is
+  such a part; including it in the BOM is not approval to join a LiPo to the board.
 - `WAIT` means **do not order yet**. The bare PCB remains `WAIT` until the board
   release gates in its README close.
 

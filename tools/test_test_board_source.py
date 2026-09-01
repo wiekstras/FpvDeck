@@ -30,6 +30,11 @@ def literal_assignment(name: str) -> dict[str, str]:
 
 
 class TestBoardPinMapTest(unittest.TestCase):
+    def test_pack_negative_link_remains_dnp(self) -> None:
+        source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn('add_fp("F2", "1206L010/60WR DNP"', source)
+        self.assertIn('assign("F2", {"1": "BNEG_RAW", "2": "GND"})', source)
+
     def test_ads8688a_dbt_map(self) -> None:
         mapping = literal_assignment("adc_mapping")
         expected_analog = {

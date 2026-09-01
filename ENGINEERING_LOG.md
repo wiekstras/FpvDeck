@@ -192,3 +192,23 @@ and unresolved facts. Status labels are used deliberately:
   a **VERIFY STOCK AND BRIDGE** item, with a separate controlled-impedance
   SMA-to-CM4IO fixture required before purchase/use. Production remains TW9992
   research rather than an ADV728x lifecycle commitment.
+
+## 2026-09-01 — Provisional pack-reference test path
+
+- The placed Rev A design correctly kept `BNEG_RAW` separate from local ground,
+  but that also left the six cumulative-tap dividers without a completed battery
+  return. A direct copper bond was rejected because USB, grounded test equipment,
+  the SBC, and other modules can form alternate fault-current paths.
+- Added F2 as a **DNP-only** Littelfuse `1206L010/60WR` candidate between
+  `BNEG_RAW` and local ground, plus TP33/TP34 on both sides. The exact part is
+  manufacturer-rated 0.10 A hold, 0.25 A trip and 60 V maximum; the manufacturer
+  lists 0.5 Ω minimum initial, 1.5 Ω typical initial, and 10 Ω maximum
+  resistance after trip/reflow. Its generic KiCad land pattern is still subject
+  to exact drawing review.
+- Six ideal 4.2 V/cell divider channels draw 2.151 mA total. That produces about
+  3.23 mV typical and as much as 21.5 mV at the published post-trip/reflow maximum
+  between pack B− and local ground. ADC channel 6 can observe the negative
+  `BNEG_SENSE` offset only when configured for a suitable bipolar range.
+- **OPEN / SAFETY GATE:** F2 is not approval for real-LiPo use. Fault-tree review
+  and current-limited isolated-simulator tests must cover all externally grounded
+  states, partial insertion, powered-off behavior, and alternate return paths.

@@ -84,7 +84,9 @@ Items remain here until completed and evidenced by a test, document, or artifact
 - [ ] Independently verify ACAS 0612 resistor-array pad pairing and every ADC/MCU
   pad mapping against manufacturer package drawings.
 - [ ] Resolve protected external-pack negative/reference connection and prove no
-  unsafe backfeed path before any LiPo connection.
+  unsafe backfeed path before any LiPo connection. Rev A now has DNP
+  `1206L010/60WR` plus TP33/TP34 for a current-limited experiment; this does not
+  close the release gate.
 - [ ] Route planes/tracks, run DRC, print 1:1 footprints, and complete independent
   design review before generating an orderable fabrication release.
 - [ ] Bench-evaluate the ADS8688A frontend and compare measured calibration drift

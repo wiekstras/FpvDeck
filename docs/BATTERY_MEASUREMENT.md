@@ -19,7 +19,7 @@ future requirement, not a Rev A claim.
 | Divider network | Vishay `ACASA1002U1002P1AT`, four matched 10 kΩ elements, 0.1% absolute, 0.05% ratio, 5 ppm/°C ratio tracking | **SELECTED**; one array per cumulative tap |
 | Series resistor | 1.00 kΩ, 0.1%, 25 ppm/°C, ahead of each matched network | exact BOM MPN to be footprint-checked |
 | Filter | 10 nF C0G from ADC input to analog ground | selected value; settling/noise to validate |
-| Ground protection | low-current resettable/fusible link plus separate B− sense concept | **OPEN DESIGN GATE**; do not release until offset and fault behavior are simulated |
+| Ground protection | DNP Littelfuse `1206L010/60WR` footprint plus separate B− sense channel and paired probe points | **PROVISIONAL EXPERIMENT / OPEN DESIGN GATE**; not approved for a LiPo |
 
 For each cumulative tap, three matched 10 kΩ array elements are placed in series
 above the ADC node and one 10 kΩ element below it. A separate 1 kΩ resistor makes
@@ -31,6 +31,39 @@ tap is 0.622 mA.
 The 31 kΩ series-side path is intentional: TI specifies its powered-off input
 overvoltage condition differently above 30 kΩ. This does **not** by itself prove
 all hot-plug or power-off cases safe; those remain fault-analysis tests.
+
+## Pack-negative reference experiment
+
+The six dividers require a return to pack negative, but directly joining pack
+B− to digital/USB ground can create an uncontrolled fault path through the SBC,
+bench supply, decoder, or another grounded instrument. Rev A therefore places:
+
+- F2, a **DNP** `1206L010/60WR` PPTC candidate from `BNEG_RAW` to local ground;
+- TP33 on `BNEG_RAW` and TP34 on local ground;
+- ADC channel 6 on `BNEG_SENSE`, measuring B− relative to local ground.
+
+This is test infrastructure, not a completed protection design. Littelfuse rates
+the candidate at 0.10 A hold, 0.25 A trip and 60 V maximum. Its datasheet gives
+0.5 Ω minimum initial resistance, 1.5 Ω typical initial resistance, and 10 Ω
+maximum one hour after trip or reflow. Those values matter even in normal use.
+
+At ideal 4.2 V cell increments, the sum of all six divider currents is:
+
+```text
+(4.2 + 8.4 + 12.6 + 16.8 + 21.0 + 25.2) V / 41 kΩ = 2.151 mA
+```
+
+That current makes local ground approximately 3.23 mV above B− at 1.5 Ω and
+up to 21.5 mV above B− at 10 Ω. `BNEG_SENSE` consequently appears negative
+relative to the ADC ground and must use a suitable bipolar ADS8688A input range.
+Firmware can measure this offset, but correction does not make an unsafe ground
+path safe. The existing Monte Carlo result excludes this effect.
+
+F2 remains unpopulated until a reviewed fault tree covers at least: USB attached,
+earth-referenced oscilloscope, grounded lab supply, SBC and VRX ground paths,
+board unpowered, ADC unpowered, partial balance-plug insertion, F2 open/high-R,
+and a tap-to-ground short. Only a current-limited isolated simulator may be used
+while this gate is open. A simple wire or zero-ohm substitute is prohibited.
 
 ## Measurement model
 
@@ -114,9 +147,9 @@ no gender arrangement that can be joined to a battery lead by mistake.
   not be silently interpreted as a lower cell count.
 - The last valid measurement is marked stale immediately on disconnect and is
   removed from the FPV overlay after a short UI transition.
-- The ground-protection implementation is still a release gate. The PCB must have
-  DNP/bypass options and test points so ground offset and trip behavior can be
-  characterized without a redesign.
+- The ground-protection implementation is still a release gate. Rev A has a DNP
+  PPTC option and paired test points so ground offset and trip behavior can be
+  characterized without pretending that the path is approved.
 
 ## Validation matrix
 
@@ -133,3 +166,4 @@ but incorrect pack.
 - [TI ADS8688A datasheet](https://www.ti.com/lit/ds/symlink/ads8688a.pdf)
 - [Vishay ACAS precision array datasheet](https://www.vishay.com/docs/28959/acas0612.pdf)
 - [JST XH series](https://www.jst-mfg.com/product/index.php?series=277)
+- [Littelfuse 1206L PPTC datasheet](https://www.littelfuse.com/assetdocs/littelfuse-ptc-1206l-datasheet?assetguid=2b6a1515-d4ee-4c83-8bd4-152b4901b8f5)
