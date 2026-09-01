@@ -1,6 +1,13 @@
 import unittest
 
-from tools.balance_frontend_error import Frontend, calibration_from_codes, divider_output, simulate
+from tools.balance_frontend_error import (
+    Frontend,
+    calibration_from_codes,
+    divider_output,
+    pack_return_current_a,
+    reference_drop_mv,
+    simulate,
+)
 
 
 class BalanceFrontendErrorTest(unittest.TestCase):
@@ -20,6 +27,15 @@ class BalanceFrontendErrorTest(unittest.TestCase):
         slope, intercept = calibration_from_codes(1000, 51000, 25.0)
         self.assertAlmostEqual(slope * 1000 + intercept, 0.0)
         self.assertAlmostEqual(slope * 51000 + intercept, 25.0)
+
+    def test_pack_reference_drop_is_explicit(self):
+        model = Frontend()
+        current = pack_return_current_a([4.2 * cell for cell in range(1, 7)], model)
+        self.assertAlmostEqual(current * 1000, 2.152796, places=5)
+        self.assertAlmostEqual(reference_drop_mv(current, 1.5), 3.229194, places=5)
+        self.assertAlmostEqual(reference_drop_mv(current, 10.0), 21.527959, places=5)
+        with self.assertRaises(ValueError):
+            reference_drop_mv(current, -1.0)
 
     def test_seeded_error_budget_meets_prototype_target(self):
         result = simulate(Frontend(), iterations=3000, seed=1234)

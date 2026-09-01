@@ -5,6 +5,9 @@ second engineer has checked the fab package. Use a non-conductive bench surface,
 eye protection and a current-limited supply. Do not connect a LiPo during initial
 bring-up.
 
+The separate [balance ground-fault analysis](BALANCE_GROUND_FAULT_ANALYSIS.md)
+controls any F2 population or reference-path experiment.
+
 ## Equipment
 
 - current-limited 0–6 V bench supply and calibrated DMM;

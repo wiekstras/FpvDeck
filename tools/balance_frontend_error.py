@@ -52,6 +52,32 @@ def divider_output(
     return numerator / denominator
 
 
+def pack_return_current_a(tap_voltages_v: list[float], model: Frontend) -> float:
+    """Estimate normal current returning through the common pack-negative link.
+
+    This covers the nominal divider/ADC input network only. It intentionally does
+    not model an externally grounded fault, ESD, partial insertion, or a tripped
+    PPTC; those cases require circuit fault analysis and bench validation.
+    """
+    current = 0.0
+    for tap_v in tap_voltages_v:
+        pin_v = divider_output(
+            tap_v,
+            model.r_top_ohm,
+            model.r_bottom_ohm,
+            model.adc_input_ohm_nominal,
+            model.adc_bias_v,
+        )
+        current += (tap_v - pin_v) / model.r_top_ohm
+    return current
+
+
+def reference_drop_mv(current_a: float, resistance_ohm: float) -> float:
+    if resistance_ohm < 0:
+        raise ValueError("reference resistance cannot be negative")
+    return current_a * resistance_ohm * 1000.0
+
+
 def quantized_code(voltage_v: float, range_v: float, gain: float = 1.0, offset_lsb: float = 0.0) -> int:
     ideal = voltage_v / range_v * ADC_COUNTS * gain + offset_lsb
     return max(0, min(ADC_COUNTS, round(ideal)))
@@ -153,11 +179,15 @@ def simulate(model: Frontend, iterations: int = 20_000, seed: int = 0xF9D, tempe
         model.adc_input_ohm_nominal,
         model.adc_bias_v,
     )
+    return_current = pack_return_current_a([4.2 * cell for cell in range(1, 7)], model)
     return {
         "iterations": iterations,
         "adc_pin_at_25_5_v": round(pin_at_max, 6),
         "adc_headroom_v": round(model.adc_range_v - pin_at_max, 6),
         "divider_current_at_25_5_v_ma": round(model.calibration_high_v / (model.r_top_ohm + model.r_bottom_ohm) * 1000, 6),
+        "six_tap_return_current_ma": round(return_current * 1000, 6),
+        "reference_drop_at_1_5_ohm_mv": round(reference_drop_mv(return_current, 1.5), 6),
+        "reference_drop_at_10_ohm_mv": round(reference_drop_mv(return_current, 10.0), 6),
         "tap_error_p95_mv": round(_percentile(tap_errors_mv, 0.95), 3),
         "tap_error_p99_mv": round(_percentile(tap_errors_mv, 0.99), 3),
         "tap_error_max_mv": round(max(tap_errors_mv), 3),

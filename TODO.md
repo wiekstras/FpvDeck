@@ -91,6 +91,8 @@ Items remain here until completed and evidenced by a test, document, or artifact
   design review before generating an orderable fabrication release.
 - [ ] Bench-evaluate the ADS8688A frontend and compare measured calibration drift
   with `tools/balance_frontend_error.py`.
+- [x] Add normal-state pack-return/PPTC-drop calculations and a controlled
+  ground-fault experiment matrix; hardware validation and gate closure remain open.
 - [ ] Specify hot-plug/reverse/ESD protection with worst-case fault calculations.
 - [ ] Build 1S–8S precision source test jig and calibration procedure.
 - [x] Select STM32G0B1 family lead and add host-tested firmware protocol core.

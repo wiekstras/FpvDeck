@@ -212,3 +212,10 @@ and unresolved facts. Status labels are used deliberately:
 - **OPEN / SAFETY GATE:** F2 is not approval for real-LiPo use. Fault-tree review
   and current-limited isolated-simulator tests must cover all externally grounded
   states, partial insertion, powered-off behavior, and alternate return paths.
+- Extended `tools/balance_frontend_error.py` with the nominal ADC-loaded return
+  calculation. The deterministic result is 2.152796 mA for six 4.2 V cumulative
+  taps, 3.229194 mV at 1.5 Ω and 21.527959 mV at 10 Ω. Tests lock these values.
+- Added `docs/BALANCE_GROUND_FAULT_ANALYSIS.md` with explicit current-path,
+  energy-limit, abort-condition and evidence requirements for unpowered, USB,
+  earthed-instrument, partial-insertion, open/high-R F2 and tap-fault states.
+  Production B− correction is a requirement, not an implemented claim.

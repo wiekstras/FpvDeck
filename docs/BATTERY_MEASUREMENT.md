@@ -47,14 +47,15 @@ the candidate at 0.10 A hold, 0.25 A trip and 60 V maximum. Its datasheet gives
 0.5 Ω minimum initial resistance, 1.5 Ω typical initial resistance, and 10 Ω
 maximum one hour after trip or reflow. Those values matter even in normal use.
 
-At ideal 4.2 V cell increments, the sum of all six divider currents is:
+At ideal 4.2 V cell increments, a simple 41 kΩ approximation gives:
 
 ```text
 (4.2 + 8.4 + 12.6 + 16.8 + 21.0 + 25.2) V / 41 kΩ = 2.151 mA
 ```
 
-That current makes local ground approximately 3.23 mV above B− at 1.5 Ω and
-up to 21.5 mV above B− at 10 Ω. `BNEG_SENSE` consequently appears negative
+The repository estimator also includes nominal ADS8688A input loading and reports
+2.152796 mA, making local ground approximately 3.229 mV above B− at 1.5 Ω and
+21.528 mV above B− at 10 Ω. `BNEG_SENSE` consequently appears negative
 relative to the ADC ground and must use a suitable bipolar ADS8688A input range.
 Firmware can measure this offset, but correction does not make an unsafe ground
 path safe. The existing Monte Carlo result excludes this effect.
@@ -110,7 +111,12 @@ impedance drift, 4 ppm/°C maximum gain drift, quantization, offset drift, and
 adjacent-channel subtraction. It assumes a 25 °C two-point calibration at 0 and
 25.5 V. It does not yet include PCB leakage, humidity, thermoelectric effects,
 connector resistance, RC dielectric absorption, reference long-term drift, or
-ground-protection drop. Therefore these are design estimates, not specifications.
+ground-protection drop in its cell-error distribution. It does separately report
+the nominal six-tap return current and reference drop at 1.5 Ω and 10 Ω so the
+omission cannot be hidden. Therefore these are design estimates, not specifications.
+
+The reviewed fault matrix and experiment stop conditions are maintained in
+[BALANCE_GROUND_FAULT_ANALYSIS.md](BALANCE_GROUND_FAULT_ANALYSIS.md).
 
 ## Calibration
 

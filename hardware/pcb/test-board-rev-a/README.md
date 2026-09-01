@@ -53,5 +53,8 @@ create alternate current paths. Keep it DNP and use only a current-limited,
 non-battery simulator until the release gate in `docs/BATTERY_MEASUREMENT.md`
 closes.
 
+The controlled experiment matrix is
+[`docs/BALANCE_GROUND_FAULT_ANALYSIS.md`](../../../docs/BALANCE_GROUND_FAULT_ANALYSIS.md).
+
 The VRX and decoder headers are FpvDeck generic interfaces. They do not claim the
 pinout of any undocumented commercial module.
