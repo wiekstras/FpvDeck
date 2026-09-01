@@ -35,6 +35,8 @@ arguments.
 
 `./scripts/screenshot-demo` additionally requires `xvfb-run` (provided by the
 `xvfb` package above) and regenerates the committed deterministic UI previews.
+`./scripts/benchmark-ui` uses the same dependency to collect repeated desktop
+first-frame/RSS regression records under `generated/benchmarks/ui/`.
 
 ## macOS
 

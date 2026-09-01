@@ -150,6 +150,7 @@ safe bench-module purchases from the unreleased bare PCB.
 - [Power](docs/POWER.md) · [battery measurement](docs/BATTERY_MEASUREMENT.md)
 - [Software](docs/SOFTWARE_ARCHITECTURE.md) · [app API](docs/APP_API.md) · [MCU protocol](docs/MCU_PROTOCOL.md)
 - [Touch UX](docs/TOUCH_UX.md) · [simulator](docs/SIMULATOR.md) · [testing](docs/TESTING.md)
+- [Performance targets and benchmark](docs/PERFORMANCE.md)
 - [Test PCB bring-up](docs/TEST_PCB_BRINGUP.md) · [order list](hardware/ORDER_LIST.md) · [procurement gates](hardware/PROCUREMENT_PLAN.md)
 - [Component decisions](hardware/research/COMPONENT_SELECTION.md) · [Test PCB BOM](hardware/bom/TEST_PCB_REV_A.md) · [risk register](docs/RISK_REGISTER.md)
 

@@ -11,15 +11,23 @@
 
 #include <QCommandLineParser>
 #include <QDir>
+#include <QElapsedTimer>
+#include <QFile>
 #include <QGuiApplication>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QStandardPaths>
 #include <QTimer>
 
+#include <memory>
+
 int main(int argc, char* argv[])
 {
+    QElapsedTimer startupTimer;
+    startupTimer.start();
     QGuiApplication application(argc, argv);
     QCoreApplication::setOrganizationName("FpvDeck");
     QCoreApplication::setApplicationName("FPVDeck");
@@ -33,11 +41,13 @@ int main(int argc, char* argv[])
     QCommandLineOption databaseOption({"d", "database"}, "SQLite database path", "path");
     QCommandLineOption exitOption("exit-after-ms", "Exit automatically (test use)", "milliseconds");
     QCommandLineOption screenshotOption("screenshot", "Save a rendered screenshot", "path");
+    QCommandLineOption benchmarkOption("benchmark-json", "Write first-frame benchmark JSON and exit", "path");
     QCommandLineOption demoStateOption("demo-state", "Open a deterministic showcase state", "state", "fpv");
     parser.addOption(videoOption);
     parser.addOption(databaseOption);
     parser.addOption(exitOption);
     parser.addOption(screenshotOption);
+    parser.addOption(benchmarkOption);
     parser.addOption(demoStateOption);
     parser.process(application);
 
@@ -104,7 +114,50 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("StartupDemoMode", parser.isSet(demoStateOption));
     engine.load(QUrl(QStringLiteral("qrc:/FPVDeck/ui/Main.qml")));
     if (engine.rootObjects().isEmpty()) return 3;
-    if (parser.isSet(screenshotOption)) {
+    const qint64 qmlLoadedMs = startupTimer.elapsed();
+    if (parser.isSet(benchmarkOption)) {
+        auto* window = qobject_cast<QQuickWindow*>(engine.rootObjects().constFirst());
+        if (window == nullptr) return 8;
+        auto completed = std::make_shared<bool>(false);
+        const auto writeBenchmark = [&, completed, window](bool timedOut) {
+            if (*completed) return;
+            *completed = true;
+            qint64 rssKiB = -1;
+            QFile statusFile(QStringLiteral("/proc/self/status"));
+            if (statusFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                const auto lines = statusFile.readAll().split('\n');
+                for (const QByteArray& line : lines) {
+                    if (!line.startsWith("VmRSS:")) continue;
+                    const auto fields = line.simplified().split(' ');
+                    if (fields.size() >= 2) rssKiB = fields.at(1).toLongLong();
+                    break;
+                }
+            }
+            QJsonObject metrics{
+                {"schema_version", 1},
+                {"demo_state", demoState},
+                {"qml_loaded_ms", qmlLoadedMs},
+                {"first_frame_ms", startupTimer.elapsed()},
+                {"rss_kib", rssKiB},
+                {"width", window->width()},
+                {"height", window->height()},
+                {"timed_out", timedOut},
+            };
+            QFile output(parser.value(benchmarkOption));
+            if (!output.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                qCritical("Could not write benchmark JSON: %s", qPrintable(output.errorString()));
+                application.exit(9);
+                return;
+            }
+            output.write(QJsonDocument(metrics).toJson(QJsonDocument::Indented));
+            output.close();
+            application.exit(timedOut ? 10 : 0);
+        };
+        QObject::connect(window, &QQuickWindow::frameSwapped, &application,
+            [writeBenchmark] { writeBenchmark(false); }, Qt::SingleShotConnection);
+        QTimer::singleShot(5000, &application, [writeBenchmark] { writeBenchmark(true); });
+        window->update();
+    } else if (parser.isSet(screenshotOption)) {
         QTimer::singleShot(1500, &application, [&application, &engine, &parser] {
             auto* window = qobject_cast<QQuickWindow*>(engine.rootObjects().constFirst());
             if (!window || !window->grabWindow().save(parser.value("screenshot"))) {

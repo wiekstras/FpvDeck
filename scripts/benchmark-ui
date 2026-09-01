@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="${FPVDECK_BUILD_DIR:-${project_dir}/build/benchmark-ui}"
+output_dir="${FPVDECK_BENCHMARK_DIR:-${project_dir}/generated/benchmarks/ui}"
+runs="${FPVDECK_BENCHMARK_RUNS:-3}"
+
+if ! command -v xvfb-run >/dev/null 2>&1; then
+    echo "xvfb-run is required for the desktop first-frame benchmark" >&2
+    exit 1
+fi
+
+"${project_dir}/scripts/generate-test-video"
+cmake -S "${project_dir}" -B "${build_dir}" -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build "${build_dir}" --parallel
+mkdir -p "${output_dir}"
+
+states=(home fpv fpv-controls battery media media-playback diagnostics)
+results=()
+# Prime shared-library, font and QML disk caches; the warm-up record is retained
+# for inspection but deliberately excluded from the distribution.
+xvfb-run -a -s "-screen 0 1280x720x24" \
+    "${build_dir}/software/fpvdeck" \
+    --database :memory: \
+    --video "${project_dir}/generated/fpv-test-pal.mp4" \
+    --demo-state home \
+    --benchmark-json "${output_dir}/warmup.json"
+
+for state in "${states[@]}"; do
+    for ((run = 1; run <= runs; run++)); do
+        result="${output_dir}/${state}-${run}.json"
+        xvfb-run -a -s "-screen 0 1280x720x24" \
+            "${build_dir}/software/fpvdeck" \
+            --database :memory: \
+            --video "${project_dir}/generated/fpv-test-pal.mp4" \
+            --demo-state "${state}" \
+            --benchmark-json "${result}"
+        results+=("${result}")
+    done
+done
+
+python3 "${project_dir}/tools/summarize_ui_benchmark.py" "${results[@]}"
+echo "Raw benchmark records: ${output_dir}"

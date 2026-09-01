@@ -16,6 +16,8 @@ PAL/NTSC validation, and physical-input lockout.
 
 Headless tests launch the complete QML graph in Home, Fly, Fly controls, flight
 lock, Battery, Media, touch playback, Receiver, Flights, and Diagnostics states.
+An additional first-swapped-frame test exercises the schema-versioned benchmark
+output and a Python test rejects incomplete/unknown metric records.
 The screenshot script runs the same executable with deterministic data. A Python
 source audit checks the manufacturer-verified critical ADS8688A and STM32 pad map
 without requiring KiCad in CI. It does not replace schematic ERC or design review.

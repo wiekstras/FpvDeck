@@ -106,7 +106,9 @@ Items remain here until completed and evidenced by a test, document, or artifact
 ## Reliability and release
 
 - [ ] Implement watchdog, bounded service restarts, safe shutdown, and brownout tests.
-- [ ] Define performance benchmark tooling and acceptance thresholds.
+- [x] Add repeated desktop first-frame/RSS benchmark tooling and initial system
+  acceptance thresholds. Touch-to-pixel, frame pacing and target-hardware probes
+  remain to implement.
 - [x] Add a versioned bring-up command subset, host-tested board dispatch layer,
   simulated `fpvdeck-hw-test`, and a staged hardware bring-up procedure.
 - [ ] Bind firmware board HAL callbacks to STM32G0 peripherals and validate the

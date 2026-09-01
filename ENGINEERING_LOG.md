@@ -219,3 +219,19 @@ and unresolved facts. Status labels are used deliberately:
   energy-limit, abort-condition and evidence requirements for unpowered, USB,
   earthed-instrument, partial-insertion, open/high-R F2 and tap-fault states.
   Production B− correction is a requirement, not an implemented claim.
+
+## 2026-09-01 — Reproducible desktop first-frame benchmark
+
+- Added `--benchmark-json` to the real Qt application. It records a versioned
+  first-frame record containing QML-load time, first swapped frame, RSS, screen
+  geometry, demo state and timeout status, then exits. CI exercises this path.
+- Added `scripts/benchmark-ui`, including an excluded cache warm-up, repeated
+  fresh processes and median/p95 aggregation. The raw JSON remains generated
+  output rather than a source-controlled performance claim.
+- **MEASURED ON THIS DEVELOPMENT CONTAINER ONLY:** three-sample Release/Xvfb
+  first-frame medians ranged from 655 ms (Media playback) to 892 ms (FPV controls);
+  p95 ranged from 704 to 1,034 ms and median RSS was roughly 282–285 MiB. These
+  numbers are a regression baseline, not CM4 boot, touch latency, frame pacing,
+  video latency, or physical-display evidence.
+- The automated suite now has 19 tests, including the benchmark first-frame path
+  and schema validation. All passed locally after this change.
