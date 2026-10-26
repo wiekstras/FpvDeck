@@ -11,3 +11,7 @@ build/
 __pycache__/
 *.py[cod]
 generated/
+.deps/
+managed_components/
+sdkconfig
+sdkconfig.old

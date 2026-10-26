@@ -1,66 +1,39 @@
-# System architecture
+# Architecture
 
-![Overall FpvDeck system](assets/diagrams/overall-system.svg)
+## Product boundary
 
-FpvDeck keeps the safety-critical control radio independent of Linux. The T8L
-donor remains able to generate and transmit ELRS control even when the compute
-side is powered down, booting, overloaded, or crashed.
+FpvDeck combines a Waveshare ESP32-P4 5-inch touch platform, a replaceable FPV
+HAT, and a single internal 1S battery. The external 2S–6S balance lead is an
+instrument input only.
 
-```text
-                         CONTROL PLANE (independent)
- T8L gimbals/switches ──> T8L controller ──> ELRS 2.4 GHz ──> aircraft
-                                  │ optional, read-only status/telemetry later
-                                  ▼
-                         MCU hardware controller
-                                  │ COBS + CRC protocol
-                                  ▼
- FPV camera -> FC OSD -> 5.8 GHz VTX -- RF --> dedicated 5.8 GHz VRX -> CVBS
-                                                    -> CVBS decoder -> CSI-2 -> Linux SoM
-                                                                    │
-                     ┌──────────────────────────────────────────────┤
-                     │ VideoService: bounded live path              │
-                     │ Recorder branch: pre-overlay encode          │
-                     │ Qt Quick/DRM compositor: color UI overlay     │
-                     └──────────────────────────────────────────────┤
-                                                                    ▼
-                                                               MIPI DSI LCD
+```mermaid
+flowchart LR
+  VTX[Aircraft 5.8 GHz analog VTX] --> A[RX5808 A]
+  VTX --> B[RX5808 B optional]
+  A --> SW[hardware diversity switch]
+  B --> SW
+  SW --> TVP[TVP5150 CVBS decoder]
+  TVP -->|8-bit YCbCr + PCLK/HS/VS| P4[ESP32-P4 ISP/PPA]
+  P4 --> UI[LVGL RGB overlay]
+  UI --> LCD[5-inch MIPI-DSI touchscreen]
+  BAL[External 2S-6S balance lead] --> DIV[divider frontend; protection gate open]
+  DIV --> ADC[2 x ADS1115]
+  ADC --> P4
+  RSSI[RSSI A/B] --> ADC3[ADS1115 #3]
+  ADC3 --> P4
+  CELL[Internal 1S LiPo] --> HOST[Waveshare charger/power + onboard BAT_ADC]
+  HOST --> P4
 ```
 
-The received Betaflight OSD is pixels in Layer 1. FPVDeck never tries to recreate
-or insert that analog OSD. Layer 2 contains glanceable system widgets; Layer 3
-contains transient menus/apps. Secondary service failure must not block Layer 1.
+The 40-pin header carries 5 V, 3.3 V, shared I²C, eleven DVP signals, RX5808
+tuning, diversity state, reset, three buttons, and buzzer PWM. The exact mapping
+exists only in [`board_pins.h`](../firmware/main/board_pins.h).
 
-## Prototype architecture
+## Failure containment
 
-The T8L/ELRS path is control only. FpvDeck's dedicated VRX performs RF-to-CVBS;
-the decoder performs CVBS-to-digital conversion; neither function is supplied by
-the donor radio.
-
-The simulator is the pre-hardware product showcase. Prototype 0 is the deliberately
-simple Pi 5 + 5-inch Touch Display 2 + RC832 Mini + UVG-002 functionality bench;
-it exists to show real Air65 video before latency optimization. Prototype 1 is a CM4
-latency bench with the selected 720×1560 DSI touch module, ADV7282A-M evaluation
-hardware, standalone SteadyView X VRX, STM32G0 development board, and protected
-ADC evaluation hardware. Each module remains replaceable, and the analog-video
-modules remain procurement-gated until the decoder-to-CM4 bridge is reviewed.
-
-Prototype 2 is a Controller-I/O PCB: MCU, protected battery measurement, controls,
-power button/sequencing logic, fans/temperature, debug, and module connectors.
-Prototype 3 integrates only interfaces whose layout, thermal, EMC, and latency
-behavior has been proven on the bench, including a compute carrier as justified.
-
-## Performance gates
-
-| Metric | Initial target | Release method |
-| --- | ---: | --- |
-| CVBS connector to visible photons | p95 ≤45 ms; stretch ≤33 ms | LED/photodiode fixture, ≥1,000 transitions |
-| Live video continuity under app crash | no missing live frames attributable to app | fault injection + capture counter |
-| UI | 60 Hz when live path has headroom | frame timing trace |
-| Video | every source field represented at 50/59.94 Hz | V4L2/DRM sequence correlation |
-| DVR start acknowledgement | <500 ms | monotonic event log |
-| Channel switch/relock | <500 ms target, measured by mode | RF generator/VTX fixture |
-| Warm boot to live video | <8 s target | power-cycle fixture; live path may precede full shell |
-| Normal shutdown | database/storage clean after 1,000 cycles | automated power controller |
-| FPV runtime | ≥1.25 h target; 1.5 h stretch at typical brightness | measured two-cell pack test |
-
-Targets are engineering gates, not current measured results.
+- The hardware video switch keeps selecting a receiver without a firmware loop.
+- A missing HAT logs a warning and still permits the launcher/display to boot.
+- Streaming is lower priority than local display and is disabled until measured.
+- External battery energy is never connected to a FpvDeck power rail.
+- Internal-cell voltage comes from the host board's existing GPIO20 BAT_ADC;
+  raw battery voltage is not exposed by the 40-pin header.

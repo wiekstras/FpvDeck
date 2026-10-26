@@ -1,23 +1,18 @@
-# FpvDeck renders
+# Concept renders
 
-`fpvdeck-concept-render-v2.png` is a **CONCEPT RENDER**, not final design, CAD,
-or evidence that the illustrated layout fits the T8L. It communicates the current
-product direction: a larger high-mounted display, separated gimbals, and clear
-pinch-grip finger envelopes. Version 1 is retained as design history.
+These images communicate product intent only. They are AI-generated and are not
+dimensional CAD, proof of component fit, PCB placement, thermal performance or
+RF performance.
 
-Final mechanical renders require measured, datum-controlled inputs for:
+- `fpvdeck-field-tool-concept.png` shows the intended screen-first handheld form.
+- `fpvdeck-exploded-concept.png` communicates the host/HAT/1S-cell stack only.
 
-- T8L external shell, seams, wall thickness, and grip geometry
-- gimbal centers, outer envelopes, stick travel, stick height, and fasteners
-- PCB outline, component heights, mounting points, and cable exits
-- switch/button positions, travel, keepouts, and wiring
-- ELRS antenna location, feed routing, and RF keepout
-- 18650 compartment, contacts, latch, and insulation
-- display active area, glass, PCB, FFC, backlight, and mounting stack
-- VRX, decoder, compute module/carrier, cooling, and shielding volumes
-- USB-C, removable storage, balance connector, debug, and antenna connectors
-- enclosure bosses, wall/impact requirements, seals, and disassembly paths
-- center of mass, neck-strap balance, palm support, and thumb/pinch user trials
+Text and component counts were reviewed against the active architecture. Any
+apparent connector, PCB trace, fastener or clearance in these images is still
+illustrative; the source-controlled KiCad and measured mechanical model take
+precedence.
 
-Generated concepts must never be used as a dimensional reference or PCB-layout
-input. See [mechanical requirements](../../MECHANICAL_REQUIREMENTS.md).
+Before accurate renders/CAD: measure the host PCB and active display, 40-pin
+header height/orientation, actual RX5808 modules, antenna connectors/keep-outs,
+1S cell, JST-XH insertion envelope, button geometry, AV jack, wall thickness,
+fasteners, thermal clearances and cable bend radii.

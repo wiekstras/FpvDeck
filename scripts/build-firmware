@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -z "${IDF_PATH:-}" ]]; then
+    if [[ ! -f "$repo_root/.deps/esp-idf/export.sh" ]]; then
+        echo "ESP-IDF is missing. Run ./scripts/setup-idf first." >&2
+        exit 1
+    fi
+    # shellcheck disable=SC1091
+    source "$repo_root/.deps/esp-idf/export.sh"
+fi
+cd "$repo_root"
+if [[ ! -f sdkconfig ]] || ! grep -q '^CONFIG_IDF_TARGET="esp32p4"$' sdkconfig; then
+    idf.py set-target esp32p4
+fi
+idf.py build

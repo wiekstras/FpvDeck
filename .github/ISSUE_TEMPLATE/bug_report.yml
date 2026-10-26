@@ -1,34 +1,24 @@
-name: Software bug
-description: Report reproducible simulator, application, service, or build behavior.
+name: Firmware or UI bug
+description: Report reproducible behavior in FpvDeck firmware.
 title: "bug: "
 labels: [bug]
 body:
-  - type: markdown
-    attributes:
-      value: Do not use this form for sensitive safety/security reports.
-  - type: dropdown
-    id: backend
-    attributes:
-      label: Backend
-      options: [Desktop simulator, Bench hardware, Unknown]
-    validations:
-      required: true
   - type: textarea
-    id: behavior
+    id: observed
     attributes:
       label: Observed behavior
-      description: Include exact steps, logs, video mode, and expected behavior.
     validations:
       required: true
   - type: textarea
-    id: environment
+    id: expected
     attributes:
-      label: Environment
-      description: Commit, OS, Qt version, GPU/display backend, and launch command.
+      label: Expected behavior
     validations:
       required: true
   - type: textarea
-    id: evidence
+    id: reproduce
     attributes:
-      label: Evidence
-      description: Attach concise logs or a minimal test source; remove secrets.
+      label: Reproduction and logs
+      description: Include board revision, firmware commit and PAL/NTSC source.
+    validations:
+      required: true
