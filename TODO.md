@@ -16,11 +16,14 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Implement RSSI smoothing, peak hold and scanner peak selection.
 - [x] Implement TVP5150 ID/config/status driver.
 - [x] Add GPIO buttons, PWM buzzer, NVS settings and LVGL app launcher.
+- [x] Register Up/OK/Down as an LVGL keypad for touch-independent navigation.
 - [x] Add host tests and a one-command runner.
 - [x] Build the complete ESP32-P4 image with pinned ESP-IDF 6.1 dependencies.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.
 - [ ] Complete zero-copy field capture/PPA/display handoff against ESP-IDF v6.1 HIL.
 - [ ] Implement and benchmark ESP-Hosted SoftAP + hardware JPEG MJPEG stream.
+- [ ] Bind live ADC/RSSI/video data into the honest empty-state app views after
+      HAT communication is verified; never ship fabricated demo readings.
 - [ ] Validate low-battery shutdown against the Waveshare power controller.
 - [ ] Read and calibrate the host board's existing BAT_ADC on GPIO20; do not
       connect the reserved ADS1115 deck-cell input without an approved source.

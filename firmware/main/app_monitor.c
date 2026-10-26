@@ -13,7 +13,7 @@ void app_monitor_show(void)
     lv_obj_set_style_text_align(hint, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_center(hint);
     lv_obj_t *overlay = lv_label_create(video);
-    lv_label_set_text(overlay, "R1  5658 MHz     A 72%  B 65%     RX A     DECK 82%");
+    lv_label_set_text(overlay, "R1  5658 MHz     RSSI A —  B —     RX —     DECK —");
     lv_obj_set_style_bg_color(overlay, lv_color_hex(0x071016), 0);
     lv_obj_set_style_bg_opa(overlay, LV_OPA_80, 0);
     lv_obj_set_style_pad_all(overlay, 14, 0);

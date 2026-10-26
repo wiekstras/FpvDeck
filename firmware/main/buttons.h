@@ -11,6 +11,8 @@ typedef enum {
 
 #ifdef ESP_PLATFORM
 #include "esp_err.h"
+#include "lvgl.h"
 esp_err_t buttons_init(void);
 bool button_pressed(button_id_t button);
+lv_indev_t *buttons_attach_lvgl(void);
 #endif

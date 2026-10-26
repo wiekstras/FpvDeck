@@ -13,9 +13,11 @@ teal focus, text labels and shape changes avoid color-only status.
 - **Stream:** explicit status for local spectator SoftAP.
 - **Settings:** brightness, video mode, buzzer, Wi-Fi and calibration.
 
-Buttons always provide launcher navigation. Streaming or a settings failure must
-not block the monitor capture task. The firmware currently has deterministic UI
-states; live data binding and physical touch/button usability remain HIL tasks.
+Buttons are registered as an LVGL keypad: Up/Down move focus and OK activates
+the focused control. Streaming or a settings failure must not block the monitor
+capture task. App-specific channel/long-press behavior and physical usability
+remain HIL tasks. Production screens show explicit empty states rather than
+plausible-looking fabricated readings while live data binding is incomplete.
 
 ## Concept imagery
 

@@ -62,6 +62,9 @@ void app_main(void)
     bsp_display_backlight_on();
 
     ESP_ERROR_CHECK(buttons_init());
+    bsp_display_lock(-1);
+    ESP_ERROR_CHECK(buttons_attach_lvgl() != NULL ? ESP_OK : ESP_ERR_NO_MEM);
+    bsp_display_unlock();
     ESP_ERROR_CHECK(buzzer_init());
     ESP_ERROR_CHECK(rx5808_init());
     err = deck_power_init();

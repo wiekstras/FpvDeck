@@ -34,3 +34,6 @@
 - Added calibrated sampling of the Waveshare board's existing GPIO20 BAT_ADC,
   including host-tested no-battery/low/critical thresholds and a critical-power
   screen. Actual voltage accuracy and power-cut behavior remain HIL gates.
+- Registered Up/OK/Down as an LVGL keypad on the default focus group. Removed
+  hard-coded pack and RSSI values from production screens; apps now show explicit
+  empty/waiting states until real acquisition supplies measurements.

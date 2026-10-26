@@ -13,7 +13,8 @@ void app_battery_show(void)
 
     lv_obj_t *summary = lv_label_create(content);
     lv_label_set_text(summary,
-        "6S LiPo\n\n25.17 V\n\nDELTA  18 mV\nLOWEST 4.187 V\nHIGHEST 4.205 V\n\nReady to fly");
+        "NO PACK\n\n— V\n\nDELTA  — mV\nLOWEST — V\nHIGHEST — V\n\n"
+        "Connect a 2S–6S balance lead");
     lv_obj_set_width(summary, 410);
     lv_obj_set_style_text_font(summary, &lv_font_montserrat_24, 0);
     lv_obj_set_style_text_color(summary, lv_color_hex(0xEAF6F7), 0);
@@ -24,12 +25,9 @@ void app_battery_show(void)
     lv_obj_set_flex_flow(cells, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(cells, LV_FLEX_ALIGN_SPACE_EVENLY,
                           LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER);
-    static const char *rows[] = {
-        "CELL 1     4.198 V", "CELL 2     4.193 V", "CELL 3     4.205 V",
-        "CELL 4     4.187 V", "CELL 5     4.196 V", "CELL 6     4.191 V"};
     for (unsigned i = 0; i < 6; ++i) {
         lv_obj_t *row = lv_label_create(cells);
-        lv_label_set_text(row, rows[i]);
+        lv_label_set_text_fmt(row, "CELL %u     — V", i + 1U);
         lv_obj_set_style_text_font(row, &lv_font_montserrat_22, 0);
     }
     lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);
