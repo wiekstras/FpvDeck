@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "esp_err.h"
+#include "fpvdeck_platform.h"
 #include "rx5808.h"
 
 typedef enum {

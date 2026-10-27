@@ -5,6 +5,9 @@
 #include "signal_logic.h"
 
 #include <stdint.h>
+#ifdef FPVDECK_SIMULATOR
+#include "sim_video.h"
+#endif
 
 static const char s_band_names[RX5808_BAND_COUNT] = {'A', 'B', 'E', 'F', 'R', 'L'};
 static lv_obj_t *s_screen;
@@ -147,10 +150,14 @@ void app_monitor_show(void)
     lv_obj_set_flex_grow(video, 1);
     lv_obj_set_style_bg_color(video, lv_color_hex(0x101A1D), 0);
     lv_obj_set_style_border_width(video, 0, 0);
+#ifdef FPVDECK_SIMULATOR
+    sim_video_populate(video);
+#else
     lv_obj_t *hint = lv_label_create(video);
     lv_label_set_text(hint, "VIDEO INPUT\nwaiting for TVP5150 lock");
     lv_obj_set_style_text_align(hint, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_center(hint);
+#endif
 
     lv_obj_t *previous = lv_button_create(video);
     lv_obj_set_size(previous, 80, 80);

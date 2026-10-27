@@ -49,6 +49,22 @@ idf.py -p /dev/ttyACM0 flash monitor
 The project defaults target ESP32-P4 rev3.x. Confirm the physical chip revision
 before changing that profile.
 
+## Run the simulator on macOS
+
+The desktop simulator builds the same LVGL launcher and app screens used by the
+ESP32-P4 firmware. It supplies deterministic virtual RX5808, video, balance
+pack and Deck-battery backends, plus a fault-injection drawer.
+
+```sh
+brew install cmake sdl2 pkg-config
+./scripts/simulator
+```
+
+Use the mouse as touch, the wheel to scroll, and arrow keys/Enter as the three
+hardware buttons. The amber **SIM** control injects video loss/noise, balance
+lead removal, 2S–6S packs, imbalance and low internal battery. Details and the
+headless smoke test are in [simulator/README.md](simulator/README.md).
+
 ## Run host tests
 
 Pure logic has no ESP-IDF dependency:
@@ -90,6 +106,7 @@ See [the complete bring-up procedure](docs/BRINGUP.md).
 - [Architecture](docs/ARCHITECTURE.md)
 - [Hardware design](docs/HARDWARE.md)
 - [Firmware design](docs/FIRMWARE.md)
+- [macOS/desktop simulator](simulator/README.md)
 - [Video and latency](docs/VIDEO.md)
 - [Battery measurement](docs/BATTERY.md)
 - [UI design](docs/UI.md)
@@ -102,6 +119,7 @@ See [the complete bring-up procedure](docs/BRINGUP.md).
 - ✅ architecture reset and verified expansion-header mapping
 - ✅ host-testable core logic and test runner
 - ✅ ESP-IDF 6.1 firmware compiles for ESP32-P4 without warnings in project code
+- ✅ native macOS/Linux LVGL simulator with touch, keyboard and fault injection
 - 🚧 live sensor/video-to-display integration requires the physical stack
 - 📐 generated KiCad schematic and PCB draft
 - ⚠️ RX5808 module footprint/pinout requires physical verification

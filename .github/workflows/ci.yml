@@ -9,8 +9,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Install simulator dependencies
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev pkg-config
       - name: Host tests
         run: ./scripts/test-host
+      - name: Desktop simulator smoke test
+        run: ./scripts/test-simulator
       - name: Generate and validate HAT
         run: python3 hardware/gen_hat.py --check
       - name: Ensure generated artifacts are committed

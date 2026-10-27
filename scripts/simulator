@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="$repo_dir/build/simulator"
+
+if ! command -v cmake >/dev/null 2>&1; then
+  echo "cmake is required. On macOS: brew install cmake sdl2 pkg-config" >&2
+  exit 1
+fi
+if ! command -v pkg-config >/dev/null 2>&1 || ! pkg-config --exists sdl2; then
+  echo "SDL2 development files are required. On macOS: brew install sdl2 pkg-config" >&2
+  exit 1
+fi
+
+cmake -S "$repo_dir/simulator" -B "$build_dir" -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build "$build_dir" --parallel
+exec "$build_dir/fpvdeck-sim" "$@"
+

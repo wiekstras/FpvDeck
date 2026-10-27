@@ -86,3 +86,22 @@
   was flashed, no parts were ordered, and the HAT is still blocked from
   fabrication by `hardware/READINESS.md` (RX5808 mechanics, balance protection,
   analog input/AV validation, crystal margin, routed layout and independent review).
+
+## 2026-10-27 — native desktop simulator
+
+- Added a macOS/Linux SDL2 build that compiles the production LVGL launcher,
+  Battery, Monitor, Finder, Stream and Settings screens. The Scanner retains the
+  same app contract and shared receiver/signal logic, with a desktop timer in
+  place of its FreeRTOS worker.
+- Introduced a narrow portable platform seam for display brightness and result
+  types. The ESP32-P4 build remains successful and hardware drivers remain the
+  firmware implementations; desktop backends are linked only by the simulator.
+- The simulator models a 2S–6S external pack, imbalance/disconnect, Deck cell,
+  dual RSSI, channel-dependent RF peaks, diversity selection, video noise and
+  signal loss. A persistent top-layer control drawer changes these states by
+  touch without external hardware.
+- Added synthetic moving analog-video imagery with a Betaflight-style source OSD
+  below FpvDeck's RGB receiver overlay. This is a UI/pipeline visualization, not
+  a latency or decoder simulation.
+- Verified `./scripts/test-simulator`, `./scripts/test-host`, the HAT generator,
+  and a complete ESP-IDF v6.1 `esp32p4` firmware build.

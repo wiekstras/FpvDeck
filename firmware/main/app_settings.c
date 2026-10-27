@@ -1,8 +1,7 @@
 #include "apps.h"
 #include "settings.h"
 #include "tvp5150.h"
-
-#include "bsp/display.h"
+#include "platform.h"
 
 #include <string.h>
 
@@ -34,7 +33,7 @@ static void brightness_changed(lv_event_t *event)
     s_settings.brightness_percent = (uint8_t)lv_slider_get_value(slider);
     lv_label_set_text_fmt(s_brightness_value, "%u%%",
                           s_settings.brightness_percent);
-    (void)bsp_display_brightness_set(s_settings.brightness_percent);
+    (void)platform_display_set_brightness(s_settings.brightness_percent);
 }
 
 static void brightness_saved(lv_event_t *event)

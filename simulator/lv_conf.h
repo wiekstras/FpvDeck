@@ -1,0 +1,16 @@
+#ifndef LV_CONF_H
+#define LV_CONF_H
+
+#define LV_COLOR_DEPTH 32
+#define LV_MEM_SIZE (16U * 1024U * 1024U)
+#define LV_USE_SDL 1
+#define LV_SDL_INCLUDE_PATH <SDL2/SDL.h>
+#define LV_FONT_MONTSERRAT_20 1
+#define LV_FONT_MONTSERRAT_22 1
+#define LV_FONT_MONTSERRAT_24 1
+#define LV_FONT_MONTSERRAT_26 1
+#define LV_USE_LOG 1
+#define LV_LOG_LEVEL LV_LOG_LEVEL_WARN
+
+#endif
+

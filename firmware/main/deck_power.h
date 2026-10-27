@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include "fpvdeck_platform.h"
 
 typedef enum {
     DECK_POWER_NO_BATTERY,
@@ -11,8 +12,7 @@ typedef enum {
 
 deck_power_state_t deck_power_classify(float voltage);
 #ifdef ESP_PLATFORM
-#include "esp_err.h"
 esp_err_t deck_power_init(void);
 esp_err_t deck_power_read_voltage(float *voltage);
-bool deck_power_latest(float *voltage);
 #endif
+bool deck_power_latest(float *voltage);

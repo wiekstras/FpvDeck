@@ -19,6 +19,11 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Register Up/OK/Down as an LVGL keypad for touch-independent navigation.
 - [x] Add host tests and a one-command runner.
 - [x] Build the complete ESP32-P4 image with pinned ESP-IDF 6.1 dependencies.
+- [x] Build a native SDL2 macOS/Linux simulator from the production LVGL app
+      sources, including simulated video/RSSI/battery/power and fault controls.
+- [x] Add a headless simulator startup smoke test to CI.
+- [ ] Add deterministic app-interaction tests and source-controlled simulator
+      screenshots after the LVGL test input harness is stabilized.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.
 - [ ] Complete zero-copy field capture/PPA/display handoff against ESP-IDF v6.1 HIL.
 - [ ] Implement and benchmark ESP-Hosted SoftAP + hardware JPEG MJPEG stream.
@@ -62,4 +67,5 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [ ] Measure weak-signal/diversity behavior and video-switch artifacts.
 - [ ] Characterize 1S runtime and thermal behavior with 3000/4000 mAh packs.
 - [ ] Test battery accuracy for 2S–6S with calibrated precision sources.
-- [ ] Design measured enclosure CAD after hardware stack dimensions are frozen.
+- [ ] Replace the adjustable prototype enclosure envelope with measured host,
+      HAT, battery, JST-XH and SMA dimensions before any fabrication claim.

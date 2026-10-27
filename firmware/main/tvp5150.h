@@ -2,10 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-
-#ifdef ESP_PLATFORM
-#include "driver/i2c_master.h"
-#include "esp_err.h"
+#include "fpvdeck_platform.h"
 
 #define TVP5150_I2C_ADDRESS 0x5CU
 
@@ -25,8 +22,11 @@ typedef enum {
     TVP5150_STANDARD_PAL,
 } tvp5150_standard_t;
 
+#ifdef ESP_PLATFORM
+#include "driver/i2c_master.h"
+
 esp_err_t tvp5150_init(i2c_master_bus_handle_t bus);
 esp_err_t tvp5150_read_id(uint8_t *msb, uint8_t *lsb);
 esp_err_t tvp5150_read_status(tvp5150_status_t *status);
-esp_err_t tvp5150_set_standard(tvp5150_standard_t standard);
 #endif
+esp_err_t tvp5150_set_standard(tvp5150_standard_t standard);

@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include "fpvdeck_platform.h"
 
 #define BATTERY_MAX_CELLS 6
 #define BATTERY_DIVIDER_RATIO ((100.0f + 12.0f) / 12.0f)
@@ -27,9 +28,8 @@ bool battery_is_storage_voltage(float voltage);
 
 #ifdef ESP_PLATFORM
 #include "ads1115.h"
-#include "esp_err.h"
 esp_err_t battery_start_sampling(const ads1115_t adc[2],
                                  const bool ready[2],
                                  const float calibration[BATTERY_MAX_CELLS]);
-bool battery_latest(battery_pack_t *pack);
 #endif
+bool battery_latest(battery_pack_t *pack);
