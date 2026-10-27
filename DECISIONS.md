@@ -102,5 +102,10 @@ questions are safety gates, not invitations to guess.
 - **Correction:** diversity polarity is now consistent end-to-end: LMV331
   open/high means RSSI A is stronger, the 3157 high-select path is video A, and
   `ACTIVE_RX` high means RX A.
+- **Correction:** the first HAT generator mapped the ADS1115 as though analog
+  channels occupied pins 1–4. TI SBAS444E shows DGS pins 1=ADDR, 2=ALERT,
+  3=GND, 4–7=AIN0–AIN3, 8=VDD, 9=SDA and 10=SCL. All three instances are now
+  corrected and each has the required 100 nF supply bypass. No earlier generated
+  board artifact is safe to fabricate.
 - **Decision:** do not claim live video, live battery readings, streaming, or a
   fabrication-ready HAT until hardware-in-loop tests close their explicit gates.

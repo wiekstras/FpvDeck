@@ -9,6 +9,8 @@ Gerbers or placement files are released.
 
 - [x] Official Waveshare 40-pin signal map captured in one firmware header.
 - [x] TVP5150AM1 pin assignment and register plan traced to TI SLES209E.
+- [x] ADS1115 DGS pin order corrected against TI SBAS444E and a local 100 nF
+      VDD bypass added for each ADC; generator assertions now lock those pins.
 - [x] Checked source model emits BOM, audit netlist and KiCad-readable schematic.
 - [x] RX A required / RX B DNP assembly strategy established.
 - [x] External pack is measurement-only in every active document.
@@ -23,7 +25,8 @@ Gerbers or placement files are released.
 - [ ] Verify crystal load/circuit and oscillator margin.
 - [ ] Remove or justify the DNP HAT deck-cell divider; raw BAT is not available
       at the 40-pin header and must not be acquired with an unreviewed flying wire.
-- [ ] Add complete decoupling from each manufacturer application circuit.
+- [ ] Add/verify the remaining TVP5150, LDO, switch, comparator and video-buffer
+      decoupling from each manufacturer application circuit.
 - [ ] Independent schematic/pin/footprint review.
 - [ ] ERC clean; PCB DRC clean; controlled-impedance stack-up documented.
 - [ ] 1:1 footprint print checked against every physical component.

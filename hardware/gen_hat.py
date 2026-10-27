@@ -99,9 +99,15 @@ for index in range(3):
                 ["RSSI_A_ADC", "RSSI_B_ADC", "SPARE_RSSI2", "SPARE_RSSI3"])
     PARTS.append(part(f"U{5 + index}", f"ADS1115 0x{address:02X}", "Package_SO:VSSOP-10_3x3mm_P0.5mm",
                       "ADS1115IDGSR", "REQUIRED",
-                      {"1": channels[0], "2": channels[1], "3": channels[2], "4": channels[3],
-                       "5": "GND", "6": "I2C_SDA", "7": "I2C_SCL", "8": "+3V3", "9": addr_net,
-                       "10": f"ADC{index + 1}_ALERT"}))
+                      {"1": addr_net, "2": f"ADC{index + 1}_ALERT", "3": "GND",
+                       "4": channels[0], "5": channels[1], "6": channels[2],
+                       "7": channels[3], "8": "+3V3", "9": "I2C_SDA",
+                       "10": "I2C_SCL"},
+                      "TI SBAS444E DGS top-view pinout; ADDR selects 0x48/0x49/0x4A."))
+    PARTS.append(part(f"CA{index + 1}", "100n 16V X7R",
+                      "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D",
+                      "REQUIRED", {"1": "+3V3", "2": "GND"},
+                      f"Place directly at U{5 + index} VDD pin 8; TI-required bypass."))
 
 for index in range(1, 7):
     PARTS.extend([
@@ -182,6 +188,26 @@ def validate() -> dict[str, list[str]]:
     lonely = {n: e for n, e in nets.items() if len(e) < 2 and n not in ALLOW_SINGLE and not n.startswith("RF_")}
     if lonely:
         raise ValueError(f"nets with fewer than two endpoints: {lonely}")
+    by_ref = {p.ref: p for p in PARTS}
+    for index, address_net in enumerate(("GND", "+3V3", "I2C_SDA"), start=5):
+        adc = by_ref[f"U{index}"]
+        expected_fixed = {
+            "1": address_net,
+            "2": f"ADC{index - 4}_ALERT",
+            "3": "GND",
+            "8": "+3V3",
+            "9": "I2C_SDA",
+            "10": "I2C_SCL",
+        }
+        for pin, expected_net in expected_fixed.items():
+            if adc.pins.get(pin) != expected_net:
+                raise ValueError(
+                    f"{adc.ref} ADS1115 DGS pin {pin} must be {expected_net}, "
+                    f"got {adc.pins.get(pin)}"
+                )
+        bypass_ref = f"CA{index - 4}"
+        if by_ref[bypass_ref].pins != {"1": "+3V3", "2": "GND"}:
+            raise ValueError(f"{bypass_ref} must bypass ADS1115 VDD to GND")
     return nets
 
 

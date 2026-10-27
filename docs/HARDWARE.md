@@ -20,6 +20,9 @@
 - ADS1115 at 0x48/0x49 reads balance taps; the nominal internal-cell channel on
   0x49 is reserved/DNP because raw BAT is not exposed on the header. The host's
   existing GPIO20 BAT_ADC reads deck voltage. ADS1115 0x4A reads receiver RSSI.
+  All three use TI's DGS pin order and a local 100 nF VDD bypass; this was
+  independently rechecked after the initial generator was found to have the
+  wrong ADC pin order.
 - Three buttons are active-low to internal pull-ups. A transistor drives the
   buzzer so the GPIO does not source its current.
 - AV out is a review/DNP branch until the TPF131 input scaling is simulated and

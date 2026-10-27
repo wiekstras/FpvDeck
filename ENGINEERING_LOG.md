@@ -62,3 +62,7 @@
 - Corrected the latency budget after inspecting the pinned Waveshare component:
   it uses the HX8394 720×1280 **30 Hz** timing macro, not 60 Hz. The provisional
   FpvDeck-added budget now includes up to 33.3 ms of panel phase.
+- A primary-source HAT audit found the generated ADS1115 VSSOP pin order was
+  incorrect. Corrected U5/U6/U7 to TI SBAS444E's DGS pinout and added a 100 nF
+  VDD bypass at each device. Regenerated BOM/netlist/schematic artifacts replace
+  the invalid earlier outputs; the board remains explicitly non-fabricable.
