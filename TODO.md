@@ -32,6 +32,8 @@ Completed items stay checked; safety-critical unknowns stay visible.
       RSSI-driven buzzer cadence.
 - [x] Replace static settings mock data with persisted brightness, buzzer,
       video-standard and masked WPA2 password controls.
+- [x] Apply PAL/NTSC/Auto selection to TVP5150 register 0x28 at boot and on
+      Settings changes.
 - [ ] Implement the guided per-tap calibration workflow after the protected
       balance frontend passes bench bring-up.
 - [ ] Measure the correct post-tune settle time and derive an RX5808-specific

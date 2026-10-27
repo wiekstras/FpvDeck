@@ -9,7 +9,7 @@ them without a service/plugin framework.
 | Module | Responsibility |
 | --- | --- |
 | `rx5808` | table lookup, register math, 25-bit LSB-first tuning |
-| `tvp5150` | reset, ID verification, format/output setup, lock status |
+| `tvp5150` | reset, ID verification, format/output setup, lock status and persisted PAL/NTSC/Auto selection |
 | `video` | ESP32-P4 ISP-DVP one-field RGB565 capture |
 | `ads1115` | 16-bit single-shot reads with selectable PGA |
 | `battery` | 500 ms ADS sampling, calibrated taps, cell subtraction and limits |

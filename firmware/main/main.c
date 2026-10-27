@@ -99,7 +99,15 @@ void app_main(void)
                                             settings.cell_calibration));
     ESP_ERROR_CHECK(signal_start_sampling(&s_adc[2], s_adc_ready[2]));
     err = tvp5150_init(bus);
-    if (err != ESP_OK) ESP_LOGW(TAG, "TVP5150 HAT not detected: %s", esp_err_to_name(err));
+    if (err != ESP_OK) {
+        ESP_LOGW(TAG, "TVP5150 HAT not detected: %s", esp_err_to_name(err));
+    } else {
+        const tvp5150_standard_t standard =
+            settings.video_mode == SETTINGS_VIDEO_PAL ? TVP5150_STANDARD_PAL :
+            (settings.video_mode == SETTINGS_VIDEO_NTSC ? TVP5150_STANDARD_NTSC :
+                                                          TVP5150_STANDARD_AUTO);
+        ESP_ERROR_CHECK(tvp5150_set_standard(standard));
+    }
 
     bsp_display_lock(-1);
     app_launcher_show();

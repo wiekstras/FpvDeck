@@ -71,3 +71,6 @@
   crystal resistor. Crystal load footprints are deliberately DNP/TUNE because
   their value depends on the chosen crystal and measured stray capacitance.
   CVBS anti-aliasing and system-level ESD remain explicit release gates.
+- Closed the settings/decoder gap: persisted Auto, NTSC M/J and PAL B/G/H/I/N
+  now program TVP5150 register 0x28 using TI-defined values 0x00/0x02/0x04 at
+  boot and when changed. Capture-buffer standard changes still require HIL.

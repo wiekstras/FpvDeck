@@ -1,5 +1,6 @@
 #include "apps.h"
 #include "settings.h"
+#include "tvp5150.h"
 
 #include "bsp/display.h"
 
@@ -56,6 +57,11 @@ static void video_mode_changed(lv_event_t *event)
     if (selected <= SETTINGS_VIDEO_NTSC) {
         s_settings.video_mode = (settings_video_mode_t)selected;
         (void)settings_save(&s_settings);
+        const tvp5150_standard_t standard =
+            selected == SETTINGS_VIDEO_PAL ? TVP5150_STANDARD_PAL :
+            (selected == SETTINGS_VIDEO_NTSC ? TVP5150_STANDARD_NTSC :
+                                               TVP5150_STANDARD_AUTO);
+        (void)tvp5150_set_standard(standard);
     }
 }
 

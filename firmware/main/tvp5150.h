@@ -19,7 +19,14 @@ typedef struct {
     uint8_t raw_status_8c;
 } tvp5150_status_t;
 
+typedef enum {
+    TVP5150_STANDARD_AUTO = 0,
+    TVP5150_STANDARD_NTSC,
+    TVP5150_STANDARD_PAL,
+} tvp5150_standard_t;
+
 esp_err_t tvp5150_init(i2c_master_bus_handle_t bus);
 esp_err_t tvp5150_read_id(uint8_t *msb, uint8_t *lsb);
 esp_err_t tvp5150_read_status(tvp5150_status_t *status);
+esp_err_t tvp5150_set_standard(tvp5150_standard_t standard);
 #endif

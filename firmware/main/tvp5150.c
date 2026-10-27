@@ -88,4 +88,24 @@ esp_err_t tvp5150_read_status(tvp5150_status_t *status)
     status->standard_code = status->raw_status_8c & 0x0FU;
     return ESP_OK;
 }
+
+esp_err_t tvp5150_set_standard(tvp5150_standard_t standard)
+{
+    if (s_tvp == NULL) return ESP_ERR_INVALID_STATE;
+    uint8_t value;
+    switch (standard) {
+    case TVP5150_STANDARD_AUTO:
+        value = 0x00;
+        break;
+    case TVP5150_STANDARD_NTSC:
+        value = 0x02; /* SLES209E 3.21.32: NTSC M/J BT.601. */
+        break;
+    case TVP5150_STANDARD_PAL:
+        value = 0x04; /* SLES209E 3.21.32: PAL B/G/H/I/N BT.601. */
+        break;
+    default:
+        return ESP_ERR_INVALID_ARG;
+    }
+    return write_reg(0x28, value);
+}
 #endif
