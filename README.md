@@ -10,6 +10,12 @@ a radio transmitter.
 > **CONCEPT RENDER — not mechanical CAD.** The enclosure and antenna placement
 > remain subject to measured HAT, battery, connector, thermal, and RF clearances.
 
+![Parametric prototype enclosure CAD](hardware/mechanical/prototype-shell/export/fpvdeck-product-concept.png)
+
+> **PARAMETRIC CONCEPT CAD.** The screen and mounting envelope use official
+> Waveshare dimensions; connector positions and enclosure depth still require
+> fit checks with received parts.
+
 ## Reference platform
 
 - Waveshare ESP32-P4-WIFI6-Touch-LCD-5: ESP32-P4, ESP32-C6, 5-inch 720×1280
@@ -87,6 +93,15 @@ syntax, then writes the KiCad 8 schematic, BOM and audit netlist. The PCB is an
 engineering placement/routing draft and is explicitly **not released for
 fabrication** until the gates in [hardware/READINESS.md](hardware/READINESS.md)
 are closed.
+
+## Mechanical CAD
+
+The adjustable [prototype clamshell](hardware/mechanical/prototype-shell/README.md)
+includes the official display/mounting envelope, three-button rail, two SMA
+passages and a side-entry JST-XH balance port. OpenSCAD source, STL exports and
+review renders are committed. The [KiCad placement board](hardware/fpv-hat/README.md)
+coordinates those connector locations and includes SVG/STEP exports. Both are
+fit-check artifacts—not fabrication releases.
 
 ## Bring-up order
 

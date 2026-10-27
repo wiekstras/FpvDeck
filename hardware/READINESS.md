@@ -8,6 +8,10 @@ Gerbers or placement files are released.
 ## Closed
 
 - [x] Official Waveshare 40-pin signal map captured in one firmware header.
+- [x] Official Waveshare overall, active-area, board and 112.003 × 57 mm
+      mounting-pattern dimensions captured in parametric enclosure CAD.
+- [x] Source-controlled mechanical PCB places two edge SMAs, a side-entry
+      JST-XH balance connector and three buttons, with SVG/STEP review exports.
 - [x] TVP5150AM1 pin assignment and register plan traced to TI SLES209E.
 - [x] ADS1115 DGS pin order corrected against TI SBAS444E and a local 100 nF
       VDD bypass added for each ADC; generator assertions now lock those pins.
@@ -20,7 +24,8 @@ Gerbers or placement files are released.
 ## Blocking gates
 
 - [ ] Measure at least three actual RX5808 modules; verify pin order, body, pads and antenna node.
-- [ ] Measure host board keep-outs, header mating height, battery envelope and antenna clearance.
+- [ ] Import/measure the exact host 40-pin header offset and keep-outs from the
+      official STEP; confirm mating height, battery envelope and antenna clearance.
 - [ ] Replace the placement-only PCB container with a four-layer routed board.
 - [ ] Simulate and bench TVP input termination, diversity switching and AV buffer branch.
 - [ ] Select/validate ESD and miswire protection for every balance pin.

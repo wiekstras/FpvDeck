@@ -25,9 +25,9 @@ CY2,CRYSTAL LOAD TUNE,TBD_AFTER_OSCILLATOR_TEST,Capacitor_SMD:C_0603_1608Metric,
 FB1,600R@100MHz,BLM18AG601SN1D,Inductor_SMD:L_0603_1608Metric,REQUIRED,
 FB2,600R@100MHz,BLM18AG601SN1D,Inductor_SMD:L_0603_1608Metric,REQUIRED,
 J1,WAVESHARE 40PIN,M20-9982046,Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical,REQUIRED,GPIO mapping is sourced from Waveshare schematic sheet 1/2.
-J2,SMA EDGE A,132289,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,REQUIRED,
-J3,SMA EDGE B,132289,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,DNP,
-J4,BALANCE 2S-6S,B7B-XH-A(LF)(SN),Connector_JST:JST_XH_B7B-XH-A_1x07_P2.50mm_Vertical,REQUIRED,Measurement only; no pack energy powers the Deck.
+J2,SMA EDGE A,132289-12,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,REQUIRED,
+J3,SMA EDGE B,132289-12,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,DNP,
+J4,BALANCE 2S-6S,S7B-XH-A-1(LF)(SN),Connector_JST:JST_XH_S7B-XH-A-1_1x07_P2.50mm_Horizontal,REQUIRED,Side-entry external access; measurement only; no pack energy powers the Deck.
 J5,AV OUT 3.5MM,SJ1-3523N,Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal,REVIEW,
 Q1,BUZZER DRIVER,MMBT3904LT1G,Package_TO_SOT_SMD:SOT-23,REQUIRED,
 R1,10k 1%,RC0603FR-0710KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,Comparator open-drain pull-up.

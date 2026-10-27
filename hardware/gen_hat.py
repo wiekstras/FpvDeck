@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import csv
 import html
+import shutil
 import sys
 import uuid
 from dataclasses import dataclass
@@ -53,9 +54,9 @@ PARTS = [
          {"1": "GND", "2": "RF_B", "3": "GND", "4": "RX_DATA", "5": "RX_LE_B", "6": "RX_CLK",
           "7": "GND", "8": "+5V", "9": "RSSI_B", "10": "NC_AUDIO_B", "11": "VIDEO_B"},
          "Optional diversity receiver; same physical verification gate as RXA."),
-    part("J2", "SMA EDGE A", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289", "REQUIRED",
+    part("J2", "SMA EDGE A", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289-12", "REQUIRED",
          {"1": "RF_A", "2": "GND"}),
-    part("J3", "SMA EDGE B", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289", "DNP",
+    part("J3", "SMA EDGE B", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289-12", "DNP",
          {"1": "RF_B", "2": "GND"}),
     # LMV331: high/open output means RSSI_A > RSSI_B. The 3157 B2 input is
     # therefore VIDEO_A so ACTIVE_RX high consistently means receiver A.
@@ -96,9 +97,10 @@ PARTS = [
          {"1": "XTAL1", "2": "GND"}, "Select from CL1=2*CL-Cstray; do not fit an unverified value."),
     part("CY2", "CRYSTAL LOAD TUNE", "Capacitor_SMD:C_0603_1608Metric", "TBD_AFTER_OSCILLATOR_TEST", "DNP",
          {"1": "XTAL2", "2": "GND"}, "Match CY1 after measured board stray capacitance/oscillator test."),
-    part("J4", "BALANCE 2S-6S", "Connector_JST:JST_XH_B7B-XH-A_1x07_P2.50mm_Vertical",
-         "B7B-XH-A(LF)(SN)", "REQUIRED", {"1": "GND", "2": "TAP1", "3": "TAP2", "4": "TAP3",
-         "5": "TAP4", "6": "TAP5", "7": "TAP6"}, "Measurement only; no pack energy powers the Deck."),
+    part("J4", "BALANCE 2S-6S", "Connector_JST:JST_XH_S7B-XH-A-1_1x07_P2.50mm_Horizontal",
+         "S7B-XH-A-1(LF)(SN)", "REQUIRED", {"1": "GND", "2": "TAP1", "3": "TAP2", "4": "TAP3",
+         "5": "TAP4", "6": "TAP5", "7": "TAP6"},
+         "Side-entry external access; measurement only; no pack energy powers the Deck."),
 ]
 
 for index in range(3):
@@ -332,19 +334,12 @@ def write_board_svg() -> None:
 
 
 def write_minimal_board() -> None:
-    board = '''(kicad_pcb (version 20221018) (generator fpvdeck_gen_hat)
-  (general (thickness 1.6))
-  (paper "A4")
-  (layers (0 "F.Cu" signal) (31 "B.Cu" signal) (36 "B.SilkS" user "B.Silkscreen")
-          (37 "F.SilkS" user "F.Silkscreen") (44 "Edge.Cuts" user))
-  (setup (pad_to_mask_clearance 0))
-  (gr_rect (start 20 20) (end 120 85) (stroke (width 0.2) (type default)) (fill none) (layer "Edge.Cuts"))
-  (gr_text "FPVDECK HAT REV A - PLACEMENT ONLY / NOT FOR FAB" (at 70 24) (layer "F.SilkS")
-    (effects (font (size 1.3 1.3) (thickness 0.22))))
-  (gr_text "RX5808 FOOTPRINT MUST BE MEASURED" (at 70 81) (layer "F.SilkS")
-    (effects (font (size 1 1) (thickness 0.18))))
-)\n'''
-    (OUT / "fpv-hat.kicad_pcb").write_text(board, encoding="utf-8")
+    template = Path(__file__).parent / "templates" / "fpv-hat-placement.kicad_pcb"
+    if not template.exists():
+        raise FileNotFoundError(
+            "mechanical PCB template missing; run hardware/gen_pcb_mechanical.py "
+            "with KiCad installed")
+    shutil.copyfile(template, OUT / "fpv-hat.kicad_pcb")
 
 
 def main() -> int:

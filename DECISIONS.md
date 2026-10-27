@@ -114,3 +114,25 @@ questions are safety gates, not invitations to guess.
   remains REVIEW until its full tolerance budget satisfies ±50 ppm.
 - **Decision:** do not claim live video, live battery readings, streaming, or a
   fabrication-ready HAT until hardware-in-loop tests close their explicit gates.
+
+## 2026-10-27 — simulator and prototype mechanics
+
+- **Decision:** the desktop simulator is a native SDL2/LVGL build of production
+  app sources, not a separate web mock-up. Hardware calls are linked to desktop
+  backends and the FreeRTOS scanner worker is replaced only in the simulator.
+- **CONFIRMED:** Waveshare's 2026-04-08 mechanical drawing specifies a 126.9 ×
+  70.7 mm front, 110.32 × 62.28 mm active area, 118.509 × 64.509 mm rear-board
+  envelope, 11.6 mm stack, and four M2.5 holes on 112.003 × 57 mm centers.
+- **Decision:** add a 24.1 mm right control rail around the host module so the
+  three physical buttons can be used without consuming active screen area.
+  This makes the adjustable first shell 151 × 78.5 mm; it is a prototype UX
+  choice, not a frozen industrial design.
+- **Decision:** use the exact active Amphenol `132289-12` end-launch SMA variant
+  in BOM/CAD rather than the ambiguous family number `132289`.
+- **Decision:** change the balance connector from top-entry B7B-XH-A to
+  side-entry `S7B-XH-A-1`. It preserves the 7-pin XH electrical interface while
+  allowing a bottom-edge balance lead without a plug protruding through the rear.
+- **UNKNOWN / MUST VERIFY:** the current header location, button footprint used
+  for the mechanical proxy, SMA/JST positions, header stack, battery cavity and
+  port clearances require the official host STEP plus received-part measurements.
+  The KiCad board is intentionally unrouted and its silkscreen states this.

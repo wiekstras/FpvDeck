@@ -53,6 +53,10 @@ Completed items stay checked; safety-critical unknowns stay visible.
 
 - [x] Generate a checked KiCad 8 schematic, BOM and netlist from source.
 - [x] Create a placed PCB design draft and source-controlled board views.
+- [x] Add a parametric two-part enclosure fit-check model with generated STLs,
+      SMA passages, side-entry JST-XH opening and three-button rail.
+- [x] Coordinate external connectors in a real KiCad placement board and export
+      top/bottom SVG plus placement-only STEP.
 - [ ] Measure actual RX5808 modules; freeze custom footprint and antenna launch.
 - [ ] Confirm Waveshare HAT clearance, header orientation and board outline.
 - [ ] Simulate/bench the CVBS input termination and TPF131 AV-output branch.
@@ -69,3 +73,5 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [ ] Test battery accuracy for 2S–6S with calibrated precision sources.
 - [ ] Replace the adjustable prototype enclosure envelope with measured host,
       HAT, battery, JST-XH and SMA dimensions before any fabrication claim.
+- [ ] Import the official Waveshare STEP and freeze the exact 40-pin header,
+      USB, microSD, power-button and keep-out geometry in both PCB and shell.

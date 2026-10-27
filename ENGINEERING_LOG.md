@@ -105,3 +105,22 @@
   a latency or decoder simulation.
 - Verified `./scripts/test-simulator`, `./scripts/test-host`, the HAT generator,
   and a complete ESP-IDF v6.1 `esp32p4` firmware build.
+
+## 2026-10-27 — prototype CAD and connector coordination
+
+- Read Waveshare's official 2026-04-08 PDF/DXF and captured confirmed front,
+  active-area, rear-board, stack and M2.5 mounting-pattern dimensions in one
+  OpenSCAD parameter file. The official 2026-08-12 STEP remains the next source
+  for port/header offsets and detailed keep-outs.
+- Added a 151 × 78.5 mm adjustable clamshell concept with a landscape display
+  opening, dedicated three-button rail, two top SMA passages, bottom balance
+  port, locating lip and host mounting bosses. Generated manifold front/rear
+  STL files and review PNGs are committed.
+- Selected JST `S7B-XH-A-1` side entry so a balance lead exits the bottom edge,
+  and made the SMA part exact as active Amphenol `132289-12`. Both choices are
+  traced to manufacturer drawings; final clearance still needs 1:1 test prints.
+- Replaced the empty KiCad board rectangle with a 118.5 × 64.5 mechanical
+  placement board containing the official mounting pattern, external connector
+  footprints, button rail and major video/ADC packages. It has zero routed tracks
+  and carries explicit NOT FOR FABRICATION markings; STEP/SVG/PNG exports exist
+  solely for enclosure coordination.
