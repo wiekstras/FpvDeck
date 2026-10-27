@@ -24,10 +24,13 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [ ] Implement and benchmark ESP-Hosted SoftAP + hardware JPEG MJPEG stream.
 - [x] Bind live ADS1115 battery/RSSI and active-diversity data into app views,
       retaining explicit empty states when hardware is absent.
+- [x] Add touch and Up/Down RX5808 channel control plus an OK-long-press band
+      picker to the FPV monitor.
 - [ ] Bind captured video fields into the monitor display after PPA/panel HIL.
 - [ ] Validate low-battery shutdown against the Waveshare power controller.
-- [ ] Read and calibrate the host board's existing BAT_ADC on GPIO20; do not
+- [x] Read the host board's existing BAT_ADC on GPIO20; do not
       connect the reserved ADS1115 deck-cell input without an approved source.
+- [ ] Calibrate GPIO20 BAT_ADC against a DMM across the usable 1S range.
 
 ## Hardware
 

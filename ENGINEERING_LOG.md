@@ -42,3 +42,7 @@
   snapshots on LVGL timers, show calibrated voltages, and retain a clean empty
   state when the HAT is absent. RSSI remains in volts until a receiver-specific
   calibration curve is measured; the UI does not invent a percentage.
+- The FPV monitor now tunes both RX5808 footprints from touch arrows or the
+  Up/Down hardware buttons. A deliberate OK long press opens the A/B/E/F/R/L
+  band picker; selections persist through NVS. The complete ESP32-P4 firmware
+  still builds successfully after this input path was added.

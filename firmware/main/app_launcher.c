@@ -81,7 +81,9 @@ lv_obj_t *app_make_button(lv_obj_t *parent, const char *text,
     lv_obj_set_size(button, 250, 112);
     lv_obj_set_style_radius(button, 20, 0);
     lv_obj_set_style_bg_color(button, lv_color_hex(0x123647), 0);
-    lv_obj_add_event_cb(button, callback, LV_EVENT_CLICKED, NULL);
+    if (callback != NULL) {
+        lv_obj_add_event_cb(button, callback, LV_EVENT_CLICKED, NULL);
+    }
     lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, text);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_20, 0);
