@@ -107,5 +107,10 @@ questions are safety gates, not invitations to guess.
   3=GND, 4–7=AIN0–AIN3, 8=VDD, 9=SDA and 10=SCL. All three instances are now
   corrected and each has the required 100 nF supply bypass. No earlier generated
   board artifact is safe to fabricate.
+- **Decision:** TI Figure 6-1 is authoritative for decoder bypassing: 100 nF is
+  placed locally on PLL_AVDD, CH_AVDD, DVDD and IO_DVDD. The ME6211 receives
+  explicit 1 µF input/output capacitors. Crystal load pads stay DNP/TUNE because
+  TI's value depends on board stray capacitance; the current crystal selection
+  remains REVIEW until its full tolerance budget satisfies ±50 ppm.
 - **Decision:** do not claim live video, live battery readings, streaming, or a
   fabrication-ready HAT until hardware-in-loop tests close their explicit gates.

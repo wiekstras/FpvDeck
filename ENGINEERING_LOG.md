@@ -66,3 +66,8 @@
   incorrect. Corrected U5/U6/U7 to TI SBAS444E's DGS pinout and added a 100 nF
   VDD bypass at each device. Regenerated BOM/netlist/schematic artifacts replace
   the invalid earlier outputs; the board remains explicitly non-fabricable.
+- Continued the source audit with TI TVP5150 Figure 6-1: added four local decoder
+  bypass capacitors, ME6211 input/output capacitors and TI's 100 kΩ parallel
+  crystal resistor. Crystal load footprints are deliberately DNP/TUNE because
+  their value depends on the chosen crystal and measured stray capacitance.
+  CVBS anti-aliasing and system-level ESD remain explicit release gates.

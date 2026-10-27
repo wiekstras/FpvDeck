@@ -16,7 +16,9 @@
   SN74LVC1G3157 and reports `ACTIVE_RX` to the ESP32-P4.
 - TVP5150AM1 accepts selected CVBS and emits 8-bit BT.601 YCbCr with discrete
   synchronization. Eleven 33 Ω source resistors isolate DVP edges.
-- ME6211C18 makes 1.8 V; ferrites split analog and digital decoder rails.
+- ME6211C18 makes 1.8 V; ferrites split analog and digital decoder rails. Its
+  1 µF input/output capacitors and four TVP5150 100 nF local rail bypasses are
+  explicit BOM items rather than layout notes.
 - ADS1115 at 0x48/0x49 reads balance taps; the nominal internal-cell channel on
   0x49 is reserved/DNP because raw BAT is not exposed on the header. The host's
   existing GPIO20 BAT_ADC reads deck voltage. ADS1115 0x4A reads receiver RSSI.
@@ -41,6 +43,8 @@ or guessed RX5808 pads. See [release gates](../hardware/READINESS.md).
 - SMA-to-RX path grounded coplanar, 50 Ω, under 10 mm, with via fence.
 - Keep both RX5808s and antennas away from DSI, DVP, ESP32-C6, and converters.
 - Place TVP input termination at AIP1A and crystal network at pins 5/6.
+- Fit no crystal load value until `CL1 = CL2 = 2CL - Cstray` is resolved for the
+  chosen crystal/board; TI also requires the clock source within ±50 ppm.
 - Match DVP data/sync paths within the budget derived from the actual stack-up.
 - Put tap-side protection adjacent to J4; no tap trace enters digital areas first.
 - Add readable probe labels and test points for every cumulative tap and rail.

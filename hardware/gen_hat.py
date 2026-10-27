@@ -79,13 +79,23 @@ PARTS = [
           "30": "REFM", "31": "AGND", "32": "+1V8A"}),
     part("U4", "1.8V LDO", "Package_TO_SOT_SMD:SOT-23-5", "ME6211C18M5G", "REQUIRED",
          {"1": "+5V", "2": "GND", "3": "+5V", "5": "+1V8"}),
+    part("CIN1", "1u 10V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R61A105KA61D", "REQUIRED",
+         {"1": "+5V", "2": "GND"}, "ME6211 input bypass; place at U4 pin 1."),
+    part("COUT1", "1u 10V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R61A105KA61D", "REQUIRED",
+         {"1": "+1V8", "2": "GND"}, "ME6211 output stability capacitor; place at U4 pin 5."),
     part("FB1", "600R@100MHz", "Inductor_SMD:L_0603_1608Metric", "BLM18AG601SN1D", "REQUIRED",
          {"1": "+1V8", "2": "+1V8A"}),
     part("FB2", "600R@100MHz", "Inductor_SMD:L_0603_1608Metric", "BLM18AG601SN1D", "REQUIRED",
          {"1": "+1V8", "2": "+1V8D"}),
     part("Y1", "14.31818MHz", "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "ECS-143-20-33Q-JES-TR", "REVIEW",
          {"1": "XTAL1", "2": "GND", "3": "XTAL2", "4": "GND"},
-         "Verify oscillator start/load with chosen crystal before release."),
+         "Verify total tolerance <=50 ppm and oscillator start/load before release."),
+    part("RY1", "100k 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-07100KL", "REQUIRED",
+         {"1": "XTAL1", "2": "XTAL2"}, "TI SLES209E recommended parallel crystal resistor."),
+    part("CY1", "CRYSTAL LOAD TUNE", "Capacitor_SMD:C_0603_1608Metric", "TBD_AFTER_OSCILLATOR_TEST", "DNP",
+         {"1": "XTAL1", "2": "GND"}, "Select from CL1=2*CL-Cstray; do not fit an unverified value."),
+    part("CY2", "CRYSTAL LOAD TUNE", "Capacitor_SMD:C_0603_1608Metric", "TBD_AFTER_OSCILLATOR_TEST", "DNP",
+         {"1": "XTAL2", "2": "GND"}, "Match CY1 after measured board stray capacitance/oscillator test."),
     part("J4", "BALANCE 2S-6S", "Connector_JST:JST_XH_B7B-XH-A_1x07_P2.50mm_Vertical",
          "B7B-XH-A(LF)(SN)", "REQUIRED", {"1": "GND", "2": "TAP1", "3": "TAP2", "4": "TAP3",
          "5": "TAP4", "6": "TAP5", "7": "TAP6"}, "Measurement only; no pack energy powers the Deck."),
@@ -131,6 +141,14 @@ for index, raw, out in [(0, "DVP_D0_RAW", "DVP_D0"), (1, "DVP_D1_RAW", "DVP_D1")
                       {"1": raw, "2": out}))
 
 PARTS.extend([
+    part("CD1", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+1V8A", "2": "GND"}, "TVP5150 PLL_AVDD pin 4 bypass; place at pin."),
+    part("CD2", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+1V8A", "2": "GND"}, "TVP5150 CH_AVDD pin 32 bypass; place at pin."),
+    part("CD3", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+1V8D", "2": "GND"}, "TVP5150 DVDD pin 20 bypass; place at pin."),
+    part("CD4", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+3V3", "2": "GND"}, "TVP5150 IO_DVDD pin 10 bypass; place at pin."),
     part("R20", "37.4R 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0737R4L", "REQUIRED",
          {"1": "VIDEO_SELECTED", "2": "VIDEO_TERM"}),
     part("R21", "37.4R 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0737R4L", "REQUIRED",
@@ -208,6 +226,13 @@ def validate() -> dict[str, list[str]]:
         bypass_ref = f"CA{index - 4}"
         if by_ref[bypass_ref].pins != {"1": "+3V3", "2": "GND"}:
             raise ValueError(f"{bypass_ref} must bypass ADS1115 VDD to GND")
+    required_bypasses = {
+        "CIN1": "+5V", "COUT1": "+1V8", "CD1": "+1V8A",
+        "CD2": "+1V8A", "CD3": "+1V8D", "CD4": "+3V3",
+    }
+    for ref, rail in required_bypasses.items():
+        if by_ref[ref].pins != {"1": rail, "2": "GND"}:
+            raise ValueError(f"{ref} must bypass {rail} to GND")
     return nets
 
 
@@ -247,10 +272,11 @@ def write_schematic(nets: dict[str, list[str]]) -> None:
         f'    (uuid {uid("warning")}))',
     ]
     blocks = [
-        ("POWER + HOST", ["J1", "U4", "FB1", "FB2"]),
+        ("POWER + HOST", ["J1", "U4", "CIN1", "COUT1", "FB1", "FB2"]),
         ("5.8 GHz DIVERSITY", ["RXA", "RXB", "J2", "J3", "U1", "U2"]),
-        ("CVBS TO DVP", ["U3", "Y1", "R20", "R21", "C20", "C21", "C22", "C23", "C24"]),
-        ("BATTERY + RSSI ADC", ["J4", "U5", "U6", "U7"]),
+        ("CVBS TO DVP", ["U3", "CD1", "CD2", "CD3", "CD4", "Y1", "RY1", "CY1", "CY2",
+                         "R20", "R21", "C20", "C21", "C22", "C23", "C24"]),
+        ("BATTERY + RSSI ADC", ["J4", "U5", "CA1", "U6", "CA2", "U7", "CA3"]),
         ("USER I/O", ["SW1", "SW2", "SW3", "Q1", "BZ1"]),
         ("BUFFERED AV OUT (REVIEW/DNP)", ["U8", "J5", "R29"]),
     ]
