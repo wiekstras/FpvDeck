@@ -55,3 +55,10 @@
   controls behind an explicit lock, saved lock selection and a non-blocking
   50 ms tone state machine whose cadence rises with raw RSSI voltage. Boundary
   behavior is host-tested; physical RSSI/cadence calibration remains required.
+- Replaced the static Settings mock-up with live NVS-backed brightness, buzzer,
+  video-standard and masked WPA2 password controls. Saved brightness is applied
+  at boot and stored settings are range-sanitized. Calibration stays explicitly
+  unavailable until the protected analog path passes HIL.
+- Corrected the latency budget after inspecting the pinned Waveshare component:
+  it uses the HX8394 720×1280 **30 Hz** timing macro, not 60 Hz. The provisional
+  FpvDeck-added budget now includes up to 33.3 ms of panel phase.

@@ -21,8 +21,8 @@ display buffer while LVGL draws only sparse overlay areas.
 | decoder lock/pipeline | < 1 field | data-sheet architecture; measure |
 | field acquisition | 16.7 ms NTSC / 20 ms PAL maximum | structural |
 | ISP/PPA handoff | < 3 ms | benchmark required |
-| display scan alignment | 0–16.7 ms at 60 Hz | panel phase dependent |
-| FpvDeck added | target median < 25 ms, p95 < 40 ms | unvalidated |
+| display scan alignment | 0–33.3 ms at the BSP's 30 Hz mode | confirmed in pinned Waveshare timing macro; phase dependent |
+| FpvDeck added | provisional median < 45 ms, p95 < 65 ms | unvalidated; revisit if a vendor-supported faster panel mode appears |
 
 The primary acceptance test is an LED in the camera view plus a display-facing
 photodiode sampled by an oscilloscope. Record at least 1,000 transitions for PAL
@@ -33,3 +33,6 @@ and NTSC and publish median/p95/p99. A high-speed camera is a secondary check.
 ESP-IDF v6.1 provides ISP DVP input with HSYNC/VSYNC and YUV422→RGB565. The
 current driver configures and captures fields. Zero-copy PPA-to-panel reuse and
 the correct sampling edge/polarity must be validated on real TVP5150 hardware.
+The pinned Waveshare BSP configures this panel with
+`HX8394_720_1280_PANEL_30HZ_DPI_CONFIG` (58 MHz DPI clock). A 60 Hz scan must not
+be claimed or attempted without panel timing documentation from Waveshare.

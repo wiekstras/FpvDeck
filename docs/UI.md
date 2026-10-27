@@ -12,7 +12,8 @@ teal focus, text labels and shape changes avoid color-only status.
 - **Finder:** glanceable session peak, explicit channel lock and optional
   non-blocking proportional buzzer.
 - **Stream:** explicit status for local spectator SoftAP.
-- **Settings:** brightness, video mode, buzzer, Wi-Fi and calibration.
+- **Settings:** live brightness, video mode, buzzer and masked WPA2 credential
+  controls; calibration remains visibly disabled until HIL is safe.
 
 Buttons are registered as an LVGL keypad. In the monitor, Up/Down directly tune
 the previous/next channel and a deliberate OK long press opens the band picker;

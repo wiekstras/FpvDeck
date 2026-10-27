@@ -32,6 +32,9 @@ questions are safety gates, not invitations to guess.
   full-frame deinterlacing. The ISP converts BT.601 YUV422 to RGB565; PPA then
   scales/rotates for the portrait-native panel. This is the shortest credible
   latency path.
+- **CONFIRMED:** the pinned Waveshare BSP configures the 720×1280 panel with its
+  30 Hz timing macro and 58 MHz DPI clock. Latency budgeting therefore uses a
+  0–33.3 ms panel-phase term; 60 Hz is not assumed without vendor timing data.
 - **Decision:** Use TVP5150 register `0x03 = 0x0D`, `0x0D = 0x00`, `0x0F = 0x00`,
   and `0x28 = 0x00`, derived from TI SLES209E. Driver code verifies device ID
   before configuration and allows the documented clock-stretch/write settle time.

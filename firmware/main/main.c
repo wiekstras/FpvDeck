@@ -79,6 +79,7 @@ void app_main(void)
 
     fpvdeck_settings_t settings;
     ESP_ERROR_CHECK(settings_load(&settings));
+    ESP_ERROR_CHECK(bsp_display_brightness_set(settings.brightness_percent));
     uint16_t frequency = 0;
     if (rx5808_channel_frequency(settings.band, settings.channel, &frequency)) {
         ESP_ERROR_CHECK(rx5808_set_both(frequency));

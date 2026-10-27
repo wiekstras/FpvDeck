@@ -30,6 +30,10 @@ Completed items stay checked; safety-critical unknowns stay visible.
       strongest-three actions with serialized ADC access.
 - [x] Add a session-local finder peak, explicit channel lock and non-blocking
       RSSI-driven buzzer cadence.
+- [x] Replace static settings mock data with persisted brightness, buzzer,
+      video-standard and masked WPA2 password controls.
+- [ ] Implement the guided per-tap calibration workflow after the protected
+      balance frontend passes bench bring-up.
 - [ ] Measure the correct post-tune settle time and derive an RX5808-specific
       RSSI voltage calibration curve.
 - [ ] Bind captured video fields into the monitor display after PPA/panel HIL.
