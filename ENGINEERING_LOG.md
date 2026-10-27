@@ -136,3 +136,27 @@
   captures found disabled LVGL float formatting and low-contrast default object
   styles; enabled float formatting in simulator/firmware configuration and fixed
   the affected production screens before committing the generated previews.
+
+## 2026-10-27 — modern UI and ESP32-P4 render profile
+
+- Replaced the uniform default-button launcher with an asymmetric, priority-led
+  dashboard and introduced a shared `ui_theme` used by production firmware and
+  the desktop simulator.
+- Rebuilt Battery around a dominant pack summary, metric cards and persistent
+  per-cell voltage bars; rebuilt Monitor around an opaque four-metric receiver
+  rail; rebuilt Finder around proximity, peak and receiver metrics. Scanner,
+  Settings, Stream, dialogs, buttons and simulator controls now share the same
+  palette, focus and pressed states.
+- Kept rendering deliberately cheap: no gradients, blur, shadows or perpetual
+  animation; 100 ms transitions; static object trees; Finder UI reduced from
+  20 Hz to 10 Hz. Screen/card scrollbars are explicitly suppressed.
+- Enabled LVGL's ESP32-P4 PPA draw unit for supported opaque fills alongside the
+  existing two software draw units and style cache. The first build correctly
+  rejected LVGL's old 4-byte draw-buffer alignment; PPA requires it to equal the
+  P4 L2 cache line, so both are now 128 bytes. Physical frame-time and bandwidth
+  measurement remain required before calling the profile optimized.
+- Regenerated actual SDL renderer captures and retained isolated startup tests
+  for all seven screens.
+- Final validation passed: seven simulator smoke tests, host logic tests, the
+  90-part/90-net HAT generator check, and the ESP-IDF 6.1 P4 build. The resulting
+  firmware image is `0xde240` bytes with 89% of the app partition free.

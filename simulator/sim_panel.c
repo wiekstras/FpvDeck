@@ -2,6 +2,7 @@
 
 #include "lvgl.h"
 #include "sim_backend.h"
+#include "ui_theme.h"
 
 static lv_obj_t *s_panel;
 static lv_obj_t *s_summary;
@@ -66,6 +67,7 @@ static lv_obj_t *control(lv_obj_t *parent, const char *text, lv_event_cb_t cb)
 {
     lv_obj_t *button = lv_button_create(parent);
     lv_obj_set_size(button, 260, 68);
+    ui_button_style(button, false);
     lv_obj_add_event_cb(button, cb, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, text);
@@ -80,8 +82,8 @@ static void open_panel(lv_event_t *event)
     s_panel = lv_obj_create(lv_layer_top());
     lv_obj_set_size(s_panel, 1040, 610);
     lv_obj_center(s_panel);
-    lv_obj_set_style_bg_color(s_panel, lv_color_hex(0x071016), 0);
-    lv_obj_set_style_border_color(s_panel, lv_color_hex(0x51D9D0), 0);
+    lv_obj_set_style_bg_color(s_panel, lv_color_hex(UI_COLOR_BG), 0);
+    lv_obj_set_style_border_color(s_panel, lv_color_hex(UI_COLOR_ACCENT), 0);
     lv_obj_set_style_border_width(s_panel, 2, 0);
     lv_obj_set_style_radius(s_panel, 22, 0);
     lv_obj_set_flex_flow(s_panel, LV_FLEX_FLOW_ROW_WRAP);
@@ -108,7 +110,8 @@ void sim_panel_create(void)
     lv_obj_t *button = lv_button_create(lv_layer_top());
     lv_obj_set_size(button, 94, 48);
     lv_obj_align(button, LV_ALIGN_TOP_RIGHT, -18, 14);
-    lv_obj_set_style_bg_color(button, lv_color_hex(0x76520D), 0);
+    ui_button_style(button, false);
+    lv_obj_set_style_border_color(button, lv_color_hex(UI_COLOR_WARNING), 0);
     lv_obj_add_event_cb(button, open_panel, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, "SIM");

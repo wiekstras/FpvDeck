@@ -32,6 +32,8 @@ T8L, ELRS or RC-transmitter function is part of the current product.
 
 ## Applications
 
+![FpvDeck application launcher](docs/assets/ui/launcher.png)
+
 | App | Purpose | State |
 | --- | --- | --- |
 | Battery | 2S–6S cells, total, delta, limits and storage hint | live ADS polling + host-tested math; HIL calibration pending |

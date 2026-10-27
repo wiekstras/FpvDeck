@@ -120,6 +120,15 @@ questions are safety gates, not invitations to guess.
 - **Decision:** the desktop simulator is a native SDL2/LVGL build of production
   app sources, not a separate web mock-up. Hardware calls are linked to desktop
   backends and the FreeRTOS scanner worker is replaced only in the simulator.
+- **Decision:** keep the visual system flat and information-dense: solid fills,
+  thin borders, no gradients or software shadows, opaque video overlays and
+  100 ms transitions. This reads as a modern field instrument while avoiding
+  expensive full-screen blending on ESP32-P4.
+- **Decision:** enable LVGL's native ESP32-P4 PPA draw unit with 128-byte bursts.
+  It accelerates only eligible draw tasks; rounded cards and text retain the
+  software path. LVGL draw-buffer alignment is 128 bytes to match the configured
+  P4 L2 cache line, as enforced by the driver. No performance gain is claimed
+  until measured on the board.
 - **CONFIRMED:** Waveshare's 2026-04-08 mechanical drawing specifies a 126.9 ×
   70.7 mm front, 110.32 × 62.28 mm active area, 118.509 × 64.509 mm rear-board
   envelope, 11.6 mm stack, and four M2.5 holes on 112.003 × 57 mm centers.

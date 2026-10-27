@@ -24,6 +24,10 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Add isolated headless startup tests for every simulator application to CI.
 - [x] Add deterministic, source-controlled simulator screenshots generated from
       the real LVGL/SDL renderer.
+- [x] Replace default-widget visuals with a shared modern LVGL design system,
+      asymmetric launcher, metric-first apps and P4-conscious flat rendering.
+- [ ] Record ESP32-P4 LVGL frame time, CPU load and PSRAM bandwidth for launcher,
+      Battery, Monitor and Scanner on physical hardware.
 - [ ] Add deterministic touch/key app-interaction tests after the LVGL test
       input harness is stabilized.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.

@@ -24,7 +24,7 @@ convert_bmp() {
   fi
 }
 
-for screen in launcher battery monitor scanner; do
+for screen in launcher battery monitor scanner finder stream settings; do
   bmp="$temporary_dir/$screen.bmp"
   duration=900
   if [[ "$screen" == "scanner" ]]; then duration=3200; fi

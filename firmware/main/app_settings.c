@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "tvp5150.h"
 #include "platform.h"
+#include "ui_theme.h"
 
 #include <string.h>
 
@@ -13,18 +14,17 @@ static lv_obj_t *s_password_modal;
 static lv_obj_t *make_row(lv_obj_t *parent, const char *title)
 {
     lv_obj_t *row = lv_obj_create(parent);
-    lv_obj_set_size(row, lv_pct(100), 92);
+    lv_obj_set_size(row, lv_pct(100), 84);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
                           LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_hor(row, 24, 0);
-    lv_obj_set_style_radius(row, 16, 0);
-    lv_obj_set_style_bg_color(row, lv_color_hex(0x0D1B24), 0);
-    lv_obj_set_style_text_color(row, lv_color_hex(0xEAF6F7), 0);
+    ui_surface_style(row);
     lv_obj_t *label = lv_label_create(row);
     lv_label_set_text(label, title);
     lv_obj_set_width(label, 330);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_20, 0);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, 0);
+    lv_obj_set_style_text_color(label, lv_color_hex(UI_COLOR_MUTED), 0);
     return row;
 }
 
@@ -104,12 +104,13 @@ static void edit_password(lv_event_t *event)
                         LV_EVENT_DELETE, NULL);
     lv_obj_set_size(s_password_modal, 1160, 620);
     lv_obj_center(s_password_modal);
-    lv_obj_set_style_bg_color(s_password_modal, lv_color_hex(0x071016), 0);
-    lv_obj_set_style_radius(s_password_modal, 20, 0);
+    ui_surface_style(s_password_modal);
+    lv_obj_set_style_border_color(s_password_modal,
+                                  lv_color_hex(UI_COLOR_ACCENT), 0);
 
     lv_obj_t *title = lv_label_create(s_password_modal);
     lv_label_set_text(title, "Spectator Wi-Fi password");
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_24, 0);
+    ui_label_title(title);
     lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 10);
     lv_obj_t *textarea = lv_textarea_create(s_password_modal);
     lv_obj_set_size(textarea, 1040, 68);
@@ -143,8 +144,9 @@ void app_settings_show(void)
     lv_obj_set_width(list, lv_pct(100));
     lv_obj_set_flex_grow(list, 1);
     lv_obj_set_flex_flow(list, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_style_pad_all(list, 18, 0);
-    lv_obj_set_style_pad_row(list, 10, 0);
+    lv_obj_set_style_pad_hor(list, 24, 0);
+    lv_obj_set_style_pad_ver(list, 16, 0);
+    lv_obj_set_style_pad_row(list, 8, 0);
     lv_obj_set_style_bg_opa(list, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(list, 0, 0);
 
@@ -153,6 +155,10 @@ void app_settings_show(void)
     lv_obj_set_size(slider, 560, 42);
     lv_slider_set_range(slider, 10, 100);
     lv_slider_set_value(slider, s_settings.brightness_percent, LV_ANIM_OFF);
+    lv_obj_set_style_bg_color(slider, lv_color_hex(0x173039), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(slider, lv_color_hex(UI_COLOR_ACCENT),
+                              LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(slider, lv_color_hex(UI_COLOR_TEXT), LV_PART_KNOB);
     lv_obj_add_event_cb(slider, brightness_changed, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_add_event_cb(slider, brightness_saved, LV_EVENT_RELEASED, NULL);
     s_brightness_value = lv_label_create(row);
@@ -164,6 +170,8 @@ void app_settings_show(void)
     row = make_row(list, "Buzzer");
     lv_obj_t *toggle = lv_switch_create(row);
     lv_obj_set_size(toggle, 92, 52);
+    lv_obj_set_style_bg_color(toggle, lv_color_hex(UI_COLOR_ACCENT),
+                              LV_PART_INDICATOR | LV_STATE_CHECKED);
     if (s_settings.buzzer_enabled) lv_obj_add_state(toggle, LV_STATE_CHECKED);
     lv_obj_add_event_cb(toggle, buzzer_changed, LV_EVENT_VALUE_CHANGED, NULL);
 
@@ -171,6 +179,9 @@ void app_settings_show(void)
     lv_obj_t *dropdown = lv_dropdown_create(row);
     lv_obj_set_size(dropdown, 300, 58);
     lv_dropdown_set_options(dropdown, "Auto\nPAL\nNTSC");
+    lv_obj_set_style_bg_color(dropdown, lv_color_hex(UI_COLOR_SURFACE_HI), 0);
+    lv_obj_set_style_border_color(dropdown, lv_color_hex(UI_COLOR_BORDER), 0);
+    lv_obj_set_style_text_color(dropdown, lv_color_hex(UI_COLOR_TEXT), 0);
     lv_dropdown_set_selected(dropdown, (uint32_t)s_settings.video_mode);
     lv_obj_add_event_cb(dropdown, video_mode_changed, LV_EVENT_VALUE_CHANGED,
                         NULL);
@@ -187,7 +198,7 @@ void app_settings_show(void)
     lv_obj_t *pending = lv_label_create(row);
     lv_label_set_text(pending,
         "Requires connected HAT, precision source and DMM | not run");
-    lv_obj_set_style_text_color(pending, lv_color_hex(0xFFB24A), 0);
+    lv_obj_set_style_text_color(pending, lv_color_hex(UI_COLOR_WARNING), 0);
 
-    lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);
+    lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 100, 0, true);
 }

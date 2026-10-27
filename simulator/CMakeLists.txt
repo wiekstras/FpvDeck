@@ -18,6 +18,7 @@ add_subdirectory("${REPO_ROOT}/managed_components/lvgl__lvgl" lvgl)
 target_link_libraries(lvgl PUBLIC PkgConfig::SDL2 m)
 
 set(APP_SOURCES
+    "${REPO_ROOT}/firmware/main/ui_theme.c"
     "${REPO_ROOT}/firmware/main/app_launcher.c"
     "${REPO_ROOT}/firmware/main/app_battery.c"
     "${REPO_ROOT}/firmware/main/app_monitor.c"

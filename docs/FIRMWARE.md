@@ -17,6 +17,7 @@ them without a service/plugin framework.
 | `settings` | versioned settings blob in NVS |
 | `buttons` / `buzzer` | local controls and PWM tones |
 | `deck_power` | calibrated onboard GPIO20 BAT_ADC and warning thresholds |
+| `ui_theme` | shared flat visual system and P4-conscious widget styling |
 
 ## Build
 
@@ -54,3 +55,12 @@ The finder uses a 150–900 ms beep interval mapped over the ADS1115's 0–2.048
 RSSI input span. This mapping is deterministic and host-tested, but provisional:
 physical RX5808 characterization must replace the full-scale mapping with useful
 near/far thresholds before it can be considered a calibrated field instrument.
+
+## Display performance profile
+
+The project defaults use two LVGL software draw units, style caching, a 15 ms
+refresh period and the ESP32-P4 PPA draw unit for supported opaque fills. The UI
+keeps rounded areas local, avoids gradients/shadows, and updates existing
+objects instead of rebuilding screens on timers. The Waveshare panel remains a
+30 Hz physical output; configuration alone does not establish the final frame
+time or video latency. See [UI.md](UI.md) for the rendering rules.
