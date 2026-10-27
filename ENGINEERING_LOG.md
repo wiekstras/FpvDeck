@@ -74,3 +74,15 @@
 - Closed the settings/decoder gap: persisted Auto, NTSC M/J and PAL B/G/H/I/N
   now program TVP5150 register 0x28 using TI-defined values 0x00/0x02/0x04 at
   boot and when changed. Capture-buffer standard changes still require HIL.
+
+## 2026-10-27 — acceptance checkpoint
+
+- `./scripts/check` passes: host unit tests are green and the HAT generator
+  validates 90 parts / 90 nets with no generated-artifact drift.
+- `./scripts/build-firmware` passes against pinned ESP-IDF 6.1 with
+  `-Wall -Wextra -Werror` on project sources. `fpvdeck.bin` is `0xde2a0` bytes;
+  the remaining build notes originate in upstream ESP-IDF Kconfig files.
+- Local `main` has been pushed incrementally to canonical `origin`. No hardware
+  was flashed, no parts were ordered, and the HAT is still blocked from
+  fabrication by `hardware/READINESS.md` (RX5808 mechanics, balance protection,
+  analog input/AV validation, crystal margin, routed layout and independent review).
