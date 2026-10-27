@@ -30,7 +30,7 @@ T8L, ELRS or RC-transmitter function is part of the current product.
 | --- | --- | --- |
 | Battery | 2S–6S cells, total, delta, limits and storage hint | live ADS polling + host-tested math; HIL calibration pending |
 | Monitor | Low-latency analog video, channel, dual RSSI and active receiver | live RSSI/active-RX overlay; video handoff needs HIL |
-| Scanner | Band sweep, graph and strongest three channels | host-tested peak logic |
+| Scanner | 48-channel A/B/E/F/R/L sweep, graph and strongest three channels | non-blocking live sweep; HIL RSSI calibration pending |
 | Finder | Peak-hold RSSI with proportional buzzer cadence | live peak/RX display; buzzer cadence pending |
 | Stream | Local WPA2 SoftAP MJPEG spectator view | interface scaffold; encoder/network integration pending |
 | Settings | Brightness, video standard, buzzer, calibration and Wi-Fi password | NVS implementation |

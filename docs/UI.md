@@ -13,10 +13,12 @@ teal focus, text labels and shape changes avoid color-only status.
 - **Stream:** explicit status for local spectator SoftAP.
 - **Settings:** brightness, video mode, buzzer, Wi-Fi and calibration.
 
-Buttons are registered as an LVGL keypad: Up/Down move focus and OK activates
-the focused control. Streaming or a settings failure must not block the monitor
-capture task. App-specific channel/long-press behavior and physical usability
-remain HIL tasks. Production screens show explicit empty states rather than
+Buttons are registered as an LVGL keypad. In the monitor, Up/Down directly tune
+the previous/next channel and a deliberate OK long press opens the band picker;
+the same actions have large touch targets. The scanner exposes its three strongest
+measured frequencies as large buttons that tune and open the monitor. Streaming
+or a settings failure must not block the monitor capture task. Physical usability
+remains a HIL task. Production screens show explicit empty states rather than
 plausible-looking fabricated readings whenever their hardware source is absent.
 Battery and RSSI views already consume live snapshots; video/display handoff is
 still the primary live-binding gate.

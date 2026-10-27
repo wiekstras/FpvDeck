@@ -25,6 +25,7 @@ void scanner_strongest(const scanner_sample_t *samples, size_t sample_count,
 #include "ads1115.h"
 #include "esp_err.h"
 esp_err_t signal_start_sampling(const ads1115_t *adc, bool ready);
+esp_err_t signal_read_raw(float *rssi_a_v, float *rssi_b_v);
 bool signal_latest(float *rssi_a_v, float *rssi_b_v, float *peak_v,
                    bool *active_rx_a);
 #endif

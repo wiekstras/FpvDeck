@@ -26,6 +26,10 @@ Completed items stay checked; safety-critical unknowns stay visible.
       retaining explicit empty states when hardware is absent.
 - [x] Add touch and Up/Down RX5808 channel control plus an OK-long-press band
       picker to the FPV monitor.
+- [x] Add a non-blocking 48-channel receiver sweep, live RSSI chart and
+      strongest-three actions with serialized ADC access.
+- [ ] Measure the correct post-tune settle time and derive an RX5808-specific
+      RSSI voltage calibration curve.
 - [ ] Bind captured video fields into the monitor display after PPA/panel HIL.
 - [ ] Validate low-battery shutdown against the Waveshare power controller.
 - [x] Read the host board's existing BAT_ADC on GPIO20; do not

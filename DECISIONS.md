@@ -76,6 +76,11 @@ questions are safety gates, not invitations to guess.
 
 - **Decision:** Hardware-free logic is ordinary C compiled by host GCC. Hardware
   drivers use ESP-IDF directly; there is no plugin/service abstraction layer.
+- **Decision:** The spectrum scanner visits all 48 configured A/B/E/F/R/L table
+  entries rather than inventing intermediate channel labels. It takes raw dual
+  RSSI readings through a serialized ADS1115 path, reports volts, and uses an
+  initial 80 ms post-tune settle time. That delay and the volts-to-signal curve
+  remain HIL calibration items.
 - **Decision:** Spectator streaming is isolated behind `app_stream`. The initial
   build provides UI/state boundaries but does not claim a validated 15 fps stream
   until ESP-Hosted, JPEG throughput and simultaneous display capture are measured.

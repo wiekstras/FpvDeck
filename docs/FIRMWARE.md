@@ -13,7 +13,7 @@ them without a service/plugin framework.
 | `video` | ESP32-P4 ISP-DVP one-field RGB565 capture |
 | `ads1115` | 16-bit single-shot reads with selectable PGA |
 | `battery` | 500 ms ADS sampling, calibrated taps, cell subtraction and limits |
-| `signal_logic` | 100 ms dual-RSSI sampling, smoothing/peak and strongest-three |
+| `signal_logic` | serialized dual-RSSI sampling, smoothing/peak and strongest-three |
 | `settings` | versioned settings blob in NVS |
 | `buttons` / `buzzer` | local controls and PWM tones |
 | `deck_power` | calibrated onboard GPIO20 BAT_ADC and warning thresholds |
@@ -45,3 +45,7 @@ shutdown require hardware-in-loop tests.
 Acquisition runs outside the LVGL task. UI timers only copy the latest snapshot,
 so slow ADS conversions cannot stall touch or rendering. Until RX5808 RSSI is
 bench-calibrated, it is displayed as volts rather than a fabricated percentage.
+The scanner owns serialized raw reads while sweeping all 48 A/B/E/F/R/L table
+entries, settles 80 ms after each retune, and restores the saved monitor channel
+when a sweep completes. Both the settle time and voltage-to-signal mapping require
+measurement with the selected physical RX5808 modules.

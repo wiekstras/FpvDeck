@@ -46,3 +46,8 @@
   Up/Down hardware buttons. A deliberate OK long press opens the A/B/E/F/R/L
   band picker; selections persist through NVS. The complete ESP32-P4 firmware
   still builds successfully after this input path was added.
+- Replaced the spectrum placeholder with a background 48-channel table sweep.
+  ADS1115 access is mutex-serialized against the continuous signal sampler; the
+  LVGL task only renders snapshots. The scanner restores the previous frequency,
+  exposes the strongest three results as monitor shortcuts, and reports hardware
+  absence honestly. Host checks and the complete ESP32-P4 build still pass.

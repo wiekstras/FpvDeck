@@ -176,5 +176,5 @@ void app_monitor_show(void)
     tune();
     refresh(s_timer);
     restore_monitor_focus();
-    lv_screen_load(s_screen);
+    lv_screen_load_anim(s_screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);
 }
