@@ -132,3 +132,7 @@
 - Replaced the launcher-only smoke test with seven isolated headless tests for
   launcher, battery, monitor, scanner, finder, stream and settings. Process
   isolation keeps one application's timers from masking another startup error.
+- Added SDL renderer capture and a macOS-compatible screenshot script. The first
+  captures found disabled LVGL float formatting and low-contrast default object
+  styles; enabled float formatting in simulator/firmware configuration and fixed
+  the affected production screens before committing the generated previews.

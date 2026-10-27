@@ -22,8 +22,10 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Build a native SDL2 macOS/Linux simulator from the production LVGL app
       sources, including simulated video/RSSI/battery/power and fault controls.
 - [x] Add isolated headless startup tests for every simulator application to CI.
-- [ ] Add deterministic app-interaction tests and source-controlled simulator
-      screenshots after the LVGL test input harness is stabilized.
+- [x] Add deterministic, source-controlled simulator screenshots generated from
+      the real LVGL/SDL renderer.
+- [ ] Add deterministic touch/key app-interaction tests after the LVGL test
+      input harness is stabilized.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.
 - [ ] Complete zero-copy field capture/PPA/display handoff against ESP-IDF v6.1 HIL.
 - [ ] Implement and benchmark ESP-Hosted SoftAP + hardware JPEG MJPEG stream.

@@ -136,13 +136,13 @@ static void refresh(lv_timer_t *timer)
     }
     if (error) {
         lv_label_set_text(s_status,
-            "RSSI ADC unavailable · connect and verify ADS1115 at 0x4A");
+            "RSSI ADC unavailable | connect and verify ADS1115 at 0x4A");
     } else if (!complete) {
         lv_label_set_text_fmt(s_status, "Scanning %u / %u channels…",
                               completed, SCAN_POINT_COUNT);
     } else {
         lv_label_set_text(s_status,
-            "Sweep complete · values are raw RSSI volts until HIL calibration");
+            "Sweep complete | values are raw RSSI volts until HIL calibration");
         for (unsigned i = 0; i < 3; ++i) {
             lv_obj_t *label = lv_obj_get_child(s_top_buttons[i], 0);
             lv_label_set_text_fmt(label, "%u MHz\n%.3f V",
@@ -197,6 +197,8 @@ void app_scanner_show(void)
     lv_obj_add_event_cb(screen, screen_deleted, LV_EVENT_DELETE, NULL);
     s_chart = lv_chart_create(screen);
     lv_obj_set_size(s_chart, 1120, 350);
+    lv_obj_set_style_bg_color(s_chart, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(s_chart, lv_color_hex(0x214252), 0);
     lv_chart_set_type(s_chart, LV_CHART_TYPE_BAR);
     lv_chart_set_range(s_chart, LV_CHART_AXIS_PRIMARY_Y, 0, 2048);
     lv_chart_set_point_count(s_chart, SCAN_POINT_COUNT);
@@ -207,12 +209,15 @@ void app_scanner_show(void)
     }
     s_status = lv_label_create(screen);
     lv_label_set_text(s_status, "Starting receiver sweep…");
+    lv_obj_set_style_text_color(s_status, lv_color_hex(0xEAF6F7), 0);
 
     lv_obj_t *results = lv_obj_create(screen);
     lv_obj_set_size(results, 1120, 125);
     lv_obj_set_flex_flow(results, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(results, LV_FLEX_ALIGN_SPACE_EVENLY,
                           LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(results, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(results, lv_color_hex(0x214252), 0);
     static const unsigned ranks[3] = {0, 1, 2};
     for (unsigned i = 0; i < 3; ++i) {
         s_top_buttons[i] = app_make_button(results, "Scanning…", NULL);

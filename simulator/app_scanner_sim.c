@@ -51,7 +51,7 @@ static void scan_tick(lv_timer_t *timer)
         return;
     }
     scanner_strongest(s_samples, POINT_COUNT, s_top, 3);
-    lv_label_set_text(s_status, "Simulation sweep complete · tap a peak to monitor");
+    lv_label_set_text(s_status, "Simulation sweep complete | tap a peak to monitor");
     for (unsigned i = 0; i < 3; ++i) {
         lv_label_set_text_fmt(lv_obj_get_child(s_buttons[i], 0), "%u MHz\n%.3f V",
                               s_top[i].frequency_mhz, s_top[i].rssi);
@@ -78,6 +78,8 @@ void app_scanner_show(void)
     lv_obj_add_event_cb(screen, deleted, LV_EVENT_DELETE, NULL);
     s_chart = lv_chart_create(screen);
     lv_obj_set_size(s_chart, 1120, 350);
+    lv_obj_set_style_bg_color(s_chart, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(s_chart, lv_color_hex(0x214252), 0);
     lv_chart_set_type(s_chart, LV_CHART_TYPE_BAR);
     lv_chart_set_range(s_chart, LV_CHART_AXIS_PRIMARY_Y, 0, 2048);
     lv_chart_set_point_count(s_chart, POINT_COUNT);
@@ -85,11 +87,14 @@ void app_scanner_show(void)
                                    LV_CHART_AXIS_PRIMARY_Y);
     s_status = lv_label_create(screen);
     lv_label_set_text(s_status, "Starting simulated receiver sweep…");
+    lv_obj_set_style_text_color(s_status, lv_color_hex(0xEAF6F7), 0);
     lv_obj_t *results = lv_obj_create(screen);
     lv_obj_set_size(results, 1120, 125);
     lv_obj_set_flex_flow(results, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(results, LV_FLEX_ALIGN_SPACE_EVENLY,
                           LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(results, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(results, lv_color_hex(0x214252), 0);
     static const unsigned ranks[] = {0, 1, 2};
     for (unsigned i = 0; i < 3; ++i) {
         s_buttons[i] = app_make_button(results, "Scanning…", NULL);
@@ -100,4 +105,3 @@ void app_scanner_show(void)
     s_timer = lv_timer_create(scan_tick, 55, NULL);
     lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);
 }
-

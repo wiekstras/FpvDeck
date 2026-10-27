@@ -17,10 +17,10 @@ static void refresh(lv_timer_t *timer)
     battery_pack_t pack;
     if (!battery_latest(&pack)) {
         lv_label_set_text(s_ui.summary,
-            "NO PACK\n\n— V\n\nDELTA  — mV\nLOWEST — V\nHIGHEST — V\n\n"
-            "Connect a 2S–6S balance lead");
+            "NO PACK\n\n-- V\n\nDELTA  -- mV\nLOWEST -- V\nHIGHEST -- V\n\n"
+            "Connect a 2S-6S balance lead");
         for (unsigned i = 0; i < BATTERY_MAX_CELLS; ++i) {
-            lv_label_set_text_fmt(s_ui.rows[i], "CELL %u     — V", i + 1U);
+            lv_label_set_text_fmt(s_ui.rows[i], "CELL %u     -- V", i + 1U);
             lv_obj_set_style_text_opa(s_ui.rows[i], LV_OPA_40, 0);
         }
         return;
@@ -48,7 +48,8 @@ static void refresh(lv_timer_t *timer)
                                    pack.cells_v[i] < 3.50f ? 0xFFB24A : 0xEAF6F7;
             lv_obj_set_style_text_color(s_ui.rows[i], lv_color_hex(color), 0);
         } else {
-            lv_label_set_text_fmt(s_ui.rows[i], "CELL %u     — V", i + 1U);
+            lv_label_set_text_fmt(s_ui.rows[i], "CELL %u     -- V", i + 1U);
+            lv_obj_set_style_text_color(s_ui.rows[i], lv_color_hex(0x58727A), 0);
             lv_obj_set_style_text_opa(s_ui.rows[i], LV_OPA_40, 0);
         }
     }
@@ -84,6 +85,8 @@ void app_battery_show(void)
     lv_obj_set_flex_flow(cells, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(cells, LV_FLEX_ALIGN_SPACE_EVENLY,
                           LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(cells, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(cells, lv_color_hex(0x214252), 0);
     for (unsigned i = 0; i < BATTERY_MAX_CELLS; ++i) {
         s_ui.rows[i] = lv_label_create(cells);
         lv_obj_set_style_text_font(s_ui.rows[i], &lv_font_montserrat_22, 0);

@@ -17,7 +17,7 @@ static void animate(lv_timer_t *timer)
     lv_obj_set_style_opa(video->noise,
         sim_state()->video_noise || sim_state()->signal_lost ? LV_OPA_70 : LV_OPA_10, 0);
     lv_label_set_text(video->noise, sim_state()->signal_lost ?
-        "NO SIGNAL  ·  RECEIVER SEARCHING" : "·  ·    ·       ·  ·");
+        "NO SIGNAL  |  RECEIVER SEARCHING" : ".  .    .       .  .");
 }
 
 static void deleted(lv_event_t *event)
@@ -56,4 +56,3 @@ void sim_video_populate(lv_obj_t *parent)
     video->timer = lv_timer_create(animate, 60, video);
     animate(video->timer);
 }
-

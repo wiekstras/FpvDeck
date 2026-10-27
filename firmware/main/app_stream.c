@@ -10,6 +10,7 @@ void app_stream_show(void)
         "are measured on the physical HAT.");
     lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_20, 0);
+    lv_obj_set_style_text_color(label, lv_color_hex(0xEAF6F7), 0);
     lv_obj_center(label);
     lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);
 }

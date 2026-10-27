@@ -11,6 +11,6 @@
 #define LV_FONT_MONTSERRAT_26 1
 #define LV_USE_LOG 1
 #define LV_LOG_LEVEL LV_LOG_LEVEL_WARN
+#define LV_USE_FLOAT 1
 
 #endif
-

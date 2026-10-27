@@ -20,6 +20,7 @@ static lv_obj_t *make_row(lv_obj_t *parent, const char *title)
     lv_obj_set_style_pad_hor(row, 24, 0);
     lv_obj_set_style_radius(row, 16, 0);
     lv_obj_set_style_bg_color(row, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_text_color(row, lv_color_hex(0xEAF6F7), 0);
     lv_obj_t *label = lv_label_create(row);
     lv_label_set_text(label, title);
     lv_obj_set_width(label, 330);
@@ -83,13 +84,13 @@ static void keyboard_event(lv_event_t *event)
     const size_t length = strlen(password);
     if (length < 8 || length > 63) {
         lv_textarea_set_placeholder_text(textarea,
-            "WPA2 password must be 8–63 characters");
+            "WPA2 password must be 8-63 characters");
         lv_textarea_set_text(textarea, "");
         return;
     }
     memcpy(s_settings.wifi_password, password, length + 1U);
     (void)settings_save(&s_settings);
-    lv_label_set_text_fmt(s_password_status, "Configured · %u characters",
+    lv_label_set_text_fmt(s_password_status, "Configured | %u characters",
                           (unsigned)length);
     lv_obj_delete_async(s_password_modal);
 }
@@ -176,7 +177,7 @@ void app_settings_show(void)
 
     row = make_row(list, "Spectator Wi-Fi");
     s_password_status = lv_label_create(row);
-    lv_label_set_text_fmt(s_password_status, "Configured · %u characters",
+    lv_label_set_text_fmt(s_password_status, "Configured | %u characters",
                           (unsigned)strlen(s_settings.wifi_password));
     lv_obj_set_flex_grow(s_password_status, 1);
     lv_obj_t *edit = app_make_button(row, "Edit password", edit_password);
@@ -185,7 +186,7 @@ void app_settings_show(void)
     row = make_row(list, "Cell calibration");
     lv_obj_t *pending = lv_label_create(row);
     lv_label_set_text(pending,
-        "Requires connected HAT, precision source and DMM · not run");
+        "Requires connected HAT, precision source and DMM | not run");
     lv_obj_set_style_text_color(pending, lv_color_hex(0xFFB24A), 0);
 
     lv_screen_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 130, 0, true);

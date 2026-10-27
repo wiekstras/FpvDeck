@@ -10,9 +10,9 @@ static void refresh(void)
 {
     const sim_state_t *state = sim_state();
     lv_label_set_text_fmt(s_summary,
-        "PACK %s · %uS%s\nVIDEO %s · DECK %s",
+        "PACK %s | %uS%s\nVIDEO %s | DECK %s",
         state->pack_connected ? "CONNECTED" : "DISCONNECTED",
-        state->cell_count, state->cell_imbalance ? " · IMBALANCED" : "",
+        state->cell_count, state->cell_imbalance ? " | IMBALANCED" : "",
         state->signal_lost ? "LOST" : (state->video_noise ? "NOISY" : "LOCKED"),
         state->deck_low ? "LOW" : "NORMAL");
 }
@@ -95,7 +95,7 @@ static void open_panel(lv_event_t *event)
     lv_obj_set_width(s_summary, 850);
     control(s_panel, "Connect / disconnect pack", toggle_pack);
     control(s_panel, "Toggle cell imbalance", toggle_imbalance);
-    control(s_panel, "Cycle 2S–6S", next_cells);
+    control(s_panel, "Cycle 2S-6S", next_cells);
     control(s_panel, "Toggle video signal", toggle_signal);
     control(s_panel, "Toggle analog noise", toggle_noise);
     control(s_panel, "Toggle low deck battery", toggle_deck);
@@ -107,11 +107,10 @@ void sim_panel_create(void)
 {
     lv_obj_t *button = lv_button_create(lv_layer_top());
     lv_obj_set_size(button, 94, 48);
-    lv_obj_align(button, LV_ALIGN_TOP_MID, 0, 14);
+    lv_obj_align(button, LV_ALIGN_TOP_RIGHT, -18, 14);
     lv_obj_set_style_bg_color(button, lv_color_hex(0x76520D), 0);
     lv_obj_add_event_cb(button, open_panel, LV_EVENT_CLICKED, NULL);
     lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, "SIM");
     lv_obj_center(label);
 }
-

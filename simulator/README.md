@@ -36,6 +36,16 @@ Open a particular screen directly when reviewing layouts:
 Valid screen names are `launcher`, `battery`, `monitor`, `scanner`, `finder`,
 `stream`, and `settings`.
 
+Regenerate the source-controlled launcher, Battery, Monitor, and Scanner images:
+
+```sh
+./scripts/simulator-screenshots
+```
+
+The script uses macOS `sips` (built in) or `ffmpeg` for BMP-to-PNG conversion.
+For one raw capture, use `./scripts/simulator --screen monitor --screenshot
+/tmp/monitor.bmp`.
+
 Run the headless suite, which starts every screen in an isolated process, with:
 
 ```sh

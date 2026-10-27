@@ -71,6 +71,12 @@ hardware buttons. The amber **SIM** control injects video loss/noise, balance
 lead removal, 2S–6S packs, imbalance and low internal battery. Details and the
 headless smoke test are in [simulator/README.md](simulator/README.md).
 
+![FpvDeck simulated FPV monitor](docs/assets/ui/monitor.png)
+
+The source-controlled [UI captures](docs/assets/ui/) are generated from the
+running LVGL simulator with `./scripts/simulator-screenshots`; they are not
+static design mock-ups.
+
 ## Run host tests
 
 Pure logic has no ESP-IDF dependency:

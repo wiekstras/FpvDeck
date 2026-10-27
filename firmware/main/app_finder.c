@@ -22,7 +22,7 @@ static void update_channel_controls(void)
     uint16_t frequency = 0;
     (void)rx5808_channel_frequency(s_settings.band, s_settings.channel,
                                     &frequency);
-    lv_label_set_text_fmt(s_lock_label, "%s  %c%u · %u MHz",
+    lv_label_set_text_fmt(s_lock_label, "%s  %c%u | %u MHz",
                           s_locked ? "UNLOCK" : "LOCK CHANNEL",
                           s_band_names[s_settings.band],
                           s_settings.channel + 1U, frequency);
@@ -93,7 +93,7 @@ static void refresh(lv_timer_t *timer)
         const float active = active_a ? a : b;
         if (active > s_local_peak) s_local_peak = active;
         lv_label_set_text_fmt(s_rssi,
-            "RSSI\n\n%.3f V\n\nPEAK %.3f V\n%c%u · %u MHz\n\nACTIVE RX %c",
+            "RSSI\n\n%.3f V\n\nPEAK %.3f V\n%c%u | %u MHz\n\nACTIVE RX %c",
             active, s_local_peak, s_band_names[s_settings.band],
             s_settings.channel + 1U, frequency, active_a ? 'A' : 'B');
         if (s_settings.buzzer_enabled) {
@@ -113,7 +113,7 @@ static void refresh(lv_timer_t *timer)
         }
     } else {
         lv_label_set_text_fmt(s_rssi,
-            "RSSI\n\n—\n\nPEAK —\n%c%u · %u MHz\n\nWaiting for receiver hardware",
+            "RSSI\n\n--\n\nPEAK --\n%c%u | %u MHz\n\nWaiting for receiver hardware",
             s_band_names[s_settings.band], s_settings.channel + 1U, frequency);
         stop_tone();
     }
@@ -156,6 +156,8 @@ void app_finder_show(void)
     lv_obj_set_flex_flow(controls, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(controls, LV_FLEX_ALIGN_SPACE_EVENLY,
                           LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(controls, lv_color_hex(0x0D1B24), 0);
+    lv_obj_set_style_border_color(controls, lv_color_hex(0x214252), 0);
     s_previous = app_make_button(controls, LV_SYMBOL_LEFT " Channel",
                                  previous_channel);
     lv_obj_set_size(s_previous, 240, 72);

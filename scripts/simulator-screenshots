@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+build_dir="$repo_dir/build/simulator-screenshots"
+output_dir="$repo_dir/docs/assets/ui"
+temporary_dir="$(mktemp -d)"
+trap 'rm -rf "$temporary_dir"' EXIT
+
+cmake -S "$repo_dir/simulator" -B "$build_dir" -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build "$build_dir" --parallel
+mkdir -p "$output_dir"
+
+convert_bmp() {
+  local source="$1"
+  local destination="$2"
+  if command -v sips >/dev/null 2>&1; then
+    sips -s format png "$source" --out "$destination" >/dev/null
+  elif command -v ffmpeg >/dev/null 2>&1; then
+    ffmpeg -loglevel error -y -i "$source" "$destination"
+  else
+    echo "Screenshot conversion needs macOS sips or ffmpeg." >&2
+    exit 1
+  fi
+}
+
+for screen in launcher battery monitor scanner; do
+  bmp="$temporary_dir/$screen.bmp"
+  duration=900
+  if [[ "$screen" == "scanner" ]]; then duration=3200; fi
+  SDL_VIDEODRIVER=offscreen SDL_AUDIODRIVER=dummy \
+    "$build_dir/fpvdeck-sim" --screen "$screen" --duration-ms "$duration" \
+    --screenshot "$bmp"
+  convert_bmp "$bmp" "$output_dir/$screen.png"
+done
+
+echo "Wrote simulator screenshots to ${output_dir#$repo_dir/}/"

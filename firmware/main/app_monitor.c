@@ -44,12 +44,12 @@ static void refresh(lv_timer_t *timer)
             a, b, active_a ? 'A' : 'B', deck);
     } else if (rssi_ok) {
         lv_label_set_text_fmt(s_overlay,
-            "%c%u  %u MHz   RSSI A %.3f V  B %.3f V   RX %c   DECK —",
+            "%c%u  %u MHz   RSSI A %.3f V  B %.3f V   RX %c   DECK --",
             s_band_names[s_settings.band], s_settings.channel + 1U, frequency,
             a, b, active_a ? 'A' : 'B');
     } else {
         lv_label_set_text_fmt(s_overlay,
-            "%c%u  %u MHz   RSSI A —  B —   RX —   DECK —",
+            "%c%u  %u MHz   RSSI A --  B --   RX --   DECK --",
             s_band_names[s_settings.band], s_settings.channel + 1U, frequency);
     }
 }
@@ -175,6 +175,7 @@ void app_monitor_show(void)
     lv_obj_center(next_label);
 
     s_overlay = lv_label_create(video);
+    lv_obj_set_style_text_color(s_overlay, lv_color_hex(0xEAF6F7), 0);
     lv_obj_set_style_bg_color(s_overlay, lv_color_hex(0x071016), 0);
     lv_obj_set_style_bg_opa(s_overlay, LV_OPA_80, 0);
     lv_obj_set_style_pad_all(s_overlay, 14, 0);

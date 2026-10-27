@@ -54,6 +54,7 @@ lv_obj_t *app_screen_create(const char *title)
 {
     lv_obj_t *screen = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(screen, lv_color_hex(0x071016), 0);
+    lv_obj_set_style_text_color(screen, lv_color_hex(0xEAF6F7), 0);
     lv_obj_t *bar = lv_obj_create(screen);
     lv_obj_set_size(bar, lv_pct(100), 76);
     lv_obj_set_style_bg_color(bar, lv_color_hex(0x0D1B24), 0);
@@ -68,6 +69,7 @@ lv_obj_t *app_screen_create(const char *title)
     lv_obj_t *label = lv_label_create(bar);
     lv_label_set_text(label, title);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_24, 0);
+    lv_obj_set_style_text_color(label, lv_color_hex(0xEAF6F7), 0);
     lv_obj_center(label);
     lv_obj_set_flex_flow(screen, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_style_pad_all(screen, 0, 0);
@@ -95,14 +97,16 @@ void app_launcher_show(void)
 {
     lv_obj_t *screen = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(screen, lv_color_hex(0x071016), 0);
+    lv_obj_set_style_text_color(screen, lv_color_hex(0xEAF6F7), 0);
     lv_obj_t *title = lv_label_create(screen);
     lv_label_set_text(title, "FPV DECK");
     lv_obj_set_style_text_color(title, lv_color_hex(0x51D9D0), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_26, 0);
     lv_obj_align(title, LV_ALIGN_TOP_LEFT, 36, 24);
     lv_obj_t *status = lv_label_create(screen);
-    lv_label_set_text(status, "FIELD TOOL  •  HAT SELF-TEST PENDING");
-    lv_obj_align(status, LV_ALIGN_TOP_RIGHT, -36, 31);
+    lv_label_set_text(status, "FIELD TOOL  |  HAT SELF-TEST PENDING");
+    lv_obj_set_style_text_color(status, lv_color_hex(0x89A5AD), 0);
+    lv_obj_align(status, LV_ALIGN_TOP_RIGHT, -150, 31);
 
     lv_obj_t *grid = lv_obj_create(screen);
     lv_obj_set_size(grid, 1160, 570);
