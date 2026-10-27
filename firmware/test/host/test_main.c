@@ -110,6 +110,11 @@ static void test_signal(void)
     CHECK(strongest[0].frequency_mhz == 5658);
     CHECK(strongest[1].frequency_mhz == 5917);
     CHECK(strongest[2].frequency_mhz == 5740);
+    CHECK(finder_beep_interval_ms(-1.0f) == 900);
+    CHECK(finder_beep_interval_ms(0.0f) == 900);
+    CHECK(finder_beep_interval_ms(1.024f) == 525);
+    CHECK(finder_beep_interval_ms(2.048f) == 150);
+    CHECK(finder_beep_interval_ms(3.0f) == 150);
 }
 
 static void test_deck_power(void)

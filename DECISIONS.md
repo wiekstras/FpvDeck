@@ -81,6 +81,10 @@ questions are safety gates, not invitations to guess.
   RSSI readings through a serialized ADS1115 path, reports volts, and uses an
   initial 80 ms post-tune settle time. That delay and the volts-to-signal curve
   remain HIL calibration items.
+- **Decision:** Lost-quad beeps are non-blocking 50 ms tones with a provisional
+  interval mapped from 900 ms at 0 V to 150 ms at the ADS1115 2.048 V full scale.
+  The UI continues to show volts, not a misleading percentage. Receiver HIL
+  data must define the final useful cadence curve.
 - **Decision:** Spectator streaming is isolated behind `app_stream`. The initial
   build provides UI/state boundaries but does not claim a validated 15 fps stream
   until ESP-Hosted, JPEG throughput and simultaneous display capture are measured.

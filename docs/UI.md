@@ -9,7 +9,8 @@ teal focus, text labels and shape changes avoid color-only status.
 - **Battery:** total, six large cell rows, delta, lowest/highest, warnings.
 - **FPV monitor:** video-dominant screen with one compact telemetry strip.
 - **Scanner:** tap-selectable RSSI bars and strongest three channels.
-- **Finder:** glanceable RSSI, peak hold and optional proportional buzzer.
+- **Finder:** glanceable session peak, explicit channel lock and optional
+  non-blocking proportional buzzer.
 - **Stream:** explicit status for local spectator SoftAP.
 - **Settings:** brightness, video mode, buzzer, Wi-Fi and calibration.
 

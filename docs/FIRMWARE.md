@@ -13,7 +13,7 @@ them without a service/plugin framework.
 | `video` | ESP32-P4 ISP-DVP one-field RGB565 capture |
 | `ads1115` | 16-bit single-shot reads with selectable PGA |
 | `battery` | 500 ms ADS sampling, calibrated taps, cell subtraction and limits |
-| `signal_logic` | serialized dual-RSSI sampling, smoothing/peak and strongest-three |
+| `signal_logic` | serialized dual-RSSI sampling, smoothing/peak, scanner ranking and finder cadence |
 | `settings` | versioned settings blob in NVS |
 | `buttons` / `buzzer` | local controls and PWM tones |
 | `deck_power` | calibrated onboard GPIO20 BAT_ADC and warning thresholds |
@@ -49,3 +49,8 @@ The scanner owns serialized raw reads while sweeping all 48 A/B/E/F/R/L table
 entries, settles 80 ms after each retune, and restores the saved monitor channel
 when a sweep completes. Both the settle time and voltage-to-signal mapping require
 measurement with the selected physical RX5808 modules.
+
+The finder uses a 150–900 ms beep interval mapped over the ADS1115's 0–2.048 V
+RSSI input span. This mapping is deterministic and host-tested, but provisional:
+physical RX5808 characterization must replace the full-scale mapping with useful
+near/far thresholds before it can be considered a calibrated field instrument.

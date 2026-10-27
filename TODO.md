@@ -28,6 +28,8 @@ Completed items stay checked; safety-critical unknowns stay visible.
       picker to the FPV monitor.
 - [x] Add a non-blocking 48-channel receiver sweep, live RSSI chart and
       strongest-three actions with serialized ADC access.
+- [x] Add a session-local finder peak, explicit channel lock and non-blocking
+      RSSI-driven buzzer cadence.
 - [ ] Measure the correct post-tune settle time and derive an RX5808-specific
       RSSI voltage calibration curve.
 - [ ] Bind captured video fields into the monitor display after PPA/panel HIL.

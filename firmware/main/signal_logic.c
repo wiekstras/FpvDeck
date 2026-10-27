@@ -38,6 +38,14 @@ void scanner_strongest(const scanner_sample_t *samples, size_t sample_count,
     }
 }
 
+unsigned finder_beep_interval_ms(float rssi_v)
+{
+    if (rssi_v < 0.0f) rssi_v = 0.0f;
+    if (rssi_v > 2.048f) rssi_v = 2.048f;
+    const float normalized = rssi_v / 2.048f;
+    return (unsigned)(900.0f - 750.0f * normalized + 0.5f);
+}
+
 #ifdef ESP_PLATFORM
 #include "board_pins.h"
 #include "driver/gpio.h"

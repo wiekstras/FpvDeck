@@ -51,3 +51,7 @@
   LVGL task only renders snapshots. The scanner restores the previous frequency,
   exposes the strongest three results as monitor shortcuts, and reports hardware
   absence honestly. Host checks and the complete ESP32-P4 build still pass.
+- Completed the finder interaction: it has an app-session peak, large channel
+  controls behind an explicit lock, saved lock selection and a non-blocking
+  50 ms tone state machine whose cadence rises with raw RSSI voltage. Boundary
+  behavior is host-tested; physical RSSI/cadence calibration remains required.

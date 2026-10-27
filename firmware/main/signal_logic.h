@@ -20,6 +20,7 @@ void rssi_filter_reset(rssi_filter_t *filter, float alpha);
 float rssi_filter_update(rssi_filter_t *filter, float sample);
 void scanner_strongest(const scanner_sample_t *samples, size_t sample_count,
                        scanner_sample_t *out, size_t out_count);
+unsigned finder_beep_interval_ms(float rssi_v);
 
 #ifdef ESP_PLATFORM
 #include "ads1115.h"
