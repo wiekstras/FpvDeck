@@ -5,7 +5,7 @@ dual 5.8 GHz analog receiver support, a low-latency FPV monitor, spectrum tools,
 and a protected 2S–6S balance checker. It is a screen and field instrument—not
 a radio transmitter.
 
-![FpvDeck concept render](docs/assets/renders/fpvdeck-field-tool-concept.png)
+![FpvDeck screen-first handheld concept](docs/assets/renders/fpvdeck-readme-hero-v2.png)
 
 > **CONCEPT RENDER — not mechanical CAD.** The enclosure and antenna placement
 > remain subject to measured HAT, battery, connector, thermal, and RF clearances.
@@ -42,6 +42,14 @@ T8L, ELRS or RC-transmitter function is part of the current product.
 | Finder | Peak-hold RSSI, channel lock and proportional buzzer cadence | implemented; HIL cadence calibration pending |
 | Stream | Local WPA2 SoftAP MJPEG spectator view | interface scaffold; encoder/network integration pending |
 | Settings | Brightness, video standard, buzzer, calibration and Wi-Fi password | live persisted controls; calibration workflow pending |
+
+## Field workflow
+
+![FpvDeck analog FPV and balance-check workflow concept](docs/assets/renders/fpvdeck-field-workflow-concept.png)
+
+> **CONCEPT VISUALIZATION.** FpvDeck receives analog FPV independently while an
+> external flight pack may be connected through its balance lead for measurement
+> only. The pack's main discharge connector never powers FpvDeck.
 
 ## Build firmware
 

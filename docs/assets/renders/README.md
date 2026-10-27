@@ -6,6 +6,9 @@ RF performance.
 
 - `fpvdeck-field-tool-concept.png` shows the intended screen-first handheld form.
 - `fpvdeck-exploded-concept.png` communicates the host/HAT/1S-cell stack only.
+- `fpvdeck-readme-hero-v2.png` is the current clean README product hero.
+- `fpvdeck-field-workflow-concept.png` illustrates analog monitoring and
+  balance-lead-only pack measurement in a field context.
 
 Text and component counts were reviewed against the active architecture. Any
 apparent connector, PCB trace, fastener or clearance in these images is still

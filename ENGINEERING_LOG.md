@@ -160,3 +160,12 @@
 - Final validation passed: seven simulator smoke tests, host logic tests, the
   90-part/90-net HAT generator check, and the ESP-IDF 6.1 P4 build. The resulting
   firmware image is `0xde240` bytes with 89% of the app partition free.
+
+## 2026-10-27 — README concept imagery
+
+- Added a clean screen-first product hero and a field-workflow concept image to
+  the README. Both depict the current no-transmitter architecture and are marked
+  as non-dimensional concept visualization.
+- The field image reinforces that an external flight pack connects only through
+  its balance lead for measurement; it does not imply that the pack powers the
+  Deck. KiCad and measured CAD remain authoritative over generated imagery.
