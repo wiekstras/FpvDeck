@@ -11,10 +11,26 @@ set(LV_BUILD_CONF_PATH "${CMAKE_CURRENT_LIST_DIR}/lv_conf.h" CACHE PATH "" FORCE
 set(CONFIG_LV_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
 set(CONFIG_LV_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CONFIG_LV_USE_THORVG_INTERNAL OFF CACHE BOOL "" FORCE)
+option(FPVDECK_USE_IDF_MANAGED_LVGL
+       "Use the LVGL source populated by ESP-IDF when it is available" ON)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
-add_subdirectory("${REPO_ROOT}/managed_components/lvgl__lvgl" lvgl)
+
+# An ESP-IDF build populates managed_components locally, but a clean desktop/CI
+# checkout has not run the IDF component manager. Use the exact firmware LVGL
+# release in both cases and pin the fallback archive by digest.
+set(FPVDECK_IDF_LVGL "${REPO_ROOT}/managed_components/lvgl__lvgl")
+if(FPVDECK_USE_IDF_MANAGED_LVGL AND EXISTS "${FPVDECK_IDF_LVGL}/CMakeLists.txt")
+    add_subdirectory("${FPVDECK_IDF_LVGL}" lvgl)
+else()
+    include(FetchContent)
+    FetchContent_Declare(lvgl
+        URL https://github.com/lvgl/lvgl/archive/refs/tags/v9.5.0.tar.gz
+        URL_HASH SHA256=34a955cdf3a2d005507b704e87357af669a114523b6d3f77b5344fdc68717bc6
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+    FetchContent_MakeAvailable(lvgl)
+endif()
 target_link_libraries(lvgl PUBLIC PkgConfig::SDL2 m)
 
 set(APP_SOURCES

@@ -169,3 +169,13 @@
 - The field image reinforces that an external flight pack connects only through
   its balance lead for measurement; it does not imply that the pack powers the
   Deck. KiCad and measured CAD remain authoritative over generated imagery.
+
+## 2026-10-27 — clean-checkout simulator CI repair
+
+- GitHub Actions failed because the desktop simulator referenced ESP-IDF's
+  generated `managed_components/lvgl__lvgl` directory, which does not exist in a
+  clean checkout before an IDF component-manager run.
+- The simulator now uses that local LVGL tree when available and otherwise
+  fetches the same LVGL 9.5.0 release from its official repository with a pinned
+  SHA-256 archive digest. A forced clean-fetch build and all seven smoke tests
+  pass locally.
