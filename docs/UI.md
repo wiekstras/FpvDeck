@@ -17,7 +17,9 @@ Buttons are registered as an LVGL keypad: Up/Down move focus and OK activates
 the focused control. Streaming or a settings failure must not block the monitor
 capture task. App-specific channel/long-press behavior and physical usability
 remain HIL tasks. Production screens show explicit empty states rather than
-plausible-looking fabricated readings while live data binding is incomplete.
+plausible-looking fabricated readings whenever their hardware source is absent.
+Battery and RSSI views already consume live snapshots; video/display handoff is
+still the primary live-binding gate.
 
 ## Concept imagery
 

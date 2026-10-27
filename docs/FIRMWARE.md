@@ -12,8 +12,8 @@ them without a service/plugin framework.
 | `tvp5150` | reset, ID verification, format/output setup, lock status |
 | `video` | ESP32-P4 ISP-DVP one-field RGB565 capture |
 | `ads1115` | 16-bit single-shot reads with selectable PGA |
-| `battery` | calibrated taps, cell subtraction, limits and storage state |
-| `signal_logic` | RSSI smoothing/peak and scanner strongest-three |
+| `battery` | 500 ms ADS sampling, calibrated taps, cell subtraction and limits |
+| `signal_logic` | 100 ms dual-RSSI sampling, smoothing/peak and strongest-three |
 | `settings` | versioned settings blob in NVS |
 | `buttons` / `buzzer` | local controls and PWM tones |
 | `deck_power` | calibrated onboard GPIO20 BAT_ADC and warning thresholds |
@@ -41,3 +41,7 @@ idf.py -p /dev/ttyACM0 flash monitor
 Hardware-free tests compile the exact production math sources under GCC. Video
 DMA, display handoff, I²C electrical behavior, Wi-Fi/JPEG coexistence and power
 shutdown require hardware-in-loop tests.
+
+Acquisition runs outside the LVGL task. UI timers only copy the latest snapshot,
+so slow ADS conversions cannot stall touch or rendering. Until RX5808 RSSI is
+bench-calibrated, it is displayed as volts rather than a fabricated percentage.

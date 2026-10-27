@@ -57,3 +57,62 @@ bool battery_is_storage_voltage(float voltage)
 {
     return voltage >= 3.80f && voltage <= 3.85f;
 }
+
+#ifdef ESP_PLATFORM
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+static ads1115_t s_adc[2];
+static bool s_ready[2];
+static float s_calibration[BATTERY_MAX_CELLS];
+static battery_pack_t s_latest;
+static bool s_available;
+static portMUX_TYPE s_lock = portMUX_INITIALIZER_UNLOCKED;
+
+static void sampling_task(void *argument)
+{
+    (void)argument;
+    while (true) {
+        float adc_v[BATTERY_MAX_CELLS] = {0};
+        bool read_ok = s_ready[0] && s_ready[1];
+        for (unsigned tap = 0; tap < BATTERY_MAX_CELLS && read_ok; ++tap) {
+            const unsigned device = tap < 4 ? 0 : 1;
+            const unsigned channel = tap < 4 ? tap : tap - 4;
+            read_ok = ads1115_read_single(&s_adc[device], channel,
+                                           ADS1115_PGA_4V096,
+                                           &adc_v[tap]) == ESP_OK;
+        }
+        battery_pack_t pack = {0};
+        if (read_ok) battery_compute(adc_v, s_calibration, &pack);
+        taskENTER_CRITICAL(&s_lock);
+        s_latest = pack;
+        s_available = read_ok && pack.cell_count > 0;
+        taskEXIT_CRITICAL(&s_lock);
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+}
+
+esp_err_t battery_start_sampling(const ads1115_t adc[2],
+                                 const bool ready[2],
+                                 const float calibration[BATTERY_MAX_CELLS])
+{
+    if (adc == NULL || ready == NULL || calibration == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    memcpy(s_adc, adc, sizeof(s_adc));
+    memcpy(s_ready, ready, sizeof(s_ready));
+    memcpy(s_calibration, calibration, sizeof(s_calibration));
+    return xTaskCreate(sampling_task, "battery_sample", 4096, NULL, 3, NULL) == pdPASS
+               ? ESP_OK : ESP_ERR_NO_MEM;
+}
+
+bool battery_latest(battery_pack_t *pack)
+{
+    if (pack == NULL) return false;
+    taskENTER_CRITICAL(&s_lock);
+    *pack = s_latest;
+    const bool available = s_available;
+    taskEXIT_CRITICAL(&s_lock);
+    return available;
+}
+#endif

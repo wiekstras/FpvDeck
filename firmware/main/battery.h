@@ -24,3 +24,12 @@ void battery_compute(const float adc_v[BATTERY_MAX_CELLS],
                      battery_pack_t *pack);
 const char *battery_cell_state(float voltage);
 bool battery_is_storage_voltage(float voltage);
+
+#ifdef ESP_PLATFORM
+#include "ads1115.h"
+#include "esp_err.h"
+esp_err_t battery_start_sampling(const ads1115_t adc[2],
+                                 const bool ready[2],
+                                 const float calibration[BATTERY_MAX_CELLS]);
+bool battery_latest(battery_pack_t *pack);
+#endif

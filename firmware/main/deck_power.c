@@ -21,6 +21,8 @@ deck_power_state_t deck_power_classify(float voltage)
 static adc_oneshot_unit_handle_t s_adc;
 static adc_cali_handle_t s_calibration;
 static adc_channel_t s_channel;
+static volatile float s_latest_voltage;
+static volatile bool s_has_voltage;
 
 esp_err_t deck_power_init(void)
 {
@@ -72,6 +74,15 @@ esp_err_t deck_power_read_voltage(float *voltage)
                             &millivolts),
                         "deck_power", "calibrate BAT_ADC");
     *voltage = (float)millivolts * HOST_BATTERY_DIVIDER_RATIO / 1000.0f;
+    s_latest_voltage = *voltage;
+    s_has_voltage = true;
     return ESP_OK;
+}
+
+bool deck_power_latest(float *voltage)
+{
+    if (voltage == NULL || !s_has_voltage) return false;
+    *voltage = s_latest_voltage;
+    return true;
 }
 #endif

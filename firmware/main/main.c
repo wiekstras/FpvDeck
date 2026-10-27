@@ -1,10 +1,12 @@
 #include "ads1115.h"
 #include "apps.h"
+#include "battery.h"
 #include "buttons.h"
 #include "buzzer.h"
 #include "deck_power.h"
 #include "rx5808.h"
 #include "settings.h"
+#include "signal_logic.h"
 #include "tvp5150.h"
 
 #include "bsp/display.h"
@@ -16,6 +18,7 @@
 
 static const char *TAG = "fpvdeck";
 static ads1115_t s_adc[3];
+static bool s_adc_ready[3];
 
 static void deck_power_task(void *argument)
 {
@@ -87,8 +90,13 @@ void app_main(void)
         if (err != ESP_OK) {
             ESP_LOGW(TAG, "ADS1115 0x%02x unavailable: %s", 0x48U + i,
                      esp_err_to_name(err));
+        } else {
+            s_adc_ready[i] = true;
         }
     }
+    ESP_ERROR_CHECK(battery_start_sampling(s_adc, s_adc_ready,
+                                            settings.cell_calibration));
+    ESP_ERROR_CHECK(signal_start_sampling(&s_adc[2], s_adc_ready[2]));
     err = tvp5150_init(bus);
     if (err != ESP_OK) ESP_LOGW(TAG, "TVP5150 HAT not detected: %s", esp_err_to_name(err));
 

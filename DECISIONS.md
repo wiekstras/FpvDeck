@@ -85,7 +85,7 @@ questions are safety gates, not invitations to guess.
 ## 2026-10-27 — build and design review
 
 - **CONFIRMED:** a clean ESP-IDF v6.1 target build produces `fpvdeck.bin`
-  (approximately 876 KiB) with no warnings from FpvDeck-owned code. Notes emitted
+  (under 0.9 MiB) with no warnings from FpvDeck-owned code. Notes emitted
   by upstream ESP-IDF Kconfig files are outside this repository.
 - **Correction:** diversity polarity is now consistent end-to-end: LMV331
   open/high means RSSI A is stronger, the 3157 high-select path is video A, and

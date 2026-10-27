@@ -22,8 +22,9 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.
 - [ ] Complete zero-copy field capture/PPA/display handoff against ESP-IDF v6.1 HIL.
 - [ ] Implement and benchmark ESP-Hosted SoftAP + hardware JPEG MJPEG stream.
-- [ ] Bind live ADC/RSSI/video data into the honest empty-state app views after
-      HAT communication is verified; never ship fabricated demo readings.
+- [x] Bind live ADS1115 battery/RSSI and active-diversity data into app views,
+      retaining explicit empty states when hardware is absent.
+- [ ] Bind captured video fields into the monitor display after PPA/panel HIL.
 - [ ] Validate low-battery shutdown against the Waveshare power controller.
 - [ ] Read and calibrate the host board's existing BAT_ADC on GPIO20; do not
       connect the reserved ADS1115 deck-cell input without an approved source.

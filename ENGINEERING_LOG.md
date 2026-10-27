@@ -21,7 +21,7 @@
 ## 2026-10-27 — first complete build and review
 
 - Installed the project-local ESP-IDF v6.1 toolchain and completed a real
-  `esp32p4` build. `fpvdeck.bin` is about 876 KiB; FpvDeck-owned sources compile
+  `esp32p4` build. `fpvdeck.bin` remains under 0.9 MiB; FpvDeck-owned sources compile
   with `-Wall -Wextra -Werror`.
 - Host tests pass and the HAT generator reports 78 parts / 90 checked nets.
 - Corrected the diversity comparator/switch polarity so `ACTIVE_RX=1` selects
@@ -37,3 +37,8 @@
 - Registered Up/OK/Down as an LVGL keypad on the default focus group. Removed
   hard-coded pack and RSSI values from production screens; apps now show explicit
   empty/waiting states until real acquisition supplies measurements.
+- Added non-blocking sampling tasks for cumulative balance taps (500 ms) and
+  dual RSSI/ACTIVE_RX (100 ms). Battery, monitor and finder screens consume
+  snapshots on LVGL timers, show calibrated voltages, and retain a clean empty
+  state when the HAT is absent. RSSI remains in volts until a receiver-specific
+  calibration curve is measured; the UI does not invent a percentage.
