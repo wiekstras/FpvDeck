@@ -38,6 +38,10 @@ target_link_libraries(fpvdeck-sim PRIVATE lvgl PkgConfig::SDL2 m)
 target_compile_options(fpvdeck-sim PRIVATE -Wall -Wextra -Werror)
 
 enable_testing()
-add_test(NAME simulator-smoke COMMAND fpvdeck-sim --smoke-test)
-set_tests_properties(simulator-smoke PROPERTIES
-    ENVIRONMENT "SDL_VIDEODRIVER=offscreen;SDL_AUDIODRIVER=dummy" TIMEOUT 15)
+foreach(SCREEN launcher battery monitor scanner finder stream settings)
+    add_test(NAME simulator-${SCREEN}-smoke
+             COMMAND fpvdeck-sim --screen ${SCREEN} --smoke-test)
+    set_tests_properties(simulator-${SCREEN}-smoke PROPERTIES
+        ENVIRONMENT "SDL_VIDEODRIVER=offscreen;SDL_AUDIODRIVER=dummy"
+        TIMEOUT 15)
+endforeach()

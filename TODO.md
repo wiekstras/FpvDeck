@@ -21,7 +21,7 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Build the complete ESP32-P4 image with pinned ESP-IDF 6.1 dependencies.
 - [x] Build a native SDL2 macOS/Linux simulator from the production LVGL app
       sources, including simulated video/RSSI/battery/power and fault controls.
-- [x] Add a headless simulator startup smoke test to CI.
+- [x] Add isolated headless startup tests for every simulator application to CI.
 - [ ] Add deterministic app-interaction tests and source-controlled simulator
       screenshots after the LVGL test input harness is stabilized.
 - [ ] Validate DVP `SCLK` polarity/edge and field framing on physical hardware.

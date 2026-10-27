@@ -25,7 +25,18 @@ The monitor screen contains synthetic moving FPV imagery and a deliberately
 separate Betaflight-style monochrome OSD underneath FpvDeck's RGB status card.
 No hardware is required.
 
-Run the headless startup smoke test with:
+Open a particular screen directly when reviewing layouts:
+
+```sh
+./scripts/simulator --screen monitor
+./scripts/simulator --screen battery
+./scripts/simulator --screen scanner
+```
+
+Valid screen names are `launcher`, `battery`, `monitor`, `scanner`, `finder`,
+`stream`, and `settings`.
+
+Run the headless suite, which starts every screen in an isolated process, with:
 
 ```sh
 ./scripts/test-simulator
@@ -36,4 +47,3 @@ Run the headless startup smoke test with:
 This validates navigation, layout, touch sizing, simulated services, channel
 tuning and failure-state presentation. It does not simulate PPA timing, DVP
 electrical behavior, analog receiver characteristics or panel latency.
-

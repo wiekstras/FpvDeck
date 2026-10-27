@@ -124,3 +124,11 @@
   footprints, button rail and major video/ADC packages. It has zero routed tracks
   and carries explicit NOT FOR FABRICATION markings; STEP/SVG/PNG exports exist
   solely for enclosure coordination.
+
+## 2026-10-27 — simulator application coverage
+
+- Added a `--screen` selector for every production LVGL application so layout
+  and state review on macOS does not require navigating from the launcher.
+- Replaced the launcher-only smoke test with seven isolated headless tests for
+  launcher, battery, monitor, scanner, finder, stream and settings. Process
+  isolation keeps one application's timers from masking another startup error.
