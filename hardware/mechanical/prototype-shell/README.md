@@ -10,7 +10,7 @@ The model deliberately includes:
   active area;
 - four host mounting points on the official 112.003 × 57 mm pattern;
 - a right-side rail with UP / OK / DOWN openings;
-- one left-side SMA passage and one top-right SMA passage;
+- top-left and top-right SMA passages above the two receiver modules;
 - a bottom opening for a side-entry JST-XH 7-pin balance connector;
 - transparent host, HAT and connector fit-check bodies in the assembly view.
 
@@ -27,8 +27,8 @@ OpenSCAD. Edit `dimensions.scad`, never dimensions embedded in the model.
 ## Required physical fit checks
 
 1. Print the front 2 mm high and verify glass/active-area registration.
-2. Print the left and top-right rear connector corners; test both SMA parts,
-   then print the bottom connector edge for the XHP-7 plug.
+2. Print both top rear connector corners; test both SMA parts, then print the
+   bottom connector edge for the XHP-7 plug.
 3. Measure the received RX5808 modules, chosen 1S pack, header stack and button
    actuators before printing a complete shell.
 4. Confirm USB, microSD, power-button, speaker and ventilation access against

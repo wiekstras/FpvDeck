@@ -220,3 +220,14 @@
 - Updated enclosure passages and keep-out bodies, relocated the buttons and AV
   jack to clear the receiver/header regions, and regenerated PCB/STEP/PNG and
   enclosure STL/PNG review artifacts.
+
+## 2026-10-28 — corrected dual top antenna layout
+
+- The follow-up sketch clarified that both SMA connectors belong on the top
+  edge; the two rectangles below are the side-by-side RX5808 modules. The prior
+  left-edge interpretation is superseded.
+- Moved SMA A/RX A to the top-left and retained SMA B/RX B at the top-right.
+  Updated PCB placement, enclosure passages, documentation and review exports.
+- Retained two selectable diversity policies: fail-independent hardware RSSI
+  comparison, or ESP32-P4 quality-aware selection. This is not proprietary
+  rapidFIRE image fusion; Rev A has one switched CVBS path and one decoder.

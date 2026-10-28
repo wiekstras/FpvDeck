@@ -13,9 +13,9 @@
 
 - RX A and RX B are both fitted in the final diversity assembly; RX B may remain
   DNP only for staged single-receiver bring-up. Each has separate filtered 5 V
-  decoupling. RX A exits through the left edge; RX B exits through the top-right
-  edge. The left launch is approximately 2.25 mm and the inboard top-right
-  launch approximately 9.4 mm before stack-up tuning.
+  decoupling. The modules are side-by-side below two top-edge SMA connectors:
+  RX A/top-left and RX B/top-right. Their provisional launches are approximately
+  2.25 mm and 9.4 mm before stack-up tuning.
 - LMV331 compares RSSI A/B. JP1 defaults its open-drain result into the
   SN74LVC1G3157 and reports the actual selection to the ESP32-P4. JP1 may instead
   hand selection to GPIO2 for a future quality-aware firmware policy.

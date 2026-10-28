@@ -111,22 +111,22 @@ def track(board, net_map, net_name, start, end, width=0.30,
 
 def placement_table():
     p = {
-        # Orthogonal antenna placement: A exits the left edge; B exits the
-        # top-right edge. Both receiver RF pads remain 2.25 mm from the SMA
-        # center pad. RX B is shifted inboard to clear the host mounting hole;
-        # its launch remains below the project's 10 mm limit.
-        "J2": (40.75, 94.0, 0), "J3": (138.5, 67.75, 90),
-        "RXA": (57.0, 86.38, 0), "RXB": (137.0, 84.0, 270),
-        "FRA": (73.5, 84.0, 90), "CRA1": (76.0, 82.5, 90),
-        "CRA2": (76.0, 85.5, 90), "FRB": (132.0, 101.0, 0),
+        # Both antennas exit the top edge, with the two receiver modules
+        # side-by-side immediately below them as in the product sketch.
+        # RX B stays inboard of the upper-right host mounting hole; both
+        # provisional launches remain below the project's 10 mm limit.
+        "J2": (61.38, 67.75, 90), "J3": (138.5, 67.75, 90),
+        "RXA": (69.0, 84.0, 270), "RXB": (137.0, 84.0, 270),
+        "FRA": (62.0, 101.0, 0), "CRA1": (65.0, 101.0, 0),
+        "CRA2": (68.0, 101.0, 0), "FRB": (132.0, 101.0, 0),
         "CRB1": (135.0, 101.0, 0), "CRB2": (138.0, 101.0, 0),
         "U1": (82.0, 73.5, 0), "R1": (85.5, 71.5, 0),
         "R2": (85.5, 73.5, 0), "R3": (85.5, 75.5, 0),
-        "C1": (79.5, 72.0, 90), "JP1": (90.0, 73.5, 0),
+        "C1": (82.0, 77.0, 90), "JP1": (90.0, 73.5, 0),
         "U2": (94.0, 73.5, 0), "C2": (97.0, 71.8, 90),
-        "U3": (108.0, 86.0, 0), "U4": (123.0, 82.0, 0),
-        "CIN1": (126.0, 80.5, 90), "COUT1": (126.0, 83.5, 90),
-        "FB1": (119.5, 80.5, 0), "FB2": (119.5, 83.5, 0),
+        "U3": (108.0, 86.0, 0), "U4": (119.0, 82.0, 0),
+        "CIN1": (122.0, 80.5, 90), "COUT1": (122.0, 83.5, 90),
+        "FB1": (115.5, 80.5, 0), "FB2": (115.5, 83.5, 0),
         "Y1": (97.5, 87.0, 0), "RY1": (97.5, 90.0, 0),
         "CY1": (94.5, 86.0, 90), "CY2": (94.5, 89.0, 90),
         "R20": (101.0, 78.0, 0), "R21": (104.0, 78.0, 0),
@@ -137,9 +137,9 @@ def placement_table():
         "R25": (115.5, 83.0, 90),
         "CD1": (104.0, 91.5, 90), "CD2": (106.0, 92.5, 90),
         "CD3": (110.0, 96.0, 0), "CD4": (113.0, 96.0, 0),
-        "U8": (124.0, 95.0, 0), "C25": (121.0, 95.0, 90),
-        "C26": (124.0, 91.5, 0), "C27": (127.0, 91.5, 0),
-        "R29": (128.0, 95.0, 0),
+        "U8": (95.0, 104.0, 0), "C25": (92.0, 104.0, 90),
+        "C26": (95.0, 100.5, 0), "C27": (98.0, 100.5, 0),
+        "R29": (99.0, 104.0, 0),
         "J5": (51.5, 132.25, 0),
         "U5": (104.0, 108.0, 0), "CA1": (104.0, 111.0, 0),
         "U6": (111.0, 108.0, 0), "CA2": (111.0, 111.0, 0),
@@ -190,6 +190,20 @@ def generate():
     if missing or extra:
         raise RuntimeError(f"placement mismatch: missing={missing}, extra={extra}")
 
+    # The receiver bodies may have unknown underside features. Keep every
+    # ordinary component center outside their provisional 25 x 30 mm review
+    # envelopes until both salvaged modules have been measured.
+    receiver_keepouts = ((56.5, 69.5, 81.5, 99.5),
+                         (124.5, 69.5, 149.0, 99.5))
+    allowed_in_keepout = {"RXA", "RXB", "J2", "J3"}
+    for ref, (x, y, _rotation) in placements.items():
+        if ref in allowed_in_keepout:
+            continue
+        for left, top, right, bottom in receiver_keepouts:
+            if left <= x <= right and top <= y <= bottom:
+                raise RuntimeError(
+                    f"{ref} center ({x}, {y}) violates RX5808 body keep-out")
+
     footprints = {}
     for part in PARTS:
         footprints[part.ref] = add_footprint(
@@ -220,23 +234,23 @@ def generate():
 
     j2 = pad_position(footprints, "J2", 1)
     j3 = pad_position(footprints, "J3", 1)
-    if abs(pcbnew.ToMM(j2.x) - x0) > 0.01:
-        raise RuntimeError("SMA A must terminate at the left board edge")
+    if abs(pcbnew.ToMM(j2.y) - y0) > 0.01:
+        raise RuntimeError("SMA A must terminate at the top board edge")
     if abs(pcbnew.ToMM(j3.y) - y0) > 0.01:
         raise RuntimeError("SMA B must terminate at the top board edge")
 
-    box(board, 42.5, 73.5, 77.5, 100.0)
+    box(board, 56.5, 69.5, 81.5, 99.5)
     box(board, 78.0, 69.5, 132.0, 99.5)
     box(board, 124.5, 69.5, 149.0, 99.5)
     box(board, 98.5, 101.0, 150.0, 130.0)
-    label(board, "RX A / LEFT", 44.0, 86.0, 0.8, pcbnew.Dwgs_User, 90)
+    label(board, "RX A / TOP LEFT", 58.0, 84.0, 0.7, pcbnew.Dwgs_User, 90)
     label(board, "RX B / TOP RIGHT", 148.0, 84.0, 0.7, pcbnew.Dwgs_User, 90)
     label(board, "VIDEO / DIVERSITY", 105.0, 98.0, 0.75, pcbnew.Dwgs_User)
     label(board, "BALANCE ADC", 143.5, 128.5, 0.75, pcbnew.Dwgs_User)
     label(board, "FPVDECK HAT REV A", 84.0, 130.0, 0.95)
     label(board, "VERIFY RX5808 + HOST BEFORE FAB", 83.0, 127.5, 0.65)
     label(board, "BALANCE ONLY", 136.0, y1 - 1.8, 0.65)
-    label(board, "SMA A LEFT", x0 + 4.0, 94.0, 0.65, rotation=90)
+    label(board, "SMA A TOP LEFT", 61.38, y0 + 4.5, 0.65)
     label(board, "SMA B TOP RIGHT", 138.5, y0 + 4.5, 0.65)
     label(board, "AUTO / MCU", 90.0, 70.5, 0.65)
     label(board, "UP", 148.5, 105.0, 0.7)

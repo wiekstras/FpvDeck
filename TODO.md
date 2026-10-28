@@ -85,6 +85,9 @@ Completed items stay checked; safety-critical unknowns stay visible.
 
 - [ ] Measure capture-to-panel latency for PAL and NTSC over 1,000 transitions.
 - [ ] Measure weak-signal/diversity behavior and video-switch artifacts.
+- [ ] Implement and host-test the optional ESP32-P4 quality-aware diversity
+      policy (RSSI smoothing, TVP lock penalty, dwell time and field-boundary
+      switching); JP1 hardware-auto remains the Rev A default.
 - [ ] Characterize 1S runtime and thermal behavior with 3000/4000 mAh packs.
 - [ ] Test battery accuracy for 2S–6S with calibrated precision sources.
 - [ ] Replace the adjustable prototype enclosure envelope with measured host,

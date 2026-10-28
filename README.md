@@ -22,8 +22,8 @@ a radio transmitter.
   MIPI-DSI IPS, GT911 capacitive touch, microSD, charger and 40-pin expansion.
 - FpvDeck FPV HAT: two RX5808 receiver positions, hardware/MCU-selectable RSSI
   diversity, TVP5150AM1 video decoder, three ADS1115 ADCs, protected balance
-  input, three buttons, buzzer and buffered analog AV output. Antenna A exits
-  left; antenna B exits at the top-right.
+  input, three buttons, buzzer and buffered analog AV output. Both SMA antenna
+  connectors sit on the top edge, above their side-by-side RX5808 modules.
 - Flat protected 1S LiPo, 3000–4000 mAh, connected only through the Waveshare
   board's documented battery connector.
 
@@ -37,6 +37,9 @@ T8L, ELRS or RC-transmitter function is part of the current product.
 > RX5808 locations, diversity/video electronics, decoder, ADCs and balance JST
 > are placed. Donor-pad metrology, full routing, stack-up, DRC and bench safety
 > gates remain open.
+
+For an electrical/layout review, start with the focused
+[FPV HAT peer-review guide](hardware/fpv-hat/REVIEW_GUIDE.md).
 
 ## Applications
 

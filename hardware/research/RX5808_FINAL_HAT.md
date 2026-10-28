@@ -119,12 +119,12 @@ separate BLM21PG221 ferrite, 100 nF local ceramic, and 10 uF local bulk
 capacitor. The Waveshare 5 V header path must be load-tested from both USB and
 the intended 1S battery before field use.
 
-RX A is rotated toward an SMA on the left edge. RX B faces the top edge and its
-SMA is positioned at the top-right, giving orthogonal antenna exits and better
-physical separation around the handheld. The left launch is approximately
-2.25 mm. RX B is shifted inboard to clear the confirmed host mounting hole, so
-its launch is approximately 9.4 mm and remains within the project's 10 mm
-limit. Final trace width and ground-gap values remain stack-up dependent;
+RX A and RX B sit side-by-side below SMA A at the top-left and SMA B at the
+top-right. Both antenna connectors exit through the top enclosure wall, matching
+the requested physical layout. RX A's launch is approximately 2.25 mm. RX B is
+shifted inboard to clear the confirmed host mounting hole, so its launch is
+approximately 9.4 mm and remains within the project's 10 mm limit. Final trace
+width and ground-gap values remain stack-up dependent;
 `1.0 mm` in the generated file is a visible placeholder, not a 50-ohm
 impedance claim. The released board needs a four-layer stack-up and a
 field-solver-backed grounded-coplanar calculation plus ground-via fencing.

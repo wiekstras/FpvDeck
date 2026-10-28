@@ -24,7 +24,7 @@ front_depth = 3.4;
 lip_depth = 1.6;
 lip_thickness = 1.0;
 
-sma_left_y = 6.0;            // DESIGN: RX A exits left enclosure wall
+sma_top_left_x = -47.0;      // DESIGN: RX A exits top-left enclosure wall
 sma_top_x = 30.0;            // DESIGN: RX B exits top-right enclosure wall
 sma_barrel_d = 6.5;          // CONFIRMED: Amphenol 132289-12 drawing
 sma_cutout_d = 7.1;          // DESIGN: +0.6 diametral FDM clearance

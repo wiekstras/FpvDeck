@@ -154,9 +154,9 @@ questions are safety gates, not invitations to guess.
 
 ## 2026-10-28 — antenna orientation
 
-- **Decision:** RX A exits through the left PCB/enclosure edge and RX B exits at
-  the top-right. The orthogonal arrangement matches the requested handheld
-  layout and improves physical separation between unlike antenna orientations.
+- **Decision:** both SMA connectors exit through the top PCB/enclosure edge,
+  with RX A/top-left and RX B/top-right directly below them. This supersedes the
+  earlier left-edge interpretation after the user's sketch was clarified.
 - **Decision:** RX B stays inboard of the confirmed upper-right M2.5 host mount.
   This makes its provisional grounded-coplanar launch about 9.4 mm rather than
   placing a receiver body over a mounting hole; the project limit remains 10 mm.
