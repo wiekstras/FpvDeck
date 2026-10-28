@@ -65,7 +65,8 @@ PARTS = [
     # auto diversity (pads 1-2); cutting that bridge and closing 2-3 hands video
     # selection to ESP32-P4 GPIO2 without another board revision.
     part("U1", "RSSI COMPARATOR", "Package_TO_SOT_SMD:SOT-23-5", "LMV331IDBVR", "REQUIRED",
-         {"1": "RX_A_STRONGER", "2": "GND", "3": "RSSI_A_HYS", "4": "RSSI_B", "5": "+3V3"}),
+         {"1": "RSSI_A_HYS", "2": "GND", "3": "RSSI_B", "4": "RX_A_STRONGER", "5": "+3V3"},
+         "TI DBV pinout: 1=IN+, 2=GND, 3=IN-, 4=OUT, 5=VCC."),
     part("R1", "10k 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0710KL", "REQUIRED",
          {"1": "RX_A_STRONGER", "2": "+3V3"}, "Comparator open-drain pull-up."),
     part("R2", "1M 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-071ML", "REQUIRED",
@@ -236,6 +237,16 @@ def validate() -> dict[str, list[str]]:
     for receiver in (by_ref["RXA"], by_ref["RXB"]):
         if set(receiver.pins) != {str(pin) for pin in range(1, 13)}:
             raise ValueError(f"{receiver.ref} must expose all 12 RX5808 V1 pads")
+    if by_ref["U1"].pins != {
+        "1": "RSSI_A_HYS", "2": "GND", "3": "RSSI_B",
+        "4": "RX_A_STRONGER", "5": "+3V3",
+    }:
+        raise ValueError("U1 must use the TI LMV331 DBV pinout")
+    if by_ref["U2"].pins != {
+        "1": "VIDEO_A", "2": "GND", "3": "VIDEO_B",
+        "4": "VIDEO_SELECTED", "5": "+3V3", "6": "VIDEO_SELECT",
+    }:
+        raise ValueError("U2 must select VIDEO_A on high and VIDEO_B on low")
     for index, address_net in enumerate(("GND", "+3V3", "I2C_SDA"), start=5):
         adc = by_ref[f"U{index}"]
         expected_fixed = {

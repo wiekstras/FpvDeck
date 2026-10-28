@@ -123,6 +123,11 @@ boundaries. It still cannot fuse simultaneous images because only one composite
 stream reaches one decoder. The UI and documentation must not call it
 rapidFIRE.
 
+The comparator uses the TI DBV pin order (1 IN+, 2 GND, 3 IN-, 4 OUT, 5 VCC).
+Its open-collector output is high when RSSI A is stronger. The 3157 DBV truth
+table connects pin 1/B2 when select is high, so `VIDEO_A` is deliberately on
+pin 1 and `VIDEO_B` on pin 3/B1. Generator assertions lock both mappings.
+
 ## Decoder and ESP32-P4 interface
 
 The selected 1 Vpp/75-ohm composite path is attenuated by the specified

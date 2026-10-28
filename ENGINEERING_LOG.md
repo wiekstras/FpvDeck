@@ -198,3 +198,6 @@
   final-form placement candidate and reproducible top/bottom/STEP exports. Only
   the two short provisional RF launches are routed; measurements, full routing,
   stack-up, DRC and bench validation remain fabrication gates.
+- A post-layout datasheet audit caught and corrected the LMV331 DBV pin order
+  before release: pin 1 is IN+, pin 3 is IN-, and pin 4 is the open-collector
+  output. Generator assertions now lock the comparator and 3157 select polarity.

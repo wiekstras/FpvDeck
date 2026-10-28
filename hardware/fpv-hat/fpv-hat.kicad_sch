@@ -62,7 +62,7 @@
   (text "CRB2  10u 10V X7R  [REQUIRED]  1:+5V_RX_B  2:GND" (at 24 105 0)
     (effects (font (size 0.95 0.95)) (justify left bottom))
     (uuid 3f428421-f739-5146-b554-4565c80463de))
-  (text "U1  RSSI COMPARATOR  [REQUIRED]  1:RX_A_STRONGER  2:GND  3:RSSI_A_HYS  4:RSSI_B  5:+3V3" (at 24 109 0)
+  (text "U1  RSSI COMPARATOR  [REQUIRED]  1:RSSI_A_HYS  2:GND  3:RSSI_B  4:RX_A_STRONGER  5:+3V3" (at 24 109 0)
     (effects (font (size 0.95 0.95)) (justify left bottom))
     (uuid c12de6f7-4109-5731-ac4e-b8afccf0ffb9))
   (text "C1  100n 16V X7R  [REQUIRED]  1:+3V3  2:GND" (at 24 113 0)
