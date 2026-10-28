@@ -11,6 +11,7 @@ Primary sources used for code and design decisions:
 - [TI TVP5150AM1 SLES209E](https://www.ti.com/lit/gpn/tvp5150am1) — pinout, reset, I²C, output format and status registers.
 - [TI ADS1115 SBAS444E](https://www.ti.com/lit/ds/symlink/ads1115.pdf) — PGA, addresses and conversion format.
 - [RX5808 Product Specification V1.0](https://www.foxtechfpv.com/product/5.8G%20modules/rx5808/RX5808-Spec-V1.pdf) — published 28 × 23 × 3 mm envelope, 12-pad electrical order, supply and CVBS characteristics; donor fit still needs measurement.
+- [RichWave analog A/V receiver product register](https://www.richwave.com.tw/en/page_prd_new.aspx?Id=8) — identifies RTC6715 as the 5.8 GHz FM receiver used inside this module class; archived preliminary register details are treated as bring-up evidence, not a donor-module guarantee.
 - [ImmersionRC rapidFIRE operator manual](https://m.media-amazon.com/images/I/B1448syfrzL.pdf) — distinction between proprietary image-fusion mode and classic diversity.
 - [TI SN74LVC1G3157](https://www.ti.com/product/SN74LVC1G3157) — analog-switch bandwidth, break-before-make operation and on resistance.
 - [TI LMV331](https://www.ti.com/lit/ds/symlink/lmv331.pdf) — DBV pin order, input limits and open-collector comparator behavior.

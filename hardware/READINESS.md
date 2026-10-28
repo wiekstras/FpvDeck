@@ -30,6 +30,9 @@ Gerbers or placement files are released.
 - [ ] Measure the actual salvaged RX5808 modules; verify pin order, body, pads,
       shield keep-out and antenna node against the provisional 28 × 23 mm land
       pattern and complete a 1:1 paper overlay.
+- [ ] Verify each donor's RTC6715 serial-mode strap and prove 3.3 V DATA/CLK/LE
+      tuning on a current-limited bench supply; the V1 module sheet only
+      documents the default three-bit parallel channel selection.
 - [ ] Import/measure the exact host 40-pin header offset and keep-outs from the
       official STEP; confirm mating height, battery envelope and antenna clearance.
 - [ ] Complete all remaining routing and planes on the four-layer layout; only

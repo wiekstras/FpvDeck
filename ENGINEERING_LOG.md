@@ -201,3 +201,7 @@
 - A post-layout datasheet audit caught and corrected the LMV331 DBV pin order
   before release: pin 1 is IN+, pin 3 is IN-, and pin 4 is the open-collector
   output. Generator assertions now lock the comparator and 3157 select polarity.
+- RX5808 V1 only publishes the CH1/CH2/CH3 parallel-channel truth table. The
+  underlying RTC6715 supports serial programming, but the module's SPI_SE strap
+  state is a donor-specific verification gate. Added a current-limited,
+  3.3 V-logic tuning test; failed tuning must not lead to 5 V on P4 GPIO.

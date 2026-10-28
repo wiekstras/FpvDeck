@@ -53,6 +53,37 @@ The 2010 module specification gives:
 The old project model omitted pad 12. The current source model and provisional
 footprint include all twelve pads.
 
+### Parallel-select versus serial programming
+
+The RX5808 V1 module sheet labels pads 4–6 as `CH1`, `CH2`, and `CH3` and only
+documents the original eight-channel parallel truth table. The underlying
+RichWave RTC6715 supports either strap selection or a three-wire serial port,
+but serial mode depends on the module's internal `SPI_SE` configuration. The
+donor DVR boards clearly controlled more than eight channels, so serial mode is
+**LIKELY**, not yet confirmed at the removed-module pads.
+
+FpvDeck maps pad 4 to 3.3 V `RX_DATA`, pad 5 to a separate latch-enable, and
+pad 6 to shared `RX_CLK`. Firmware sends the 25-bit word LSB-first (4-bit
+address, write bit, 20-bit data) with 3 us phases. Both receivers receive the
+same DATA/CLK and are latched independently, which lets firmware tune and test
+one receiver before commanding both to the same channel.
+
+Before soldering a salvaged module to the HAT:
+
+1. inspect whether its internal serial-mode strap was already changed by the
+   donor manufacturer; do not copy internet resistor-location photos across
+   unverified module revisions;
+2. power one module from a current-limited 5.0 V supply (250 mA limit), with a
+   5.8 GHz antenna attached;
+3. drive pads 4–6 only with 3.3 V logic and tune between two known transmitters
+   or widely separated channels;
+4. confirm frequency movement from video/RSSI response before fitting module B;
+5. record underside photographs, continuity results, modification state, and
+   measured current in the engineering log.
+
+Failure to tune is a bring-up failure, not evidence that higher GPIO voltage is
+needed. The HAT must never drive an ESP32-P4 GPIO with 5 V.
+
 ## Provisional land pattern
 
 `hardware/fpv-hat.pretty/RX5808_V1_PROVISIONAL.kicad_mod` follows the V1 drawing:

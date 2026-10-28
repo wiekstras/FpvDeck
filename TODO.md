@@ -68,6 +68,8 @@ Completed items stay checked; safety-critical unknowns stay visible.
 - [x] Coordinate external connectors in a real KiCad placement board and export
       top/bottom SVG plus placement-only STEP.
 - [ ] Measure actual RX5808 modules; freeze custom footprint and antenna launch.
+- [ ] Inspect each donor module's RTC6715 serial-mode strap and prove 3.3 V
+      DATA/CLK/LE tuning on a current-limited supply before HAT assembly.
 - [ ] Measure the two salvaged modules from the supplied donor boards and attach
       square-on top/bottom/pad photos plus caliper dimensions.
 - [ ] Confirm Waveshare HAT clearance, header orientation and board outline.
