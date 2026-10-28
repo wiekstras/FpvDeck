@@ -24,7 +24,8 @@ front_depth = 3.4;
 lip_depth = 1.6;
 lip_thickness = 1.0;
 
-sma_x = 39.0;                // DESIGN, provisional HAT placement
+sma_left_y = 6.0;            // DESIGN: RX A exits left enclosure wall
+sma_top_x = 30.0;            // DESIGN: RX B exits top-right enclosure wall
 sma_barrel_d = 6.5;          // CONFIRMED: Amphenol 132289-12 drawing
 sma_cutout_d = 7.1;          // DESIGN: +0.6 diametral FDM clearance
 sma_height = 15.0;
@@ -38,4 +39,3 @@ jst_x = 22.0;                // DESIGN, provisional HAT placement
 button_x = 65.0;
 button_y = [-19, 0, 19];
 button_d = 7.5;               // DESIGN; actuator cap not frozen
-

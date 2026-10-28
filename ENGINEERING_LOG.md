@@ -209,3 +209,14 @@
   TPF131-TR topology: 100 nF AC input coupling, correct 2/4/5/6
   output/input/ground/supply pins, 100 nF + 4.7 uF bypass and a 75-ohm source
   termination. The branch remains subject to 75-ohm load testing.
+
+## 2026-10-28 — orthogonal antenna layout
+
+- Repositioned RX A/SMA A to the PCB and enclosure left edge and RX B/SMA B to
+  the top-right edge at user request.
+- Kept RX A's provisional RF launch at about 2.25 mm. Shifted RX B inboard to
+  avoid the confirmed upper-right M2.5 host mounting point; its straight launch
+  is about 9.4 mm, still below the 10 mm design limit.
+- Updated enclosure passages and keep-out bodies, relocated the buttons and AV
+  jack to clear the receiver/header regions, and regenerated PCB/STEP/PNG and
+  enclosure STL/PNG review artifacts.

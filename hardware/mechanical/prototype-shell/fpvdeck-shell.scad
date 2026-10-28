@@ -47,10 +47,11 @@ module rear_shell() {
             rounded_prism([case_x-2*wall, case_y-2*wall,
                            rear_depth-wall+0.1], corner_r-wall);
 
-        // Two top-facing SMA barrel passages. Antenna nuts remain outside.
-        for (x=[display_offset_x-sma_x, display_offset_x+sma_x])
-            translate([x, case_y/2+0.2, sma_height])
-                rotate([90,0,0]) cylinder(h=wall+0.6, d=sma_cutout_d);
+        // Orthogonal antenna placement: RX A left, RX B top-right.
+        translate([-case_x/2-0.2, sma_left_y, sma_height])
+            rotate([0,90,0]) cylinder(h=wall+0.6, d=sma_cutout_d);
+        translate([sma_top_x, case_y/2+0.2, sma_height])
+            rotate([90,0,0]) cylinder(h=wall+0.6, d=sma_cutout_d);
 
         // Bottom side-entry JST-XH 7-pin balance-lead opening.
         translate([display_offset_x+jst_x, -case_y/2-0.2,
@@ -75,9 +76,10 @@ module hat_keepout() {
 
 module connector_keepouts() {
     color([0.85,0.65,0.15,0.8]) {
-        for (x=[display_offset_x-sma_x, display_offset_x+sma_x])
-            translate([x,case_y/2,sma_height])
-                rotate([90,0,0]) cylinder(h=15,d=sma_barrel_d,center=true);
+        translate([-case_x/2,sma_left_y,sma_height])
+            rotate([0,90,0]) cylinder(h=15,d=sma_barrel_d,center=true);
+        translate([sma_top_x,case_y/2,sma_height])
+            rotate([90,0,0]) cylinder(h=15,d=sma_barrel_d,center=true);
         translate([display_offset_x+jst_x,-case_y/2+3,
                    rear_depth-jst_body_z/2-3])
             cube([jst_body_x,12,jst_body_z],center=true);

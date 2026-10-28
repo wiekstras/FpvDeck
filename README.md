@@ -22,7 +22,8 @@ a radio transmitter.
   MIPI-DSI IPS, GT911 capacitive touch, microSD, charger and 40-pin expansion.
 - FpvDeck FPV HAT: two RX5808 receiver positions, hardware/MCU-selectable RSSI
   diversity, TVP5150AM1 video decoder, three ADS1115 ADCs, protected balance
-  input, three buttons, buzzer and buffered analog AV output.
+  input, three buttons, buzzer and buffered analog AV output. Antenna A exits
+  left; antenna B exits at the top-right.
 - Flat protected 1S LiPo, 3000–4000 mAh, connected only through the Waveshare
   board's documented battery connector.
 

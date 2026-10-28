@@ -151,3 +151,12 @@ questions are safety gates, not invitations to guess.
   for the mechanical proxy, SMA/JST positions, header stack, battery cavity and
   port clearances require the official host STEP plus received-part measurements.
   The KiCad board is intentionally unrouted and its silkscreen states this.
+
+## 2026-10-28 — antenna orientation
+
+- **Decision:** RX A exits through the left PCB/enclosure edge and RX B exits at
+  the top-right. The orthogonal arrangement matches the requested handheld
+  layout and improves physical separation between unlike antenna orientations.
+- **Decision:** RX B stays inboard of the confirmed upper-right M2.5 host mount.
+  This makes its provisional grounded-coplanar launch about 9.4 mm rather than
+  placing a receiver body over a mounting hole; the project limit remains 10 mm.
