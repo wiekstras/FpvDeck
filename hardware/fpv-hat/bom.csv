@@ -1,5 +1,7 @@
 Reference,Value,Manufacturer part number,Footprint,Status,Assembly note
 BZ1,MAGNETIC BUZZER,TMB12A05,Buzzer_Beeper:Buzzer_12x9.5RM7.6,REVIEW,Footprint and current require final chosen buzzer verification.
+C1,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at U1 comparator supply.
+C2,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at U2 video-switch supply.
 C20,100n,GRM188R71H104KA93D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 C21,100n,GRM188R71H104KA93D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 C22,1u,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
@@ -14,6 +16,10 @@ CD3,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,TVP
 CD4,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,TVP5150 IO_DVDD pin 10 bypass; place at pin.
 CIN1,1u 10V X7R,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,ME6211 input bypass; place at U4 pin 1.
 COUT1,1u 10V X7R,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,ME6211 output stability capacitor; place at U4 pin 5.
+CRA1,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place at RXA power pad.
+CRA2,10u 10V X7R,GRM21BR71A106KE51L,Capacitor_SMD:C_0805_2012Metric,REQUIRED,Receiver-A local bulk capacitor.
+CRB1,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place at RXB power pad.
+CRB2,10u 10V X7R,GRM21BR71A106KE51L,Capacitor_SMD:C_0805_2012Metric,REQUIRED,Receiver-B local bulk capacitor.
 CT1,10n 50V C0G,GRM1885C1H103JA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 CT2,10n 50V C0G,GRM1885C1H103JA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 CT3,10n 50V C0G,GRM1885C1H103JA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
@@ -24,11 +30,14 @@ CY1,CRYSTAL LOAD TUNE,TBD_AFTER_OSCILLATOR_TEST,Capacitor_SMD:C_0603_1608Metric,
 CY2,CRYSTAL LOAD TUNE,TBD_AFTER_OSCILLATOR_TEST,Capacitor_SMD:C_0603_1608Metric,DNP,Match CY1 after measured board stray capacitance/oscillator test.
 FB1,600R@100MHz,BLM18AG601SN1D,Inductor_SMD:L_0603_1608Metric,REQUIRED,
 FB2,600R@100MHz,BLM18AG601SN1D,Inductor_SMD:L_0603_1608Metric,REQUIRED,
+FRA,220R@100MHz 2A,BLM21PG221SN1D,Inductor_SMD:L_0805_2012Metric,REQUIRED,Dedicated receiver-A supply filter.
+FRB,220R@100MHz 2A,BLM21PG221SN1D,Inductor_SMD:L_0805_2012Metric,REQUIRED,Dedicated receiver-B supply filter.
 J1,WAVESHARE 40PIN,M20-9982046,Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical,REQUIRED,GPIO mapping is sourced from Waveshare schematic sheet 1/2.
 J2,SMA EDGE A,132289-12,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,REQUIRED,
-J3,SMA EDGE B,132289-12,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,DNP,
+J3,SMA EDGE B,132289-12,Connector_Coaxial:SMA_Amphenol_132289_EdgeMount,REQUIRED,
 J4,BALANCE 2S-6S,S7B-XH-A-1(LF)(SN),Connector_JST:JST_XH_S7B-XH-A-1_1x07_P2.50mm_Horizontal,REQUIRED,Side-entry external access; measurement only; no pack energy powers the Deck.
 J5,AV OUT 3.5MM,SJ1-3523N,Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal,REVIEW,
+JP1,AUTO / MCU SELECT,SOLDER_JUMPER,Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm,REQUIRED,Default 1-2 = hardware RSSI diversity; cut 1-2 and bridge 2-3 for MCU control.
 Q1,BUZZER DRIVER,MMBT3904LT1G,Package_TO_SOT_SMD:SOT-23,REQUIRED,
 R1,10k 1%,RC0603FR-0710KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,Comparator open-drain pull-up.
 R2,1M 1%,RC0603FR-071ML,Resistor_SMD:R_0603_1608Metric,REQUIRED,Comparator hysteresis feedback.
@@ -68,12 +77,12 @@ RT3,100k 1%,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
 RT4,100k 1%,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
 RT5,100k 1%,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
 RT6,100k 1%,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
-RXA,RX5808 MODULE A,RX5808 module,FPVDeck:RX5808_PLACEHOLDER_VERIFY,REQUIRED,SPEC V1 electrical order; real module footprint/pin order must be measured.
-RXB,RX5808 MODULE B,RX5808 module,FPVDeck:RX5808_PLACEHOLDER_VERIFY,DNP,Optional diversity receiver; same physical verification gate as RXA.
+RXA,RX5808 MODULE A,RX5808 module,FPVDeck:RX5808_V1_PROVISIONAL,REQUIRED,SPEC V1 28x23x3 mm provisional land pattern; verify donor module pads 1:1.
+RXB,RX5808 MODULE B,RX5808 module,FPVDeck:RX5808_V1_PROVISIONAL,REQUIRED,Second fitted receiver for final diversity assembly; verify donor module pads 1:1.
 RY1,100k 1%,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,TI SLES209E recommended parallel crystal resistor.
-SW1,UP,TL3301AF160QG,Button_Switch_SMD:SW_SPST_TL3301AN,REQUIRED,
-SW2,OK,TL3301AF160QG,Button_Switch_SMD:SW_SPST_TL3301AN,REQUIRED,
-SW3,DOWN,TL3301AF160QG,Button_Switch_SMD:SW_SPST_TL3301AN,REQUIRED,
+SW1,UP,TL3305AF160QG,Button_Switch_SMD:SW_SPST_TL3305A,REQUIRED,
+SW2,OK,TL3305AF160QG,Button_Switch_SMD:SW_SPST_TL3305A,REQUIRED,
+SW3,DOWN,TL3305AF160QG,Button_Switch_SMD:SW_SPST_TL3305A,REQUIRED,
 TP1,TAP1,TEST POINT,TestPoint:TestPoint_Plated_Hole_D2.0mm,REQUIRED,
 TP2,TAP2,TEST POINT,TestPoint:TestPoint_Plated_Hole_D2.0mm,REQUIRED,
 TP3,TAP3,TEST POINT,TestPoint:TestPoint_Plated_Hole_D2.0mm,REQUIRED,

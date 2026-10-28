@@ -39,37 +39,61 @@ def part(ref: str, value: str, footprint: str, mpn: str, status: str,
 PARTS = [
     part("J1", "WAVESHARE 40PIN", "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical",
          "M20-9982046", "REQUIRED", {"1": "+5V", "2": "+3V3", "3": "+5V", "4": "I2C_SDA",
-         "5": "GND", "6": "I2C_SCL", "7": "DVP_D0", "9": "DVP_D1", "11": "DVP_D2",
+         "5": "GND", "6": "I2C_SCL", "7": "DVP_D0", "8": "VIDEO_SELECT_MCU",
+         "9": "DVP_D1", "11": "DVP_D2",
          "12": "DVP_D3", "14": "DVP_D4", "15": "DVP_D5", "16": "DVP_D6", "17": "DVP_D7",
          "18": "+3V3", "20": "DVP_PCLK", "22": "DVP_HSYNC", "24": "DVP_VSYNC",
          "26": "GND", "28": "RX_DATA", "30": "RX_CLK", "31": "RX_LE_A", "32": "RX_LE_B",
-         "34": "ACTIVE_RX", "35": "TVP_RESETB", "36": "BTN_UP", "37": "BTN_OK",
+         "34": "VIDEO_SELECT", "35": "TVP_RESETB", "36": "BTN_UP", "37": "BTN_OK",
          "38": "BTN_DOWN", "39": "BUZZER", "40": "GND"},
          "GPIO mapping is sourced from Waveshare schematic sheet 1/2."),
-    part("RXA", "RX5808 MODULE A", "FPVDeck:RX5808_PLACEHOLDER_VERIFY", "RX5808 module", "REQUIRED",
+    part("RXA", "RX5808 MODULE A", "FPVDeck:RX5808_V1_PROVISIONAL", "RX5808 module", "REQUIRED",
          {"1": "GND", "2": "RF_A", "3": "GND", "4": "RX_DATA", "5": "RX_LE_A", "6": "RX_CLK",
-          "7": "GND", "8": "+5V", "9": "RSSI_A", "10": "NC_AUDIO_A", "11": "VIDEO_A"},
-         "SPEC V1 electrical order; real module footprint/pin order must be measured."),
-    part("RXB", "RX5808 MODULE B", "FPVDeck:RX5808_PLACEHOLDER_VERIFY", "RX5808 module", "DNP",
+          "7": "GND", "8": "+5V_RX_A", "9": "RSSI_A", "10": "NC_AUDIO_A",
+          "11": "VIDEO_A", "12": "GND"},
+         "SPEC V1 28x23x3 mm provisional land pattern; verify donor module pads 1:1."),
+    part("RXB", "RX5808 MODULE B", "FPVDeck:RX5808_V1_PROVISIONAL", "RX5808 module", "REQUIRED",
          {"1": "GND", "2": "RF_B", "3": "GND", "4": "RX_DATA", "5": "RX_LE_B", "6": "RX_CLK",
-          "7": "GND", "8": "+5V", "9": "RSSI_B", "10": "NC_AUDIO_B", "11": "VIDEO_B"},
-         "Optional diversity receiver; same physical verification gate as RXA."),
+          "7": "GND", "8": "+5V_RX_B", "9": "RSSI_B", "10": "NC_AUDIO_B",
+          "11": "VIDEO_B", "12": "GND"},
+         "Second fitted receiver for final diversity assembly; verify donor module pads 1:1."),
     part("J2", "SMA EDGE A", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289-12", "REQUIRED",
          {"1": "RF_A", "2": "GND"}),
-    part("J3", "SMA EDGE B", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289-12", "DNP",
+    part("J3", "SMA EDGE B", "Connector_Coaxial:SMA_Amphenol_132289_EdgeMount", "132289-12", "REQUIRED",
          {"1": "RF_B", "2": "GND"}),
-    # LMV331: high/open output means RSSI_A > RSSI_B. The 3157 B2 input is
-    # therefore VIDEO_A so ACTIVE_RX high consistently means receiver A.
+    # LMV331: high/open output means RSSI_A > RSSI_B. JP1 defaults to hardware
+    # auto diversity (pads 1-2); cutting that bridge and closing 2-3 hands video
+    # selection to ESP32-P4 GPIO2 without another board revision.
     part("U1", "RSSI COMPARATOR", "Package_TO_SOT_SMD:SOT-23-5", "LMV331IDBVR", "REQUIRED",
-         {"1": "ACTIVE_RX", "2": "GND", "3": "RSSI_A_HYS", "4": "RSSI_B", "5": "+3V3"}),
+         {"1": "RX_A_STRONGER", "2": "GND", "3": "RSSI_A_HYS", "4": "RSSI_B", "5": "+3V3"}),
     part("R1", "10k 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0710KL", "REQUIRED",
-         {"1": "ACTIVE_RX", "2": "+3V3"}, "Comparator open-drain pull-up."),
+         {"1": "RX_A_STRONGER", "2": "+3V3"}, "Comparator open-drain pull-up."),
     part("R2", "1M 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-071ML", "REQUIRED",
-         {"1": "ACTIVE_RX", "2": "RSSI_A_HYS"}, "Comparator hysteresis feedback."),
+         {"1": "RX_A_STRONGER", "2": "RSSI_A_HYS"}, "Comparator hysteresis feedback."),
     part("R3", "10k 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0710KL", "REQUIRED",
          {"1": "RSSI_A", "2": "RSSI_A_HYS"}),
+    part("JP1", "AUTO / MCU SELECT", "Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm",
+         "SOLDER_JUMPER", "REQUIRED",
+         {"1": "RX_A_STRONGER", "2": "VIDEO_SELECT", "3": "VIDEO_SELECT_MCU"},
+         "Default 1-2 = hardware RSSI diversity; cut 1-2 and bridge 2-3 for MCU control."),
     part("U2", "VIDEO SWITCH", "Package_TO_SOT_SMD:SOT-23-6", "SN74LVC1G3157DBVR", "REQUIRED",
-         {"1": "VIDEO_A", "2": "GND", "3": "VIDEO_B", "4": "VIDEO_SELECTED", "5": "+3V3", "6": "ACTIVE_RX"}),
+         {"1": "VIDEO_A", "2": "GND", "3": "VIDEO_B", "4": "VIDEO_SELECTED", "5": "+3V3", "6": "VIDEO_SELECT"}),
+    part("C1", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+3V3", "2": "GND"}, "Place directly at U1 comparator supply."),
+    part("C2", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+3V3", "2": "GND"}, "Place directly at U2 video-switch supply."),
+    part("FRA", "220R@100MHz 2A", "Inductor_SMD:L_0805_2012Metric", "BLM21PG221SN1D", "REQUIRED",
+         {"1": "+5V", "2": "+5V_RX_A"}, "Dedicated receiver-A supply filter."),
+    part("FRB", "220R@100MHz 2A", "Inductor_SMD:L_0805_2012Metric", "BLM21PG221SN1D", "REQUIRED",
+         {"1": "+5V", "2": "+5V_RX_B"}, "Dedicated receiver-B supply filter."),
+    part("CRA1", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+5V_RX_A", "2": "GND"}, "Place at RXA power pad."),
+    part("CRA2", "10u 10V X7R", "Capacitor_SMD:C_0805_2012Metric", "GRM21BR71A106KE51L", "REQUIRED",
+         {"1": "+5V_RX_A", "2": "GND"}, "Receiver-A local bulk capacitor."),
+    part("CRB1", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+5V_RX_B", "2": "GND"}, "Place at RXB power pad."),
+    part("CRB2", "10u 10V X7R", "Capacitor_SMD:C_0805_2012Metric", "GRM21BR71A106KE51L", "REQUIRED",
+         {"1": "+5V_RX_B", "2": "GND"}, "Receiver-B local bulk capacitor."),
     part("U3", "CVBS DECODER", "Package_QFP:LQFP-32_7x7mm_P0.8mm", "TVP5150AM1PBSR", "REQUIRED",
          {"1": "TVP_AIP1A", "2": "TVP_AIP1B", "3": "AGND", "4": "+1V8A", "5": "XTAL1", "6": "XTAL2",
           "7": "AGND", "8": "TVP_RESETB", "9": "DVP_PCLK_RAW", "10": "+3V3", "11": "DVP_D7_RAW",
@@ -178,9 +202,9 @@ PARTS.extend([
     part("R28", "2.2k", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-072K2L", "REQUIRED", {"1": "BUZZER", "2": "BUZZER_BASE"}),
     part("BZ1", "MAGNETIC BUZZER", "Buzzer_Beeper:Buzzer_12x9.5RM7.6", "TMB12A05", "REVIEW",
          {"1": "+5V", "2": "BUZZER_LOW"}, "Footprint and current require final chosen buzzer verification."),
-    part("SW1", "UP", "Button_Switch_SMD:SW_SPST_TL3301AN", "TL3301AF160QG", "REQUIRED", {"1": "BTN_UP", "2": "GND"}),
-    part("SW2", "OK", "Button_Switch_SMD:SW_SPST_TL3301AN", "TL3301AF160QG", "REQUIRED", {"1": "BTN_OK", "2": "GND"}),
-    part("SW3", "DOWN", "Button_Switch_SMD:SW_SPST_TL3301AN", "TL3301AF160QG", "REQUIRED", {"1": "BTN_DOWN", "2": "GND"}),
+    part("SW1", "UP", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_UP", "2": "GND"}),
+    part("SW2", "OK", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_OK", "2": "GND"}),
+    part("SW3", "DOWN", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_DOWN", "2": "GND"}),
     part("U8", "AV BUFFER", "Package_TO_SOT_SMD:SOT-23-6", "TPF131-TR", "REVIEW",
          {"1": "AV_BUF_IN", "2": "GND", "3": "AV_BUF_BIAS", "4": "AV_BUF_EN", "5": "+5V", "6": "AV_BUF_OUT"},
          "DNP until direct-CVBS input scaling and exact application circuit are bench-validated."),
@@ -194,7 +218,7 @@ PARTS.extend([
 # These nets are intentionally exposed as test nodes or option boundaries.
 ALLOW_SINGLE = {"NC_AUDIO_A", "NC_AUDIO_B", "ADC1_ALERT", "ADC2_ALERT", "ADC3_ALERT",
                 "SPARE_ADC", "SPARE_RSSI2", "SPARE_RSSI3", "DECK_CELL", "AV_BUF_IN", "AV_BUF_BIAS",
-                "AV_BUF_EN", "ACTIVE_RX"}
+                "AV_BUF_EN"}
 
 
 def validate() -> dict[str, list[str]]:
@@ -209,6 +233,9 @@ def validate() -> dict[str, list[str]]:
     if lonely:
         raise ValueError(f"nets with fewer than two endpoints: {lonely}")
     by_ref = {p.ref: p for p in PARTS}
+    for receiver in (by_ref["RXA"], by_ref["RXB"]):
+        if set(receiver.pins) != {str(pin) for pin in range(1, 13)}:
+            raise ValueError(f"{receiver.ref} must expose all 12 RX5808 V1 pads")
     for index, address_net in enumerate(("GND", "+3V3", "I2C_SDA"), start=5):
         adc = by_ref[f"U{index}"]
         expected_fixed = {
@@ -275,7 +302,9 @@ def write_schematic(nets: dict[str, list[str]]) -> None:
     ]
     blocks = [
         ("POWER + HOST", ["J1", "U4", "CIN1", "COUT1", "FB1", "FB2"]),
-        ("5.8 GHz DIVERSITY", ["RXA", "RXB", "J2", "J3", "U1", "U2"]),
+        ("5.8 GHz DIVERSITY", ["RXA", "RXB", "J2", "J3", "FRA", "FRB",
+                                "CRA1", "CRA2", "CRB1", "CRB2", "U1", "C1",
+                                "JP1", "U2", "C2"]),
         ("CVBS TO DVP", ["U3", "CD1", "CD2", "CD3", "CD4", "Y1", "RY1", "CY1", "CY2",
                          "R20", "R21", "C20", "C21", "C22", "C23", "C24"]),
         ("BATTERY + RSSI ADC", ["J4", "U5", "CA1", "U6", "CA2", "U7", "CA3"]),

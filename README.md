@@ -20,7 +20,7 @@ a radio transmitter.
 
 - Waveshare ESP32-P4-WIFI6-Touch-LCD-5: ESP32-P4, ESP32-C6, 5-inch 720×1280
   MIPI-DSI IPS, GT911 capacitive touch, microSD, charger and 40-pin expansion.
-- FpvDeck FPV HAT: one fitted and one optional RX5808 receiver, hardware RSSI
+- FpvDeck FPV HAT: two RX5808 receiver positions, hardware/MCU-selectable RSSI
   diversity, TVP5150AM1 video decoder, three ADS1115 ADCs, protected balance
   input, three buttons, buzzer and buffered analog AV output.
 - Flat protected 1S LiPo, 3000–4000 mAh, connected only through the Waveshare
@@ -29,6 +29,13 @@ a radio transmitter.
 The previous RadioMaster T8L/Linux-radio-computer direction was retired on
 2026-10-26. It remains available in Git history through commit `fd47ebd`; no
 T8L, ELRS or RC-transmitter function is part of the current product.
+
+![FpvDeck HAT Rev A layout candidate](hardware/fpv-hat/export/fpv-hat-top.png)
+
+> **ENGINEERING LAYOUT CANDIDATE — NOT YET A FABRICATION RELEASE.** Both donor
+> RX5808 locations, diversity/video electronics, decoder, ADCs and balance JST
+> are placed. Donor-pad metrology, full routing, stack-up, DRC and bench safety
+> gates remain open.
 
 ## Applications
 
@@ -105,10 +112,11 @@ python3 hardware/gen_hat.py
 ```
 
 The generator validates references, net connectivity, labels and balanced KiCad
-syntax, then writes the KiCad 8 schematic, BOM and audit netlist. The PCB is an
-engineering placement/routing draft and is explicitly **not released for
-fabrication** until the gates in [hardware/READINESS.md](hardware/READINESS.md)
-are closed.
+syntax, then writes the KiCad schematic, BOM and audit netlist. The net-aware
+four-layer layout candidate places all modeled parts and its two short RF
+launches; it is explicitly **not released for fabrication** until the gates in
+[hardware/READINESS.md](hardware/READINESS.md) are closed. See the
+[RX5808/diversity research](hardware/research/RX5808_FINAL_HAT.md).
 
 ## Mechanical CAD
 
@@ -152,7 +160,7 @@ See [the complete bring-up procedure](docs/BRINGUP.md).
 - ✅ ESP-IDF 6.1 firmware compiles for ESP32-P4 without warnings in project code
 - ✅ native macOS/Linux LVGL simulator with touch, keyboard and fault injection
 - 🚧 live sensor/video-to-display integration requires the physical stack
-- 📐 generated KiCad schematic and PCB draft
+- 📐 generated 99-part KiCad schematic and final-form PCB layout candidate
 - ⚠️ RX5808 module footprint/pinout requires physical verification
 - ⚠️ no fabrication release or real-battery approval yet
 

@@ -11,9 +11,12 @@
 
 ## HAT blocks
 
-- RX A is required; RX B and its SMA path are optional/DNP.
-- LMV331 compares RSSI A/B. Its open-drain output both selects the
-  SN74LVC1G3157 and reports `ACTIVE_RX` to the ESP32-P4.
+- RX A and RX B are both fitted in the final diversity assembly; RX B may remain
+  DNP only for staged single-receiver bring-up. Each has separate filtered 5 V
+  decoupling and a short board-edge SMA launch.
+- LMV331 compares RSSI A/B. JP1 defaults its open-drain result into the
+  SN74LVC1G3157 and reports the actual selection to the ESP32-P4. JP1 may instead
+  hand selection to GPIO2 for a future quality-aware firmware policy.
 - TVP5150AM1 accepts selected CVBS and emits 8-bit BT.601 YCbCr with discrete
   synchronization. Eleven 33 Ω source resistors isolate DVP edges.
 - ME6211C18 makes 1.8 V; ferrites split analog and digital decoder rails. Its
@@ -33,9 +36,11 @@
 ## Board status
 
 [`hardware/gen_hat.py`](../hardware/gen_hat.py) owns the checked parts/net
-model. It emits the schematic, audit netlist, BOM, placement-board container,
-and component view. The current PCB deliberately has no fabricated RF geometry
-or guessed RX5808 pads. See [release gates](../hardware/READINESS.md).
+model. It emits the schematic, audit netlist, BOM, net-aware layout candidate,
+and component view. A V1-spec provisional RX5808 footprint is now present for
+physical overlay review, but is not fabrication-approved until the salvaged
+modules are measured. See the [receiver/diversity research](../hardware/research/RX5808_FINAL_HAT.md)
+and [release gates](../hardware/READINESS.md).
 
 ## Layout rules for the routed revision
 

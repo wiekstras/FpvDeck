@@ -1,85 +1,234 @@
 #!/usr/bin/env python3
-"""Generate the placement-only HAT mechanical PCB in KiCad.
+"""Generate the net-aware FpvDeck HAT layout candidate in KiCad.
 
-This board intentionally has no routed nets. It coordinates the Waveshare
-mounting envelope and external JST/SMA/button locations with the shell.
+The board is generated from the same part/net model as the schematic. It is a
+final-form placement candidate, but fabrication remains blocked until the donor
+RX5808 land pattern and Waveshare mating geometry are verified physically and
+the remaining nets are interactively routed/reviewed.
 """
+
 from pathlib import Path
+import sys
+
 import pcbnew
 
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+from gen_hat import PARTS, validate  # noqa: E402
+
 OUT = ROOT / "templates" / "fpv-hat-placement.kicad_pcb"
 PCB_OUT = ROOT / "fpv-hat" / "fpv-hat.kicad_pcb"
 KICAD = Path("/usr/share/kicad/footprints")
+CUSTOM = ROOT / "fpv-hat.pretty"
 CX, CY = 100.0, 100.0
 BOARD_X, BOARD_Y = 118.5, 64.5
 
-def mm(value): return pcbnew.FromMM(value)
-def point(x, y): return pcbnew.VECTOR2I(mm(x), mm(y))
 
-def footprint(board, library, name, ref, x, y, rotation=0):
-    fp = pcbnew.FootprintLoad(str(KICAD / f"{library}.pretty"), name)
-    if fp is None:
-        raise RuntimeError(f"missing KiCad footprint {library}:{name}")
-    fp.SetReference(ref)
-    fp.SetPosition(point(x, y))
-    fp.SetOrientationDegrees(rotation)
-    board.Add(fp)
-    return fp
+def mm(value):
+    return pcbnew.FromMM(value)
+
+
+def point(x, y):
+    return pcbnew.VECTOR2I(mm(x), mm(y))
+
 
 def line(board, x1, y1, x2, y2, layer=pcbnew.Edge_Cuts, width=0.2):
     shape = pcbnew.PCB_SHAPE(board)
     shape.SetShape(pcbnew.SHAPE_T_SEGMENT)
-    shape.SetStart(point(x1, y1)); shape.SetEnd(point(x2, y2))
-    shape.SetLayer(layer); shape.SetWidth(mm(width)); board.Add(shape)
+    shape.SetStart(point(x1, y1))
+    shape.SetEnd(point(x2, y2))
+    shape.SetLayer(layer)
+    shape.SetWidth(mm(width))
+    board.Add(shape)
 
-def label(board, text, x, y, size=1.2, layer=pcbnew.F_SilkS):
+
+def box(board, x1, y1, x2, y2, layer=pcbnew.Dwgs_User, width=0.2):
+    line(board, x1, y1, x2, y1, layer, width)
+    line(board, x2, y1, x2, y2, layer, width)
+    line(board, x2, y2, x1, y2, layer, width)
+    line(board, x1, y2, x1, y1, layer, width)
+
+
+def label(board, text, x, y, size=1.0, layer=pcbnew.F_SilkS, rotation=0):
     item = pcbnew.PCB_TEXT(board)
-    item.SetText(text); item.SetPosition(point(x, y))
-    item.SetTextSize(point(size, size)); item.SetTextThickness(mm(0.2))
-    item.SetLayer(layer); board.Add(item)
+    item.SetText(text)
+    item.SetPosition(point(x, y))
+    item.SetTextSize(point(size, size))
+    item.SetTextThickness(mm(max(0.15, size * 0.14)))
+    item.SetTextAngle(pcbnew.EDA_ANGLE(rotation, pcbnew.DEGREES_T))
+    item.SetLayer(layer)
+    board.Add(item)
+
+
+def load_footprint(footprint_name):
+    library, name = footprint_name.split(":", 1)
+    directory = CUSTOM if library == "FPVDeck" else KICAD / f"{library}.pretty"
+    footprint = pcbnew.FootprintLoad(str(directory), name)
+    if footprint is None:
+        raise RuntimeError(f"missing KiCad footprint {footprint_name}")
+    return footprint
+
+
+def add_footprint(board, part, placement, net_map):
+    x, y, rotation = placement
+    fp = load_footprint(part.footprint)
+    fp.SetReference(part.ref)
+    fp.SetValue(part.value)
+    fp.SetPosition(point(x, y))
+    fp.SetOrientationDegrees(rotation)
+    for pad in fp.Pads():
+        number = pad.GetNumber()
+        if number in part.pins:
+            pad.SetNet(net_map[part.pins[number]])
+    if hasattr(fp, "Reference"):
+        fp.Reference().SetTextSize(point(0.9, 0.9))
+        fp.Reference().SetTextThickness(mm(0.14))
+    board.Add(fp)
+    return fp
+
+
+def pad_position(footprints, ref, number):
+    candidates = [pad for pad in footprints[ref].Pads()
+                  if pad.GetNumber() == str(number)]
+    if not candidates:
+        raise RuntimeError(f"{ref} has no pad {number}")
+    return candidates[0].GetPosition()
+
+
+def track(board, net_map, net_name, start, end, width=0.30,
+          layer=pcbnew.F_Cu):
+    segment = pcbnew.PCB_TRACK(board)
+    segment.SetNet(net_map[net_name])
+    segment.SetStart(start)
+    segment.SetEnd(end)
+    segment.SetWidth(mm(width))
+    segment.SetLayer(layer)
+    board.Add(segment)
+
+
+def placement_table():
+    p = {
+        "J2": (48.38, 67.75, 90), "J3": (79.38, 67.75, 90),
+        "RXA": (56.0, 84.0, 270), "RXB": (87.0, 84.0, 270),
+        "FRA": (69.0, 83.0, 90), "CRA1": (71.5, 81.5, 90),
+        "CRA2": (71.5, 84.5, 90), "FRB": (100.0, 83.0, 90),
+        "CRB1": (102.5, 81.5, 90), "CRB2": (102.5, 84.5, 90),
+        "U1": (103.5, 73.5, 0), "R1": (107.0, 71.5, 0),
+        "R2": (107.0, 73.5, 0), "R3": (107.0, 75.5, 0),
+        "C1": (101.0, 72.0, 90), "JP1": (111.0, 73.5, 0),
+        "U2": (115.0, 73.5, 0), "C2": (117.8, 71.8, 90),
+        "U3": (119.0, 86.0, 0), "U4": (134.0, 82.0, 0),
+        "CIN1": (137.0, 80.5, 90), "COUT1": (137.0, 83.5, 90),
+        "FB1": (130.5, 80.5, 0), "FB2": (130.5, 83.5, 0),
+        "Y1": (108.5, 87.0, 0), "RY1": (108.5, 90.0, 0),
+        "CY1": (105.5, 86.0, 90), "CY2": (105.5, 89.0, 90),
+        "R20": (115.0, 78.0, 0), "R21": (118.0, 78.0, 0),
+        "C20": (121.0, 78.0, 0), "C21": (123.5, 79.5, 90),
+        "C22": (124.0, 91.0, 0), "C23": (121.0, 93.0, 0),
+        "C24": (124.0, 93.0, 0), "R22": (127.0, 89.0, 90),
+        "R23": (129.0, 89.0, 90), "R24": (131.0, 89.0, 90),
+        "R25": (126.5, 83.0, 90),
+        "CD1": (115.0, 91.5, 90), "CD2": (117.0, 92.5, 90),
+        "CD3": (121.0, 96.0, 0), "CD4": (124.0, 96.0, 0),
+        "U8": (139.0, 94.0, 0), "R29": (143.0, 94.0, 0),
+        "J5": (158.5, 96.0, 90),
+        "U5": (104.0, 108.0, 0), "CA1": (104.0, 111.0, 0),
+        "U6": (111.0, 108.0, 0), "CA2": (111.0, 111.0, 0),
+        "U7": (118.0, 108.0, 0), "CA3": (118.0, 111.0, 0),
+        "R26": (108.0, 114.0, 0), "R27": (112.0, 114.0, 0),
+        "R30": (118.0, 104.0, 0), "R31": (121.0, 104.0, 0),
+        "J4": (122.0, 132.0, 0), "J1": (66.0, 124.0, 90),
+        "BZ1": (50.0, 113.0, 0), "Q1": (57.5, 113.0, 0),
+        "R28": (61.0, 113.0, 0),
+        "SW1": (153.0, 78.0, 90), "SW2": (153.0, 99.5, 90),
+        "SW3": (153.0, 121.0, 90),
+    }
+
+    for index in range(11):
+        p[f"RD{index}"] = (106.0 + (index % 6) * 2.2,
+                            97.0 + (index // 6) * 2.6, 90)
+
+    for index in range(1, 7):
+        x = 123.0 + (index - 1) * 5.0
+        p[f"RT{index}"] = (x, 116.0, 90)
+        p[f"RB{index}"] = (x, 119.0, 90)
+        p[f"CT{index}"] = (x, 122.0, 90)
+        p[f"TP{index}"] = (x, 126.0, 0)
+    return p
+
 
 def generate():
+    nets = validate()
     board = pcbnew.BOARD()
+    board.SetCopperLayerCount(4)
     board.GetDesignSettings().SetBoardThickness(mm(1.6))
     x0, x1 = CX - BOARD_X / 2, CX + BOARD_X / 2
     y0, y1 = CY - BOARD_Y / 2, CY + BOARD_Y / 2
-    line(board, x0, y0, x1, y0); line(board, x1, y0, x1, y1)
-    line(board, x1, y1, x0, y1); line(board, x0, y1, x0, y0)
+    line(board, x0, y0, x1, y0)
+    line(board, x1, y0, x1, y1)
+    line(board, x1, y1, x0, y1)
+    line(board, x0, y1, x0, y0)
+
+    net_map = {}
+    for name in sorted(nets):
+        net = pcbnew.NETINFO_ITEM(board, name)
+        board.Add(net)
+        net_map[name] = net
+
+    placements = placement_table()
+    missing = sorted({part.ref for part in PARTS} - set(placements))
+    extra = sorted(set(placements) - {part.ref for part in PARTS})
+    if missing or extra:
+        raise RuntimeError(f"placement mismatch: missing={missing}, extra={extra}")
+
+    footprints = {}
+    for part in PARTS:
+        footprints[part.ref] = add_footprint(
+            board, part, placements[part.ref], net_map)
 
     for index, (x, y) in enumerate(((-56.0015, -28.5), (56.0015, -28.5),
                                     (-56.0015, 28.5), (56.0015, 28.5)), 1):
-        footprint(board, "MountingHole", "MountingHole_2.7mm_M2.5",
-                  f"H{index}", CX+x, CY+y)
-    footprint(board, "Connector_Coaxial", "SMA_Amphenol_132289_EdgeMount",
-              "J2", CX-47.5, y0, 90)
-    footprint(board, "Connector_Coaxial", "SMA_Amphenol_132289_EdgeMount",
-              "J3", CX+30.5, y0, 90)
-    footprint(board, "Connector_JST",
-              "JST_XH_S7B-XH-A-1_1x07_P2.50mm_Horizontal",
-              "J4", CX+22.0, y1-0.3, 270)
-    # Staging location only. Exact header offset remains a release gate.
-    footprint(board, "Connector_PinHeader_2.54mm",
-              "PinHeader_2x20_P2.54mm_Vertical", "J1", CX-4, CY+21.0, 90)
-    footprint(board, "Package_QFP", "LQFP-32_7x7mm_P0.8mm", "U3", CX-8, CY-6)
-    for ref, x in (("U5", CX+11), ("U6", CX+20), ("U7", CX+29)):
-        footprint(board, "Package_SO", "VSSOP-10_3x3mm_P0.5mm", ref, x, CY-4)
-    for ref, y in (("SW1", CY-18), ("SW2", CY), ("SW3", CY+18)):
-        footprint(board, "Button_Switch_SMD", "SW_SPST_TL3305A",
-                  ref, x1-6.5, y, 90)
+        hole_part = type("Hole", (), {
+            "ref": f"H{index}", "value": "M2.5",
+            "footprint": "MountingHole:MountingHole_2.7mm_M2.5",
+            "pins": {}})()
+        add_footprint(board, hole_part, (CX + x, CY + y, 0), net_map)
 
-    label(board, "FPVDECK HAT REV A - MECHANICAL PLACEMENT ONLY", CX, y0+5, 1.3)
-    label(board, "NOT ROUTED / NOT FOR FABRICATION", CX, y0+9, 1.1)
-    label(board, "J1 OFFSET VERIFY AGAINST OFFICIAL HOST STEP", CX-5, CY+26, 0.9)
-    label(board, "JST-XH BALANCE ONLY", CX+22, y1-5.5, 0.9)
-    label(board, "SMA A", CX-47.5, y0+5, 0.9)
-    label(board, "SMA B DNP", CX+30.5, y0+5, 0.9)
+    # Only the critical RF launches are routed in this generated candidate.
+    # Their 1 mm width is not a 50-ohm claim; final width/clearance comes from
+    # the selected four-layer fabricator stack-up and field-solver calculation.
+    for sma, receiver, net in (("J2", "RXA", "RF_A"),
+                               ("J3", "RXB", "RF_B")):
+        track(board, net_map, net, pad_position(footprints, sma, 1),
+              pad_position(footprints, receiver, 2), width=1.0)
+
+    box(board, 43.5, 69.5, 101.5, 99.5)
+    box(board, 101.5, 69.5, 141.0, 99.5)
+    box(board, 98.5, 101.0, 150.0, 130.0)
+    label(board, "RX A", 45.0, 84.0, 0.8, pcbnew.Dwgs_User, 90)
+    label(board, "RX B", 76.0, 84.0, 0.8, pcbnew.Dwgs_User, 90)
+    label(board, "VIDEO / DIVERSITY", 121.0, 98.0, 0.75, pcbnew.Dwgs_User)
+    label(board, "BALANCE ADC", 143.5, 128.5, 0.75, pcbnew.Dwgs_User)
+    label(board, "FPVDECK HAT REV A", 84.0, 130.0, 0.95)
+    label(board, "VERIFY RX5808 + HOST BEFORE FAB", 83.0, 127.5, 0.65)
+    label(board, "BALANCE ONLY", 136.0, y1 - 1.8, 0.65)
+    label(board, "SMA A", 48.38, y0 + 4.5, 0.75)
+    label(board, "SMA B", 79.38, y0 + 4.5, 0.75)
+    label(board, "AUTO / MCU", 111.0, 70.5, 0.65)
+    label(board, "UP", 148.5, 78.0, 0.7)
+    label(board, "OK", 148.5, 99.5, 0.7)
+    label(board, "DOWN", 147.5, 121.0, 0.7)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    pcbnew.SaveBoard(str(OUT), board); pcbnew.SaveBoard(str(PCB_OUT), board)
+    pcbnew.SaveBoard(str(OUT), board)
+    pcbnew.SaveBoard(str(PCB_OUT), board)
     for suffix in (".kicad_prl", ".kicad_pro"):
         companion = OUT.with_suffix(suffix)
-        if companion.exists(): companion.unlink()
-    print(f"wrote {OUT.relative_to(ROOT.parent)} and {PCB_OUT.relative_to(ROOT.parent)}")
+        if companion.exists():
+            companion.unlink()
+    print(f"wrote net-aware {len(PARTS)}-part layout to {PCB_OUT.relative_to(ROOT.parent)}")
+    print("critical RF launches routed; remaining nets intentionally await review routing")
 
-if __name__ == "__main__": generate()
+
+if __name__ == "__main__":
+    generate()

@@ -179,3 +179,22 @@
   fetches the same LVGL 9.5.0 release from its official repository with a pinned
   SHA-256 archive digest. A forced clean-fetch build and all seven smoke tests
   pass locally.
+
+## 2026-10-27 — donor RX5808 and HAT final-form layout pass
+
+- Reviewed the supplied donor-board photo. The shielded modules and PCB labels
+  are consistent with RX5808 hardware, but the underside pads are not visible
+  and the perspective cutting mat is not valid metrology.
+- Traced the provisional module contract to RX5808 Specification V1: 28 × 23 ×
+  3 mm, 12 contacts, 5 V nominal at 170–180 mA, 50-ohm RF and nominal 1 Vpp
+  75-ohm composite output. Corrected the project model to restore pad 12.
+- Added a source-controlled provisional 12-pad footprint, symmetric fitted
+  receiver positions, dedicated ferrite/100 nF/10 uF filtering for each receiver,
+  and an AUTO/MCU selection jumper ahead of the 340 MHz video switch.
+- Documented that FpvDeck implements classic fast diversity. ImmersionRC's own
+  manual describes rapidFIRE as dual-image fusion/reconstruction; one analog
+  selector and one TVP5150 cannot honestly make that claim.
+- Replaced the sparse mechanical PCB with a four-layer net-aware 99-part
+  final-form placement candidate and reproducible top/bottom/STEP exports. Only
+  the two short provisional RF launches are routed; measurements, full routing,
+  stack-up, DRC and bench validation remain fabrication gates.

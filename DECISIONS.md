@@ -46,8 +46,9 @@ questions are safety gates, not invitations to guess.
 
 ## RF and diversity
 
-- **Decision:** RX A is fitted; RX B, its comparator channel and second antenna
-  may be DNP for first bring-up. The PCB keeps both paths symmetric.
+- **Decision:** RX A and RX B are fitted for the final diversity assembly. RX B
+  may be DNP only for staged bring-up; both paths remain symmetric and separately
+  filtered from the 5 V header rail.
 - **UNKNOWN / MUST VERIFY:** RX5808 modules sold under the same name vary. The
   specified 11-pin mapping is captured in the schematic, but the custom footprint
   is deliberately marked `VERIFY_RX5808_V1`. Measure the actual modules before
@@ -55,6 +56,11 @@ questions are safety gates, not invitations to guess.
 - **Decision:** Software changes both receivers together on the shared DATA/CLK
   bus with separate latch-enable lines. Hardware diversity remains independent
   of firmware after tuning.
+- **Decision:** JP1 defaults the RSSI comparator into the video-switch select.
+  Its alternate position routes ESP32-P4 GPIO2 to the switch so a later
+  calibrated RSSI/decoder-lock policy can be tested without respinning the HAT.
+  This remains classic diversity: rapidFIRE's documented image fusion is
+  proprietary and cannot be claimed with one analog selector and one decoder.
 
 ## Battery measurement and power
 

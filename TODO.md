@@ -58,13 +58,21 @@ Completed items stay checked; safety-critical unknowns stay visible.
 ## Hardware
 
 - [x] Generate a checked KiCad 8 schematic, BOM and netlist from source.
-- [x] Create a placed PCB design draft and source-controlled board views.
+- [x] Create a net-aware four-layer final-form placement candidate containing
+      all modeled HAT parts and reproducible board views.
+- [x] Add the published 28 × 23 mm RX5808 V1 provisional footprint, restore pad
+      12, and document the donor-module measurement/overlay procedure.
+- [x] Add separate filtered receiver rails and AUTO/MCU diversity selection.
 - [x] Add a parametric two-part enclosure fit-check model with generated STLs,
       SMA passages, side-entry JST-XH opening and three-button rail.
 - [x] Coordinate external connectors in a real KiCad placement board and export
       top/bottom SVG plus placement-only STEP.
 - [ ] Measure actual RX5808 modules; freeze custom footprint and antenna launch.
+- [ ] Measure the two salvaged modules from the supplied donor boards and attach
+      square-on top/bottom/pad photos plus caliper dimensions.
 - [ ] Confirm Waveshare HAT clearance, header orientation and board outline.
+- [ ] Finish routing, planes and stack-up-controlled RF geometry; then run an
+      independent ERC/DRC and fabrication review.
 - [ ] Simulate/bench the CVBS input termination and TPF131 AV-output branch.
 - [ ] Validate comparator hysteresis thresholds across actual RSSI ranges.
 - [ ] Add/verify balance-port reverse, partial-insertion and ESD protection.
