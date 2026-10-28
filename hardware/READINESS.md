@@ -10,7 +10,7 @@ Gerbers or placement files are released.
 - [x] Official Waveshare 40-pin signal map captured in one firmware header.
 - [x] Official Waveshare overall, active-area, board and 112.003 × 57 mm
       mounting-pattern dimensions captured in parametric enclosure CAD.
-- [x] Source-controlled net-aware PCB places all 99 modeled parts, two edge
+- [x] Source-controlled net-aware PCB places all 102 modeled parts, two edge
       SMAs, two provisional V1 RX5808 land patterns, a side-entry JST-XH balance
       connector and three buttons, with reproducible SVG/PNG/STEP review exports.
 - [x] TVP5150AM1 pin assignment and register plan traced to TI SLES209E.
@@ -23,6 +23,8 @@ Gerbers or placement files are released.
       during staged bring-up.
 - [x] Receiver pad 12 restored, separate 5 V ferrite/bulk decoupling added, and
       AUTO/MCU diversity-selection jumper added.
+- [x] TPF131 AV-output branch corrected to the manufacturer pinout with AC
+      input coupling, 100 nF + 4.7 uF supply bypass and 75-ohm source termination.
 - [x] External pack is measurement-only in every active document.
 
 ## Blocking gates
@@ -44,8 +46,8 @@ Gerbers or placement files are released.
 - [ ] Select and validate the recommended CVBS anti-aliasing filter and input ESD.
 - [ ] Remove or justify the DNP HAT deck-cell divider; raw BAT is not available
       at the 40-pin header and must not be acquired with an unreviewed flying wire.
-- [ ] Add/verify the remaining switch, comparator and video-buffer decoupling
-      from each manufacturer application circuit.
+- [ ] Bench-verify the TPF131 output level, sync tip and thermal margin into a
+      real 75-ohm load; confirm the chosen 3.5 mm jack convention.
 - [ ] Independent schematic/pin/footprint review.
 - [ ] ERC clean; PCB DRC clean; controlled-impedance stack-up documented.
 - [ ] 1:1 footprint print checked against every physical component.

@@ -205,3 +205,7 @@
   underlying RTC6715 supports serial programming, but the module's SPI_SE strap
   state is a donor-specific verification gate. Added a current-limited,
   3.3 V-logic tuning test; failed tuning must not lead to 5 V on P4 GPIO.
+- Replaced the placeholder/unconnected AV-buffer pins with the verified 3PEAK
+  TPF131-TR topology: 100 nF AC input coupling, correct 2/4/5/6
+  output/input/ground/supply pins, 100 nF + 4.7 uF bypass and a 75-ohm source
+  termination. The branch remains subject to 75-ohm load testing.

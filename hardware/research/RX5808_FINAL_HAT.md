@@ -167,6 +167,15 @@ The [TVP5150AM1](https://www.ti.com/product/TVP5150AM1) produces 8-bit BT.601
 YCbCr plus discrete pixel clock, HSYNC and VSYNC. Eleven 33-ohm source series
 resistors sit at the decoder before the 40-pin header.
 
+The AV jack is a separate high-impedance branch from `VIDEO_SELECTED`. A 100 nF
+input capacitor feeds a 3PEAK TPF131-TR sync-clamp/video driver using its
+published SOT-23-6 pinout (2 output, 4 input, 5 ground, 6 supply). Its 6 dB gain
+is followed by a 75-ohm source resistor, so a terminated external monitor sees
+approximately unity gain while the TVP5150 branch is not loaded by the cable.
+The output is DC-coupled as permitted by the datasheet. C26/C27 provide the
+required local ceramic and bulk bypass. This branch still requires oscilloscope
+validation into a real 75-ohm load before release.
+
 The official Waveshare header exposes the 21 ordinary GPIOs used by the DVP bus,
 receiver serial controls, reset, buttons, buzzer and diversity state, plus the
 shared GPIO7/GPIO8 I2C bus. GPIO2/header pin 8 is now the optional MCU video
@@ -189,7 +198,7 @@ render or passing ERC substitutes for that test.
 
 ## Release boundary
 
-The current board now contains all 99 modeled parts, both receiver locations,
+The current board now contains all 102 modeled parts, both receiver locations,
 both SMAs, diversity comparator/switch, TVP5150, three ADS1115s, JST-XH, AV out,
 buzzer, buttons, decoder supplies and test points. Only the two critical RF
 launches are routed. Remaining routing, planes, impedance definition, ERC/DRC,

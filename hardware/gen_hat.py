@@ -206,20 +206,26 @@ PARTS.extend([
     part("SW1", "UP", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_UP", "2": "GND"}),
     part("SW2", "OK", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_OK", "2": "GND"}),
     part("SW3", "DOWN", "Button_Switch_SMD:SW_SPST_TL3305A", "TL3305AF160QG", "REQUIRED", {"1": "BTN_DOWN", "2": "GND"}),
-    part("U8", "AV BUFFER", "Package_TO_SOT_SMD:SOT-23-6", "TPF131-TR", "REVIEW",
-         {"1": "AV_BUF_IN", "2": "GND", "3": "AV_BUF_BIAS", "4": "AV_BUF_EN", "5": "+5V", "6": "AV_BUF_OUT"},
-         "DNP until direct-CVBS input scaling and exact application circuit are bench-validated."),
+    part("U8", "AV BUFFER", "Package_TO_SOT_SMD:SOT-23-6", "TPF131-TR", "REQUIRED",
+         {"1": "NC_AV1", "2": "AV_BUF_OUT", "3": "NC_AV3", "4": "AV_BUF_IN", "5": "GND", "6": "+5V"},
+         "3PEAK Rev A pinout; 6 dB driver, AC-coupled input and DC-coupled 75-ohm output."),
     part("J5", "AV OUT 3.5MM", "Connector_Audio:Jack_3.5mm_CUI_SJ1-3523N_Horizontal", "SJ1-3523N", "REVIEW",
          {"1": "GND", "2": "AV_OUT", "3": "GND"}),
-    part("R29", "75R", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0775RL", "REVIEW", {"1": "AV_BUF_OUT", "2": "AV_OUT"}),
+    part("C25", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "VIDEO_SELECTED", "2": "AV_BUF_IN"}, "TPF131 sync-clamp input coupling."),
+    part("C26", "100n 16V X7R", "Capacitor_SMD:C_0603_1608Metric", "GRM188R71C104KA01D", "REQUIRED",
+         {"1": "+5V", "2": "GND"}, "Place directly at TPF131 pin 6."),
+    part("C27", "4.7u 10V X7R", "Capacitor_SMD:C_0805_2012Metric", "GRM21BR71A475KA73L", "REQUIRED",
+         {"1": "+5V", "2": "GND"}, "TPF131 local bulk bypass; parallel with C26."),
+    part("R29", "75R 1%", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-0775RL", "REQUIRED",
+         {"1": "AV_BUF_OUT", "2": "AV_OUT"}, "Source termination at U8 output."),
     part("R30", "1k", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-071KL", "REQUIRED", {"1": "RSSI_A", "2": "RSSI_A_ADC"}),
     part("R31", "1k", "Resistor_SMD:R_0603_1608Metric", "RC0603FR-071KL", "REQUIRED", {"1": "RSSI_B", "2": "RSSI_B_ADC"}),
 ])
 
 # These nets are intentionally exposed as test nodes or option boundaries.
 ALLOW_SINGLE = {"NC_AUDIO_A", "NC_AUDIO_B", "ADC1_ALERT", "ADC2_ALERT", "ADC3_ALERT",
-                "SPARE_ADC", "SPARE_RSSI2", "SPARE_RSSI3", "DECK_CELL", "AV_BUF_IN", "AV_BUF_BIAS",
-                "AV_BUF_EN"}
+                "SPARE_ADC", "SPARE_RSSI2", "SPARE_RSSI3", "DECK_CELL", "NC_AV1", "NC_AV3"}
 
 
 def validate() -> dict[str, list[str]]:
@@ -247,6 +253,11 @@ def validate() -> dict[str, list[str]]:
         "4": "VIDEO_SELECTED", "5": "+3V3", "6": "VIDEO_SELECT",
     }:
         raise ValueError("U2 must select VIDEO_A on high and VIDEO_B on low")
+    if by_ref["U8"].pins != {
+        "1": "NC_AV1", "2": "AV_BUF_OUT", "3": "NC_AV3",
+        "4": "AV_BUF_IN", "5": "GND", "6": "+5V",
+    }:
+        raise ValueError("U8 must use the 3PEAK TPF131-TR top-view pinout")
     for index, address_net in enumerate(("GND", "+3V3", "I2C_SDA"), start=5):
         adc = by_ref[f"U{index}"]
         expected_fixed = {

@@ -160,7 +160,7 @@ See [the complete bring-up procedure](docs/BRINGUP.md).
 - ✅ ESP-IDF 6.1 firmware compiles for ESP32-P4 without warnings in project code
 - ✅ native macOS/Linux LVGL simulator with touch, keyboard and fault injection
 - 🚧 live sensor/video-to-display integration requires the physical stack
-- 📐 generated 99-part KiCad schematic and final-form PCB layout candidate
+- 📐 generated 102-part KiCad schematic and final-form PCB layout candidate
 - ⚠️ RX5808 module footprint/pinout requires physical verification
 - ⚠️ no fabrication release or real-battery approval yet
 

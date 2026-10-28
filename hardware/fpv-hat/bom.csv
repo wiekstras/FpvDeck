@@ -7,6 +7,9 @@ C21,100n,GRM188R71H104KA93D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 C22,1u,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 C23,1u,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
 C24,1u,GRM188R61A105KA61D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,
+C25,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,TPF131 sync-clamp input coupling.
+C26,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at TPF131 pin 6.
+C27,4.7u 10V X7R,GRM21BR71A475KA73L,Capacitor_SMD:C_0805_2012Metric,REQUIRED,TPF131 local bulk bypass; parallel with C26.
 CA1,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at U5 VDD pin 8; TI-required bypass.
 CA2,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at U6 VDD pin 8; TI-required bypass.
 CA3,100n 16V X7R,GRM188R71C104KA01D,Capacitor_SMD:C_0603_1608Metric,REQUIRED,Place directly at U7 VDD pin 8; TI-required bypass.
@@ -50,7 +53,7 @@ R25,10k,RC0603FR-0710KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,I2CSEL low at re
 R26,100k,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,DNP,Raw host BAT is not on the 40-pin header; do not fit or wire without review.
 R27,100k,RC0603FR-07100KL,Resistor_SMD:R_0603_1608Metric,DNP,Reserved ADS channel; host GPIO20 already senses BAT through 200k/100k.
 R28,2.2k,RC0603FR-072K2L,Resistor_SMD:R_0603_1608Metric,REQUIRED,
-R29,75R,RC0603FR-0775RL,Resistor_SMD:R_0603_1608Metric,REVIEW,
+R29,75R 1%,RC0603FR-0775RL,Resistor_SMD:R_0603_1608Metric,REQUIRED,Source termination at U8 output.
 R3,10k 1%,RC0603FR-0710KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
 R30,1k,RC0603FR-071KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
 R31,1k,RC0603FR-071KL,Resistor_SMD:R_0603_1608Metric,REQUIRED,
@@ -96,5 +99,5 @@ U4,1.8V LDO,ME6211C18M5G,Package_TO_SOT_SMD:SOT-23-5,REQUIRED,
 U5,ADS1115 0x48,ADS1115IDGSR,Package_SO:VSSOP-10_3x3mm_P0.5mm,REQUIRED,TI SBAS444E DGS top-view pinout; ADDR selects 0x48/0x49/0x4A.
 U6,ADS1115 0x49,ADS1115IDGSR,Package_SO:VSSOP-10_3x3mm_P0.5mm,REQUIRED,TI SBAS444E DGS top-view pinout; ADDR selects 0x48/0x49/0x4A.
 U7,ADS1115 0x4A,ADS1115IDGSR,Package_SO:VSSOP-10_3x3mm_P0.5mm,REQUIRED,TI SBAS444E DGS top-view pinout; ADDR selects 0x48/0x49/0x4A.
-U8,AV BUFFER,TPF131-TR,Package_TO_SOT_SMD:SOT-23-6,REVIEW,DNP until direct-CVBS input scaling and exact application circuit are bench-validated.
+U8,AV BUFFER,TPF131-TR,Package_TO_SOT_SMD:SOT-23-6,REQUIRED,"3PEAK Rev A pinout; 6 dB driver, AC-coupled input and DC-coupled 75-ohm output."
 Y1,14.31818MHz,ECS-143-20-33Q-JES-TR,Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm,REVIEW,Verify total tolerance <=50 ppm and oscillator start/load before release.
