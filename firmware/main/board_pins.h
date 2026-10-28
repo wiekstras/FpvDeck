@@ -27,7 +27,7 @@
 #define PIN_RX_CLK       35   /* J3 pin 30, schematic sheet 1/2: GPIO35 */
 #define PIN_RX_LE_A      32   /* J3 pin 31, schematic sheet 1/2: GPIO32 */
 #define PIN_RX_LE_B      49   /* J3 pin 32, schematic sheet 1/2: GPIO49 */
-#define PIN_ACTIVE_RX    50   /* J3 pin 34, schematic sheet 1/2: actual VIDEO_SELECT */
+#define PIN_ACTIVE_RX    50   /* J3 pin 34, sheet 1/2: VIDEO_SELECT; high = RX A */
 #define PIN_TVP_RESETB   46   /* J3 pin 35, schematic sheet 1/2: GPIO46 */
 #define PIN_BUTTON_UP    51   /* J3 pin 36, schematic sheet 1/2: GPIO51 */
 #define PIN_BUTTON_OK    47   /* J3 pin 37, schematic sheet 1/2: GPIO47 */

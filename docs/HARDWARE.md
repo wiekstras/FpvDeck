@@ -30,8 +30,10 @@
   wrong ADC pin order.
 - Three buttons are active-low to internal pull-ups. A transistor drives the
   buzzer so the GPIO does not source its current.
-- AV out is a review/DNP branch until the TPF131 input scaling is simulated and
-  measured. It must not load the decoder input.
+- AV out uses a high-impedance 100 nF AC-coupled branch into a TPF131-TR
+  sync-clamp/video driver, followed by a 75-ohm source termination. Its pinout
+  and local 100 nF + 4.7 uF bypass now match the manufacturer application data;
+  amplitude and thermal margin still require a real 75-ohm load test.
 
 ## Board status
 
